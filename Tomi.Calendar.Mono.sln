@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomi.Calendar.Mono.Shared",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4D1E3C3A-329D-49D4-927B-93B0802BEE0D}"
 	ProjectSection(SolutionItems) = preProject
+		Server\.dockerignore = Server\.dockerignore
 		build.bat = build.bat
 		create-migration.txt = create-migration.txt
 		docker-compose.yaml = docker-compose.yaml
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Global

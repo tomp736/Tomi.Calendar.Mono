@@ -1,1 +1,1 @@
-docker build -f Server/Dockerfile -t tomp736/tomi.calendar.mono.server .
+docker build -t tomp736/tomi.calendar.mono.server .
