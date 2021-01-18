@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tomi.Calendar.Mono.Server.Data;
@@ -9,9 +10,10 @@ using Tomi.Calendar.Mono.Server.Data;
 namespace Tomi.Calendar.Mono.Server.Migrations
 {
     [DbContext(typeof(AppNpgSqlDataContext))]
-    partial class AppNpgSqlDataContextModelSnapshot : ModelSnapshot
+    [Migration("20210118141533_RemoveKeyFromCalendarItemTag")]
+    partial class RemoveKeyFromCalendarItemTag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

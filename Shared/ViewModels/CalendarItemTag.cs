@@ -9,13 +9,14 @@ namespace Tomi.Calendar.Mono.Shared
 {
     public class CalendarItemTag
     {
-        [Key]
-        public int Key { get; set; }
         public int CalendarItemKey { get; set; }
 
         [JsonIgnore]
         public CalendarItem CalendarItem { get; set; }
+
         public int TagKey { get; set; }
+
+        [JsonIgnore]
         public Tag Tag { get; set; }
     }
 }

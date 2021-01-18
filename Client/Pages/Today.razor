@@ -1,0 +1,23 @@
+﻿@page "/day/{date}"
+@page "/today"
+
+<div class="calendar-view" style="padding-top:40px;">
+    <CalendarDayView Date="Date" />
+</div>
+
+@code
+{
+
+    [Parameter]
+    public DateTime Date { get; set; } = DateTime.Today;
+
+    protected override Task OnParametersSetAsync()
+    {
+        if(Date == DateTime.MinValue)
+        {
+            Date = DateTime.Today;
+        }
+        Console.WriteLine(Date.ToString());
+        return base.OnParametersSetAsync();
+    }
+}

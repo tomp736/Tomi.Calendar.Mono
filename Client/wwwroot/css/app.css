@@ -44,23 +44,6 @@ html, body {
         padding-top: 20px;
     }
 
-a.show-day {
-    display: block;
-}
-
-a.show-month {
-    display: hidden;
-}
-
-
-.calendar-view-items a.show-day {
-    display: hidden;
-}
-
-.calendar-view-items a.show-month {
-    display: block;
-}
-
 .calendar-view-day {
     position: absolute;
     width: 100%;
@@ -72,6 +55,15 @@ a.show-month {
 
 .calendar-view .calendar-view-day {
     float: left;
+    width: 25%;
+    height: 100%;
+    border: 1px solid;
+    overflow: hidden;
+    position: relative;
+}
+
+.calendar-view-month .calendar-view-day {
+    float: left;
     width: 14.3%;
     height: 20%;
     border: 1px solid;
@@ -79,15 +71,15 @@ a.show-month {
     position: relative;
 }
 
-    .calendar-view .calendar-view-day:hover {
+    .calendar-view-month .calendar-view-day:hover {
         border: 2px solid #4800ff;
     }
 
-    .calendar-view .calendar-view-day.last {
+    .calendar-view-month .calendar-view-day.last {
         width: 14.2%;
     }
 
-    .calendar-view .calendar-view-day.today {
+    .calendar-view-month .calendar-view-day.today {
         border-top: 3px solid #4800ff;
     }
 

@@ -25,8 +25,6 @@ namespace Tomi.Calendar.Mono.Server.Data
             modelBuilder.Entity<CalendarItem>().Property(f => f.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<CalendarItem>().Property(f => f.Key).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<CalendarItemTag>().Property(f => f.Key).ValueGeneratedOnAdd();
-
             modelBuilder.Entity<Tag>().Property(f => f.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Tag>().Property(f => f.Key).ValueGeneratedOnAdd();
 

@@ -17,7 +17,7 @@ namespace Tomi.Calendar.Mono.Client.Components
 
 
         [Parameter]
-        public DateTime Date { get; set; } = DateTime.Today;
+        public DateTime Date { get; set; }
 
         [Parameter]
         public bool Enabled { get; set; }
