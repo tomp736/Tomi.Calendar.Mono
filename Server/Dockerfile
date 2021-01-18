@@ -12,7 +12,6 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 WORKDIR /src
 COPY ["Server/Tomi.Calendar.Mono.Server.csproj", "Tomi.Calendar.Mono.Server.csproj"]
-# COPY ["Nuget","/Nuget"]
 
 RUN dotnet restore "/src/Tomi.Calendar.Mono.Server.csproj"
 
