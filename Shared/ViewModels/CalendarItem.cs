@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tomi.Calendar.Mono.Shared
 {
-    public class CalendarItem : ICalendarItem
+    public class CalendarItem
     {
+        [Key]
+        public int Key { get; set; }
         public Guid Id { get; set; }
 
         private DateTime? _startDate;
@@ -13,7 +17,7 @@ namespace Tomi.Calendar.Mono.Shared
             {
                 if (_startDate.HasValue)
                     return _startDate.Value;
-                return DateTime.MinValue;
+                return DateTime.Today;
             }
             set
             {
@@ -40,5 +44,6 @@ namespace Tomi.Calendar.Mono.Shared
 
         public string Title { get; set; }
         public string Description { get; set; }
+        public List<CalendarItemTag> CalendarItemTags { get; set; }
     }
 }

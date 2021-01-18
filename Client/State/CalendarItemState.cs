@@ -18,11 +18,15 @@ namespace Tomi.Calendar.Mono.Client.State
         }
 
         public List<CalendarItem> CalendarItems { get; set; } = new List<CalendarItem>();
+        public List<Tag> Tags { get; internal set; } = new List<Tag>();
 
         public async Task InitializeCalendarItemsAsync()
         {
             CalendarItems.Clear();
-            CalendarItems.AddRange(await _calendarHttpService.GetItemsAsync());
+            Tags.Clear();
+
+            CalendarItems.AddRange(await _calendarHttpService.GetCalendarItemsAsync());
+            Tags.AddRange(await _calendarHttpService.GetTagsAsync());
         }
         public CalendarItem GetItem(Guid id)
         {

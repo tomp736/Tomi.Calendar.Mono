@@ -1,0 +1,28 @@
+﻿@inherits TagSelectorBase
+@foreach (Tag tag in Values)
+{
+    if (SelectedKeys.Contains(tag.Key))
+    {
+        <span class="badge bg-success" @onclick="@(() => OnClick(tag.Key))">@tag.Name</span>
+    }
+    else
+    {
+        <span class="badge bg-primary" @onclick="@(() => OnClick(tag.Key))">@tag.Name</span>
+    }
+}
+
+@code {
+
+    void OnClick(int key)
+    {
+        if (SelectedKeys.Contains(key))
+        {
+            SelectedKeys.Remove(key);
+        }
+        else
+        {
+            SelectedKeys.Add(key);
+        }
+        Console.WriteLine(string.Join(",", SelectedKeys.Select(n => $"{n}")));
+    }
+}

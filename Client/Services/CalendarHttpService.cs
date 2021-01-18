@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -14,7 +15,9 @@ namespace Tomi.Calendar.Mono.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task<CalendarItem[]> GetItemsAsync()
+        #region CalendarItems
+
+        public async Task<CalendarItem[]> GetCalendarItemsAsync()
         {
             return await _httpClient.GetFromJsonAsync<CalendarItem[]>("/api/calendaritem");
         }
@@ -36,5 +39,16 @@ namespace Tomi.Calendar.Mono.Client.Services
         {
             await _httpClient.DeleteAsync($"/api/calendaritem/{calendarItemModel.Id}");
         }
+
+        #endregion
+
+        #region Tags
+
+        internal async Task<Tag[]> GetTagsAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<Tag[]>("/api/tag");
+        }
+
+        #endregion
     }
 }

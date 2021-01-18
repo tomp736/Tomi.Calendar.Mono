@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,12 +12,12 @@ namespace Tomi.Calendar.Mono.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CalendarItemController : ControllerBase
+    public class TagController : ControllerBase
     {
-        private readonly ILogger<CalendarItemController> _logger;
+        private readonly ILogger<TagController> _logger;
         private readonly AppNpgSqlDataContext _dataContext;
 
-        public CalendarItemController(AppNpgSqlDataContext dataContext, ILogger<CalendarItemController> logger)
+        public TagController(AppNpgSqlDataContext dataContext, ILogger<TagController> logger)
         {
             _dataContext = dataContext;
             _logger = logger;
@@ -27,31 +26,23 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var items = _dataContext.CalendarItems.Include(item => item.CalendarItemTags);
-            return new JsonResult(items.ToList());
+            return new JsonResult(_dataContext.Tags.ToList());
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(CalendarItem CalendarItem)
+        public async Task<ActionResult> Post(Tag Tag)
         {
             ActionResult result;
-            CalendarItem calendarItem = _dataContext.CalendarItems
-                .Include(calendarItem => calendarItem.CalendarItemTags)
-                .FirstOrDefault(n => n.Id == CalendarItem.Id);
-
-            if (calendarItem == null)
+            Tag tag = _dataContext.Tags.FirstOrDefault(n => n.Id == Tag.Id);
+            if (tag == null)
             {
-                _dataContext.CalendarItems.Add(CalendarItem);
+                _dataContext.Tags.Add(Tag);
             }
             else
             {
-                calendarItem.StartDate = CalendarItem.StartDate;
-                calendarItem.EndDate = CalendarItem.EndDate;
-                calendarItem.Title = CalendarItem.Title;
-                calendarItem.Description = CalendarItem.Description;
-                calendarItem.CalendarItemTags = CalendarItem.CalendarItemTags;
+                tag.Name = Tag.Name;
+                tag.Description = Tag.Description;
             }
-
             int rowsAffected = await _dataContext.SaveChangesAsync();
             if (rowsAffected == 1)
             {
@@ -68,8 +59,8 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             ActionResult result;
-            CalendarItem calendarItem = _dataContext.CalendarItems.FirstOrDefault(n => n.Id == id);
-            EntityEntry entityEntry = _dataContext.CalendarItems.Remove(calendarItem);
+            Tag tag = _dataContext.Tags.FirstOrDefault(n => n.Id == id);
+            EntityEntry entityEntry = _dataContext.Tags.Remove(tag);
             int rowsAffected = await _dataContext.SaveChangesAsync();
             if (rowsAffected == 1)
             {

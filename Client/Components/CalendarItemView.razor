@@ -5,6 +5,10 @@
 {
     <div>
         <div class="form-group">
+            <label for="calendar-item-tags">Tags</label>
+            <Tomi.Calendar.Mono.Client.Components.Tag.TagSelector @ref="TagSelector" SelectedKeys="@CalendarItemTagKeys" />
+        </div>
+        <div class="form-group">
             <label for="calendar-item-startdate">Start Date</label>
             <input class="form-control" type="date" id="calendar-item-startdate" @bind="CalendarItem.StartDate" />
         </div>
