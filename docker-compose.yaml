@@ -1,0 +1,25 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  calendarmono:
+    ports:
+      - "8080:80"
+      - "8081:443"
+    image: tomp736/tomi.calendar.mono.server
+    environment:
+      - AllowedOrigins=http://localhost:8080,https://localhost:8081
+      - AllowedOriginsHeaders=Origin,X-Requested-With,Content-Type,Accept
+      - AllowedOriginsMethods=POST,GET,OPTIONS,DELETE
+    depends_on:
+      - "pgdb"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+  pgdb:
+    image: "postgres:latest"
+    ports:
+    - 5432:5432
+    environment:
+      - POSTGRES_USER=dbuser # The PostgreSQL user (useful to connect to the database)
+      - POSTGRES_PASSWORD=dbpass # The PostgreSQL password (useful to connect to the database)
+      - POSTGRES_DB=default_db # The PostgreSQL default database (automatically created at first launch)      
+    volumes:
+    - ./db-data/:/var/lib/postgresql/data/

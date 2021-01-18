@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomi.Calendar.Mono.Server", "Server\Tomi.Calendar.Mono.Server.csproj", "{CEE2D4B0-C3AA-4813-970B-23C7EBFEFE91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomi.Calendar.Mono.Client", "Client\Tomi.Calendar.Mono.Client.csproj", "{C789AEA8-08A4-43AF-91FC-1923AF5344D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomi.Calendar.Mono.Shared", "Shared\Tomi.Calendar.Mono.Shared.csproj", "{29094F69-C22E-43B8-98BC-EBDE89758809}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4D1E3C3A-329D-49D4-927B-93B0802BEE0D}"
+	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
+		create-migration.txt = create-migration.txt
+		docker-compose.yaml = docker-compose.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEE2D4B0-C3AA-4813-970B-23C7EBFEFE91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEE2D4B0-C3AA-4813-970B-23C7EBFEFE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEE2D4B0-C3AA-4813-970B-23C7EBFEFE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEE2D4B0-C3AA-4813-970B-23C7EBFEFE91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C789AEA8-08A4-43AF-91FC-1923AF5344D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C789AEA8-08A4-43AF-91FC-1923AF5344D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C789AEA8-08A4-43AF-91FC-1923AF5344D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C789AEA8-08A4-43AF-91FC-1923AF5344D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29094F69-C22E-43B8-98BC-EBDE89758809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29094F69-C22E-43B8-98BC-EBDE89758809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29094F69-C22E-43B8-98BC-EBDE89758809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29094F69-C22E-43B8-98BC-EBDE89758809}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FC01D54A-0E0E-4A82-AECD-91F23681F741}
+	EndGlobalSection
+EndGlobal

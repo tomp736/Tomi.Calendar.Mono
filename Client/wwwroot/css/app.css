@@ -1,0 +1,173 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html {
+    min-height: 100%; /* make sure it is at least as tall as the viewport */
+    position: relative;
+}
+
+body {
+    height: 100%; /* force the BODY element to match the height of the HTML element */
+}
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#app {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /*overflow: hidden;*/
+    z-index: -1; /* Remove this line if it's not going to be a background! */
+}
+
+.calendar-view {
+    height: 100%
+}
+
+    .calendar-view .calendar-view-heading {
+        height: 20px;
+        background-color: #343a40;
+        color: #FFF;
+    }
+
+        .calendar-view .calendar-view-heading h3 {
+            padding: 0px;
+            font-size: 14px;
+        }
+
+    .calendar-view .calendar-view-items {
+        height: 100%;
+        margin-top: -20px;
+        padding-top: 20px;
+    }
+
+a.show-day {
+    display: block;
+}
+
+a.show-month {
+    display: hidden;
+}
+
+
+.calendar-view-items a.show-day {
+    display: hidden;
+}
+
+.calendar-view-items a.show-month {
+    display: block;
+}
+
+.calendar-view-day {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
+
+.calendar-view .calendar-view-day {
+    float: left;
+    width: 14.3%;
+    height: 20%;
+    border: 1px solid;
+    overflow: hidden;
+    position: relative;
+}
+
+    .calendar-view .calendar-view-day:hover {
+        border: 2px solid #4800ff;
+    }
+
+    .calendar-view .calendar-view-day.last {
+        width: 14.2%;
+    }
+
+    .calendar-view .calendar-view-day.today {
+        border-top: 3px solid #4800ff;
+    }
+
+.calendar-view-day heading {
+    padding: 10px;
+    font-weight: bold;
+    background-color: #212529;
+    color: #FFF;
+    font-size: 1.5vh;
+    display: block;
+}
+
+.calendar-view-day.today heading {
+    margin-top: -2px;
+}
+
+div .calendar-view-day-items {
+    height: 100%;
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    padding: 10px;
+    background-color: #343a40;
+}
+
+    div .calendar-view-day-items::-webkit-scrollbar {
+        display: none;
+    }
+
+div .calendar-view-dayofweek {
+    float: left;
+    width: 140px;
+    height: 30px;
+    padding: 10px;
+}
+
+div .calendar-item {
+    font-size: .7em;
+    border: solid 1px;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.calendar-view-day > .lds-hourglass {
+    display: inline-block;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    width: 50px;
+}
+
+    .calendar-view-day > .lds-hourglass:after {
+        content: " ";
+        display: block;
+        border-radius: 50%;
+        width: 0;
+        height: 0;
+        margin: 8px;
+        box-sizing: border-box;
+        border: 16px solid #fff;
+        border-color: #000 transparent #000 transparent;
+        animation: lds-hourglass 1.2s infinite;
+    }
+
+@keyframes lds-hourglass {
+    0% {
+        transform: rotate(0);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    50% {
+        transform: rotate(900deg);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    100% {
+        transform: rotate(1800deg);
+    }
+}
