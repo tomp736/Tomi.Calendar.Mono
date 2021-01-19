@@ -1,14 +1,10 @@
-﻿@page "/month/{date}"
-@inherits CalendarMonthViewBase
-
-<div class="calendar-view calendar-view-month" style="padding-top:40px;">
-    @*<div class="calendar-view-heading">
+﻿@inherits CalendarMonthViewBase
+@*<div class="calendar-view-heading">
         <h3>@Heading</h3>
     </div>*@
-    <div class="calendar-view-items" @onmousewheel="WheelHandler">
-        @foreach (DateTime date in CalendarHelpers.CalendarDaysInView(StartDate, EndDate))
-        {
-            <CalendarDayView Date="@date" StateChangedCallback="StateChanged"></CalendarDayView>
-        }
-    </div>
+<div class="calendar-view-items" @onmousewheel="WheelHandler">
+    @foreach (DateTime date in CalendarHelpers.CalendarDaysInView(StartDate, EndDate))
+    {
+        <CalendarDayView Date="@date" StateChangedCallback="StateChanged"></CalendarDayView>
+    }
 </div>
