@@ -21,12 +21,10 @@ namespace Tomi.Calendar.Mono.Client.Services
         {
             return await _httpClient.GetFromJsonAsync<CalendarItem[]>("/api/calendaritem");
         }
-
-        public async Task<CalendarItem> GetItemAsync(Guid calendarItemId)
+        public async Task<CalendarItem> GetCalendarItemAsync(Guid calendarItemId)
         {
             return await _httpClient.GetFromJsonAsync<CalendarItem>($"/api/calendaritem/{calendarItemId}");
         }
-
         public async Task Save(CalendarItem calendarItemModel)
         {
             if (calendarItemModel.Id == Guid.Empty)
@@ -34,7 +32,6 @@ namespace Tomi.Calendar.Mono.Client.Services
 
             await _httpClient.PostAsJsonAsync("/api/calendaritem", calendarItemModel);
         }
-
         public async Task Delete(CalendarItem calendarItemModel)
         {
             await _httpClient.DeleteAsync($"/api/calendaritem/{calendarItemModel.Id}");
@@ -47,6 +44,17 @@ namespace Tomi.Calendar.Mono.Client.Services
         internal async Task<Tag[]> GetTagsAsync()
         {
             return await _httpClient.GetFromJsonAsync<Tag[]>("/api/tag");
+        }
+        public async Task Save(Tag calendarItemModel)
+        {
+            if (calendarItemModel.Id == Guid.Empty)
+                calendarItemModel.Id = Guid.NewGuid();
+
+            await _httpClient.PostAsJsonAsync("/api/tag", calendarItemModel);
+        }
+        public async Task Delete(Tag calendarItemModel)
+        {
+            await _httpClient.DeleteAsync($"/api/tag/{calendarItemModel.Id}");
         }
 
         #endregion

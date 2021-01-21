@@ -1,0 +1,22 @@
+﻿@page "/tag/{id}"
+@page "/tag/new"
+
+<Tomi.Calendar.Mono.Client.Components.Tag.TagEditView Id="ViewId" />
+
+@code
+{
+    [Parameter]
+    public string Id { get; set; }
+
+    public Guid ViewId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ViewId = Id != null ? Guid.Parse(Id) : Guid.NewGuid();
+    }
+
+    protected override void OnParametersSet()
+    {
+        ViewId = Id != null ? Guid.Parse(Id) : Guid.NewGuid();
+    }
+}

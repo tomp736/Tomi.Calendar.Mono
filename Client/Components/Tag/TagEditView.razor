@@ -1,0 +1,22 @@
+﻿@if (this.Tag != null)
+{
+<div>
+    <div class="form-group">
+        <label for="tag-name">Title</label>
+        <input class="form-control" type="text" id="tag-name" @bind="Tag.Name" />
+    </div>
+    <div class="form-group">
+        <label for="tag-description">Description</label>
+        <input class="form-control" type="text" id="tag-description" @bind="Tag.Description" />
+    </div>
+    <button class="btn btn-primary" @onclick="SaveItem">Ok</button>
+    @if (!IsNew)
+    {
+        <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>
+    }
+    @if (ModalInstance != null)
+    {
+        <button class="btn btn-secondary" @onclick="ModalInstance.CancelAsync">Cancel</button>
+    }
+</div>
+}

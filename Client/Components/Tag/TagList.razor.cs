@@ -2,25 +2,19 @@
 using Blazored.Modal.Services;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.State;
 
-namespace Tomi.Calendar.Mono.Client.Components
+namespace Tomi.Calendar.Mono.Client.Components.Tag
 {
-    public class CalendarDayViewBase : ComponentBase
+    public partial class TagList : ComponentBase
     {
         [Inject]
         public CalendarItemState CalendarState { get; set; }
 
         [Inject]
         public IModalService Modal { get; set; }
-
-
-        [Parameter]
-        public DateTime Date { get; set; }
-
-        [Parameter]
-        public bool Enabled { get; set; }
 
         [Parameter]
         public Action StateChangedCallback { get; set; }
@@ -36,24 +30,12 @@ namespace Tomi.Calendar.Mono.Client.Components
             await base.OnParametersSetAsync();
         }
 
-        protected string Heading => $"{Date.Month}/{Date.Day}";
-        protected string ClassNames
-        {
-            get
-            {
-                string classnames = "";
-                classnames += Date.AddDays(1).DayOfWeek == CalendarState.StartDayOfWeek ? "last " : "";
-                classnames += Date.Date.CompareTo(DateTime.Today) == 0 ? "today" : "";
-                return classnames;
-            }
-        }
-
         protected async Task ShowEditItem(Guid itemId)
         {
             var parameters = new ModalParameters();
-            parameters.Add(nameof(CalendarItemView.Id), itemId);
+            parameters.Add(nameof(TagEditView.Id), itemId);
 
-            var modal = Modal.Show<CalendarItemView>("Edit Calendar Item", parameters);
+            var modal = Modal.Show<TagEditView>("Edit Tag", parameters);
             var result = await modal.Result;
 
             StateChanged();

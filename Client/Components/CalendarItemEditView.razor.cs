@@ -11,7 +11,7 @@ using Tomi.Calendar.Mono.Shared;
 
 namespace Tomi.Calendar.Mono.Client.Components
 {
-    public class CalendarItemViewBase : ComponentBase
+    public partial class CalendarItemEditView : ComponentBase
     {
         [Inject]
         public CalendarItemState CalendarState { get; set; }
@@ -49,7 +49,7 @@ namespace Tomi.Calendar.Mono.Client.Components
         {
             if (Id != Guid.Empty)
             {
-                CalendarItem = CalendarState.GetItem(Id);
+                CalendarItem = CalendarState.GetCalendarItem(Id);
             }
             else
             {

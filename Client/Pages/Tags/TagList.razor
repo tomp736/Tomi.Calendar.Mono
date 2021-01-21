@@ -1,0 +1,19 @@
+﻿@page "/tags"
+
+<Tomi.Calendar.Mono.Client.Components.Tag.TagList />
+
+@code
+{
+    [Parameter]
+    public DateTime Date { get; set; } = DateTime.Today;
+
+    protected override Task OnParametersSetAsync()
+    {
+        if(Date == DateTime.MinValue)
+        {
+            Date = DateTime.Today;
+        }
+        Console.WriteLine(Date.ToString());
+        return base.OnParametersSetAsync();
+    }
+}

@@ -10,7 +10,7 @@ using Tomi.Calendar.Mono.Shared;
 namespace Tomi.Calendar.Mono.Client.Components
 {
 
-    public class CalendarWeekViewBase : ComponentBase
+    public partial class CalendarMonthView : ComponentBase
     {
         [Inject]
         public CalendarItemState CalendarState { get; set; }
@@ -27,7 +27,7 @@ namespace Tomi.Calendar.Mono.Client.Components
 
 
         protected DateTime StartDate => CalendarHelpers.GetStartDateOfWeek(new DateTime(Date.Year, Date.Month, Date.Day), CalendarState.StartDayOfWeek);
-        protected DateTime EndDate => StartDate.AddDays(6);
+        protected DateTime EndDate => StartDate.AddDays(34);
 
 
         public DateTime CenterDate => CalendarHelpers.CalendarDaysInView(StartDate, EndDate).Skip(17).FirstOrDefault();
@@ -57,7 +57,7 @@ namespace Tomi.Calendar.Mono.Client.Components
 
         protected async Task AddNewItem()
         {
-            var modal = Modal.Show<CalendarItemView>("Add Calendar Item");
+            var modal = Modal.Show<CalendarItemEditView>("Add Calendar Item");
             var result = await modal.Result;
 
             StateChanged();

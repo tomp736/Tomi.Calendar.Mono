@@ -1,0 +1,12 @@
+﻿<h3>TagList</h3>
+
+<ol>
+    @foreach (var tag in CalendarState.Tags)
+    {
+        <li @onclick="@(async() => await ShowEditItem(tag.Id))">@tag.Name - @tag.Description</li>
+    }
+</ol>
+
+@code {
+
+}

@@ -7,7 +7,7 @@ namespace Tomi.Calendar.Mono.Client.Services
     public interface ICalendarHttpService
     {
         Task<CalendarItem[]> GetCalendarItemsAsync();
-        Task<CalendarItem> GetItemAsync(Guid calendarItemId);
+        Task<CalendarItem> GetCalendarItemAsync(Guid calendarItemId);
         Task Save(CalendarItem calendarItemModel);
         Task Delete(CalendarItem calendarItemModel);
     }

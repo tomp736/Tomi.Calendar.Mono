@@ -28,7 +28,8 @@ namespace Tomi.Calendar.Mono.Client.State
             CalendarItems.AddRange(await _calendarHttpService.GetCalendarItemsAsync());
             Tags.AddRange(await _calendarHttpService.GetTagsAsync());
         }
-        public CalendarItem GetItem(Guid id)
+
+        public CalendarItem GetCalendarItem(Guid id)
         {
             return CalendarItems.FirstOrDefault(item => item.Id == id);
         }
@@ -51,6 +52,35 @@ namespace Tomi.Calendar.Mono.Client.State
                     if(!CalendarItems.Exists(ci => ci.Id == calendarItem.Id))
                     {
                         CalendarItems.Add(calendarItem);
+                    }
+                }
+            });
+        }
+
+
+        internal Tag GetTag(Guid id)
+        {
+            return Tags.FirstOrDefault(item => item.Id == id);
+        }
+        public async Task Delete(Tag tag)
+        {
+            await _calendarHttpService.Delete(tag).ContinueWith(result =>
+            {
+                if (result.IsCompletedSuccessfully)
+                {
+                    CalendarItems.RemoveAll(item => item.Id == tag.Id);
+                }
+            });
+        }
+        public async Task Save(Tag tag)
+        {
+            await _calendarHttpService.Save(tag).ContinueWith(result =>
+            {
+                if (result.IsCompletedSuccessfully)
+                {
+                    if (!CalendarItems.Exists(ci => ci.Id == tag.Id))
+                    {
+                        Tags.Add(tag);
                     }
                 }
             });
