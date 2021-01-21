@@ -10,8 +10,12 @@ namespace Tomi.Calendar.Mono.Server.Data
     public class AppNpgSqlDataContext : ApiAuthorizationDbContext<ApplicationUser>
     {
         public DbSet<CalendarItem> CalendarItems { get; set; }
+
         public DbSet<CalendarItemTag> CalendarItemTags { get; set; }
         public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<CalendarItemNote> CalendarItemNotes { get; set; }
+        public DbSet<Note> Notes { get; set; }
 
         public AppNpgSqlDataContext(
             DbContextOptions options,

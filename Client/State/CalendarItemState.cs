@@ -20,15 +20,20 @@ namespace Tomi.Calendar.Mono.Client.State
 
         public List<CalendarItem> CalendarItems { get; set; } = new List<CalendarItem>();
         public List<Tag> Tags { get; internal set; } = new List<Tag>();
+        public List<Note> Notes { get; internal set; } = new List<Note>();
 
         public async Task InitializeCalendarItemsAsync()
         {
             CalendarItems.Clear();
             Tags.Clear();
+            Notes.Clear();
 
             CalendarItems.AddRange(await _calendarHttpService.GetCalendarItemsAsync());
             Tags.AddRange(await _calendarHttpService.GetTagsAsync());
+            Notes.AddRange(await _calendarHttpService.GetNotesAsync());
         }
+
+        #region CalendarItem
 
         public CalendarItem GetCalendarItem(Guid id)
         {
@@ -44,6 +49,7 @@ namespace Tomi.Calendar.Mono.Client.State
                 }
             });
         }
+
         public async Task Save(CalendarItem calendarItem)
         {
             await _calendarHttpService.Save(calendarItem).ContinueWith(result =>
@@ -58,20 +64,13 @@ namespace Tomi.Calendar.Mono.Client.State
             });
         }
 
+        #endregion
+
+        #region Tags
 
         internal Tag GetTag(Guid id)
         {
             return Tags.FirstOrDefault(item => item.Id == id);
-        }
-        public async Task Delete(Tag tag)
-        {
-            await _calendarHttpService.Delete(tag).ContinueWith(result =>
-            {
-                if (result.IsCompletedSuccessfully)
-                {
-                    CalendarItems.RemoveAll(item => item.Id == tag.Id);
-                }
-            });
         }
         public async Task Save(Tag tag)
         {
@@ -86,6 +85,53 @@ namespace Tomi.Calendar.Mono.Client.State
                 }
             });
         }
+
+        public async Task Delete(Tag tag)
+        {
+            await _calendarHttpService.Delete(tag).ContinueWith(result =>
+            {
+                if (result.IsCompletedSuccessfully)
+                {
+                    CalendarItems.RemoveAll(item => item.Id == tag.Id);
+                }
+            });
+        }
+
+        #endregion
+
+        #region Notes
+
+        public Note GetNote(Guid id)
+        {
+            return Notes.FirstOrDefault(item => item.Id == id);
+        }
+        public async Task Save(Note note)
+        {
+            await _calendarHttpService.Save(note).ContinueWith(result =>
+            {
+                if (result.IsCompletedSuccessfully)
+                {
+                    if (!CalendarItems.Exists(ci => ci.Id == note.Id))
+                    {
+                        Notes.Add(note);
+                    }
+                }
+            });
+        }
+
+        public async Task Delete(Note note)
+        {
+            await _calendarHttpService.Delete(note).ContinueWith(result =>
+            {
+                if (result.IsCompletedSuccessfully)
+                {
+                    Notes.RemoveAll(item => item.Id == note.Id);
+                }
+            });
+        }
+
+        #endregion
+
 
         public event Action OnChange;
 

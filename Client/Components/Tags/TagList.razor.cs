@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.State;
 
-namespace Tomi.Calendar.Mono.Client.Components.Tag
+namespace Tomi.Calendar.Mono.Client.Components.Tags
 {
     public partial class TagList : ComponentBase
     {

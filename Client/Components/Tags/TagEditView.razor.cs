@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.State;
 
-namespace Tomi.Calendar.Mono.Client.Components.Tag
+namespace Tomi.Calendar.Mono.Client.Components.Tags
 {
     public partial class TagEditView : ComponentBase
     {

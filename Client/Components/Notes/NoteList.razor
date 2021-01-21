@@ -1,0 +1,8 @@
+﻿<h3>Note List</h3>
+
+<ol>
+    @foreach (var note in CalendarState.Notes)
+    {
+        <li @onclick="@(async() => await ShowEditItem(note.Id))">@note.Title - @note.CreateDate</li>
+    }
+</ol>

@@ -12,7 +12,7 @@ namespace Tomi.Calendar.Mono.Shared.Entities
         [Key]
         public int Key { get; set; }
         public Guid Id { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public string Title { get; set; }
         public string Content { get; set; }
 

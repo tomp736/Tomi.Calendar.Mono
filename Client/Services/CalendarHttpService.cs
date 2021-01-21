@@ -57,5 +57,26 @@ namespace Tomi.Calendar.Mono.Client.Services
         }
 
         #endregion
+
+
+        #region Notes
+
+        internal async Task<Note[]> GetNotesAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<Note[]>("/api/note");
+        }
+        public async Task Save(Note note)
+        {
+            if (note.Id == Guid.Empty)
+                note.Id = Guid.NewGuid();
+
+            await _httpClient.PostAsJsonAsync("/api/note", note);
+        }
+        public async Task Delete(Note note)
+        {
+            await _httpClient.DeleteAsync($"/api/note/{note.Id}");
+        }
+
+        #endregion
     }
 }
