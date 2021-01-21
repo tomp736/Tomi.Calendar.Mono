@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Shared;
+using Tomi.Calendar.Mono.Shared.Entities;
 
 namespace Tomi.Calendar.Mono.Client.State
 {

@@ -24,7 +24,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Tag
         [CascadingParameter]
         protected BlazoredModalInstance ModalInstance { get; set; }
 
-        protected Mono.Shared.Tag Tag { get; set; }
+        protected Mono.Shared.Entities.Tag Tag { get; set; }
 
         protected bool IsNew => Tag.Key == 0;
 
@@ -36,7 +36,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Tag
             }
             if (Tag == null)
             {
-                Tag = new Mono.Shared.Tag();
+                Tag = new Mono.Shared.Entities.Tag();
                 Tag.Id = Id;
             }
             await base.OnInitializedAsync();

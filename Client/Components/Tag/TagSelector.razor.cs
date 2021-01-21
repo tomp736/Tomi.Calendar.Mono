@@ -19,7 +19,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Tag
         [Parameter]
         public List<int> SelectedKeys { get; set; }
 
-        public ICollection<Mono.Shared.Tag> Values => CalendarState.Tags;
+        public ICollection<Mono.Shared.Entities.Tag> Values => CalendarState.Tags;
 
         [Parameter]
         public Action StateChangedCallback { get; set; }

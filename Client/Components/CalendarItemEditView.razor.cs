@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Components.Tag;
 using Tomi.Calendar.Mono.Client.State;
-using Tomi.Calendar.Mono.Shared;
+using Tomi.Calendar.Mono.Shared.Entities;
 
 namespace Tomi.Calendar.Mono.Client.Components
 {
@@ -67,7 +67,7 @@ namespace Tomi.Calendar.Mono.Client.Components
         protected async Task SaveItem()
         {
             // TODO.. move this, maybe do a smarter merge
-            if(TagSelector.SelectedKeys.Any())
+            if (TagSelector.SelectedKeys.Any())
             {
                 if (CalendarItem.CalendarItemTags == null)
                 {
@@ -83,7 +83,7 @@ namespace Tomi.Calendar.Mono.Client.Components
                     };
                 }));
             }
-            
+
             await CalendarState.Save(CalendarItem);
             await ModalInstance.CloseAsync(ModalResult.Ok(this));
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tomi.Calendar.Mono.Shared.Entities;
 
 namespace Tomi.Calendar.Mono.Shared
 {

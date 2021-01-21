@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Tomi.Calendar.Mono.Server.Models;
-using Tomi.Calendar.Mono.Shared;
+using Tomi.Calendar.Mono.Shared.Entities;
 
 namespace Tomi.Calendar.Mono.Server.Data
 {
@@ -28,6 +28,9 @@ namespace Tomi.Calendar.Mono.Server.Data
             modelBuilder.Entity<Tag>().Property(f => f.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Tag>().Property(f => f.Key).ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<Note>().Property(f => f.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Note>().Property(f => f.Key).ValueGeneratedOnAdd();
+
 
             // Relationships
             modelBuilder.Entity<CalendarItemTag>()
@@ -42,6 +45,21 @@ namespace Tomi.Calendar.Mono.Server.Data
                 .HasOne(bc => bc.Tag)
                 .WithMany(c => c.CalendarItemTags)
                 .HasForeignKey(bc => bc.TagKey);
+
+
+            // Relationships
+            modelBuilder.Entity<CalendarItemNote>()
+                .HasKey(bc => new { bc.CalendarItemKey, bc.NoteKey });
+
+            modelBuilder.Entity<CalendarItemNote>()
+                .HasOne(bc => bc.CalendarItem)
+                .WithMany(b => b.CalendarItemNotes)
+                .HasForeignKey(bc => bc.CalendarItemKey);
+
+            modelBuilder.Entity<CalendarItemNote>()
+                .HasOne(bc => bc.Note)
+                .WithMany(c => c.CalendarItemNotes)
+                .HasForeignKey(bc => bc.NoteKey);
 
             base.OnModelCreating(modelBuilder);
         }

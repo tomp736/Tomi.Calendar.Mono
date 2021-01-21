@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Tomi.Calendar.Mono.Shared
+namespace Tomi.Calendar.Mono.Shared.Entities
 {
     public class CalendarItem
     {
@@ -45,5 +45,6 @@ namespace Tomi.Calendar.Mono.Shared
         public string Title { get; set; }
         public string Description { get; set; }
         public List<CalendarItemTag> CalendarItemTags { get; set; }
+        public List<CalendarItemNote> CalendarItemNotes { get; set; }
     }
 }

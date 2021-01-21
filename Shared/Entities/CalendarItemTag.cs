@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Tomi.Calendar.Mono.Shared
+namespace Tomi.Calendar.Mono.Shared.Entities
 {
     public class CalendarItemTag
     {
