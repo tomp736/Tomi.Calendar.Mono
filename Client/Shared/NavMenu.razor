@@ -25,18 +25,23 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" @onclick="@(async() => await AddNewItem())">
+            <NavLink class="nav-link" @onclick="@(async() => await AddNewCalendarItem())">
                 <span class="oi bi-calendar2-plus" aria-hidden="true"></span> Add New Item
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/tags">
-                <span class="oi bi-calendar2-date" aria-hidden="true"></span> Tags
+            <NavLink class="nav-link" href="/notes">
+                <span class="oi bi-journal" aria-hidden="true"></span> Notes
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/notes">
-                <span class="oi bi-pencil-square" aria-hidden="true"></span> Notes
+            <NavLink class="nav-link" @onclick="@(async() => await AddNewNote())">
+                <span class="oi bi-journal-plus" aria-hidden="true"></span> Add New Note
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="/tags">
+                <span class="oi bi-tags" aria-hidden="true"></span> Tags
             </NavLink>
         </li>
     </ul>
@@ -52,9 +57,17 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    protected async Task AddNewItem()
+    protected async Task AddNewCalendarItem()
     {
         var modal = ModalService.Show<CalendarItemEditView>("Add Calendar Item");
+        var result = await modal.Result;
+
+        StateHasChanged();
+    }
+
+    protected async Task AddNewNote()
+    {
+        var modal = ModalService.Show<NoteEditView>("Add Note");
         var result = await modal.Result;
 
         StateHasChanged();
