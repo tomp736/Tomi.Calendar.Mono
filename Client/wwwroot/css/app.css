@@ -77,13 +77,25 @@ html, body {
     position: relative;
 }
 
-    .calendar-view-month .calendar-view-day.last {
-        width: 14.2%;
-    }
+.calendar-view-week .calendar-view-day {
+    float: left;
+    width: 14.3%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
 
-    .calendar-view-month .calendar-view-day.today heading {
-        border-top: 3px solid #4800ff;
-    }
+.calendar-view-month .calendar-view-day.last {
+    width: 14.2%;
+}
+
+.calendar-view-week .calendar-view-day.last {
+    width: 14.2%;
+}
+
+.calendar-view-month .calendar-view-day.today heading {
+    border-top: 3px solid #4800ff;
+}
 
 .calendar-view-day heading {
     padding: 10px;

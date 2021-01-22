@@ -9,9 +9,9 @@ using Tomi.Calendar.Mono.Client.Components.Tags;
 using Tomi.Calendar.Mono.Client.State;
 using Tomi.Calendar.Mono.Shared.Entities;
 
-namespace Tomi.Calendar.Mono.Client.Components
+namespace Tomi.Calendar.Mono.Client.Components.Calendar
 {
-    public partial class CalendarItemEditView : ComponentBase
+    public partial class CalendarItemEditComponent : ComponentBase
     {
         [Inject]
         public CalendarItemState CalendarState { get; set; }
@@ -61,7 +61,7 @@ namespace Tomi.Calendar.Mono.Client.Components
         protected async Task DeleteItem()
         {
             await CalendarState.Delete(CalendarItem);
-            await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
         protected async Task SaveItem()
@@ -85,7 +85,7 @@ namespace Tomi.Calendar.Mono.Client.Components
             }
 
             await CalendarState.Save(CalendarItem);
-            await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
         public void StateChanged()

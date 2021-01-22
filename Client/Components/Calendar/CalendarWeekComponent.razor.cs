@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.State;
 using Tomi.Calendar.Mono.Shared;
 
-namespace Tomi.Calendar.Mono.Client.Components
+namespace Tomi.Calendar.Mono.Client.Components.Calendar
 {
-
-    public partial class CalendarMonthView : ComponentBase
+    public partial class CalendarWeekComponent : ComponentBase
     {
         [Inject]
         public CalendarItemState CalendarState { get; set; }
@@ -27,11 +26,9 @@ namespace Tomi.Calendar.Mono.Client.Components
 
 
         protected DateTime StartDate => CalendarHelpers.GetStartDateOfWeek(new DateTime(Date.Year, Date.Month, Date.Day), CalendarState.StartDayOfWeek);
-        protected DateTime EndDate => StartDate.AddDays(34);
+        protected DateTime EndDate => StartDate.AddDays(6);
 
-
-        public DateTime CenterDate => CalendarHelpers.CalendarDaysInView(StartDate, EndDate).Skip(17).FirstOrDefault();
-        public string Heading => $"{CalendarHelpers.GetMonthName(CenterDate)} - {CenterDate.Year}";
+        public string Heading => $"{CalendarHelpers.GetMonthName(StartDate)} - {StartDate.Year}";
 
         public void AddMonths(int months)
         {
@@ -50,14 +47,14 @@ namespace Tomi.Calendar.Mono.Client.Components
 
         public void WheelHandler(WheelEventArgs wheelEventArgs)
         {
-            int weeks = wheelEventArgs.DeltaY > 0 ? 1 : -1;
+            int weeks = wheelEventArgs.DeltaY < 0 ? 1 : -1;
             AddWeeks(weeks);
             StateChanged();
         }
 
         protected async Task AddNewItem()
         {
-            var modal = Modal.Show<CalendarItemEditView>("Add Calendar Item");
+            var modal = Modal.Show<CalendarItemEditComponent>("Add Calendar Item");
             var result = await modal.Result;
 
             StateChanged();

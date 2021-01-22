@@ -47,14 +47,14 @@ namespace Tomi.Calendar.Mono.Client.Components.Notes
         protected async Task DeleteItem()
         {
             await CalendarState.Delete(Note);
-            await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
         protected async Task SaveItem()
         {
             Note.Content = await NoteTextEditor.GetHtmlContent();
             await CalendarState.Save(Note);
-            await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
         public void StateChanged()

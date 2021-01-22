@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.State;
+using Tomi.Calendar.Mono.Shared.Entities;
 
-namespace Tomi.Calendar.Mono.Client.Components
+namespace Tomi.Calendar.Mono.Client.Components.Calendar
 {
-    public partial class CalendarDayView : ComponentBase
+    public partial class CalendarDayComponent : ComponentBase
     {
         [Inject]
         public CalendarItemState CalendarState { get; set; }
@@ -51,9 +52,9 @@ namespace Tomi.Calendar.Mono.Client.Components
         protected async Task ShowEditItem(Guid itemId)
         {
             var parameters = new ModalParameters();
-            parameters.Add(nameof(CalendarItemEditView.Id), itemId);
+            parameters.Add(nameof(CalendarItemEditComponent.Id), itemId);
 
-            var modal = Modal.Show<CalendarItemEditView>("Edit Calendar Item", parameters);
+            var modal = Modal.Show<CalendarItemEditComponent>("Edit Calendar Item", parameters);
             var result = await modal.Result;
 
             StateChanged();

@@ -59,7 +59,7 @@
 
     protected async Task AddNewCalendarItem()
     {
-        var modal = ModalService.Show<CalendarItemEditView>("Add Calendar Item");
+        var modal = ModalService.Show<CalendarItemEditComponent>("Add Calendar Item");
         var result = await modal.Result;
 
         StateHasChanged();

@@ -1,0 +1,9 @@
+﻿<heading>
+    @Heading
+</heading>
+<div class="calendar-view-items" @onmousewheel="WheelHandler">
+    @foreach (DateTime date in CalendarHelpers.CalendarDaysInView(StartDate, EndDate))
+    {
+        <CalendarDayComponent Date="@date" StateChangedCallback="StateChanged"></CalendarDayComponent>
+    }
+</div>
