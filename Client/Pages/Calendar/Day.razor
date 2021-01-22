@@ -3,13 +3,18 @@
 
 <div class="calendar-view">
     <CalendarDayComponent Date="Date" />
+    <NoteListExpanded />
 </div>
+
 
 @code
 {
 
     [Parameter]
     public DateTime Date { get; set; } = DateTime.Today;
+
+    [Parameter]
+    public Guid CalendarItemId { get; set; }
 
     protected override Task OnParametersSetAsync()
     {

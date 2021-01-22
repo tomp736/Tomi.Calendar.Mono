@@ -1,0 +1,18 @@
+﻿@if (this.Note != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                <input class="form-control" type="text" id="tag-name" @bind="Note.Title" />
+            </h5>
+            <p class="card-text">
+                <TextEditor @ref="NoteTextEditor" HTMLContent="@Note.Content"></TextEditor>
+            </p>
+            <button class="btn btn-primary" @onclick="SaveItem">Ok</button>
+            @if (!IsNew)
+            {
+                <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>
+            }
+        </div>
+    </div>
+}

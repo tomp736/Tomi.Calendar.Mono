@@ -5,7 +5,7 @@
             <label for="tag-name">Title</label>
             <input class="form-control" type="text" id="tag-name" @bind="Note.Title" />
         </div>
-        <TextEditor @ref="NoteTextEditor" HTMLContent="@Note.Content"></TextEditor>
+        <TextEditor @ref="NoteTextEditor" HTMLContent="@Note.Content" ReadOnly="@ReadOnly"></TextEditor>
         <button class="btn btn-primary" @onclick="SaveItem">Ok</button>
         @if (!IsNew)
         {

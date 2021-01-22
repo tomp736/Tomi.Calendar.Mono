@@ -1,6 +1,6 @@
 ﻿@using Blazored.TextEditor
 
-<BlazoredTextEditor @ref="@QuillHtml">
+<BlazoredTextEditor @ref="@QuillHtml" ReadOnly="@ReadOnly">
     <ToolbarContent>
         <select class="ql-header">
             <option selected=""></option>
@@ -38,6 +38,9 @@
 
     [Parameter]
     public string HTMLContent { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
 
     public async Task SetHtmlContent(string content)
     {
