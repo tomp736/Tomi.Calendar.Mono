@@ -1,7 +1,7 @@
 ﻿<div class="note-view">
     <NoteCardEditView />
     <div class="note-cards" style="height: 60vh; overflow-y: scroll; overflow-x: auto;">
-        @foreach (var note in CalendarState.Notes.OrderBy(n => n.CreateDate))
+        @foreach (var note in CalendarState.Notes.OrderByDescending(n => n.CreateDate))
         {
             <NoteCardView Id="note.Id"></NoteCardView>
         }
