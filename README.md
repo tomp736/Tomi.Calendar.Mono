@@ -6,3 +6,4 @@ Using
 - Fluxor for Centralized State
 - Blazored Components (Modal, LocalStorage, TextEditor)
 
+![alt text](https://github.com/tomp736/Tomi.Calendar.Mono/blob/master/FooBar%20Calendar.png?raw=true)
