@@ -1,4 +1,6 @@
-﻿<heading>
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<heading>
     @Heading
 </heading>
 <div class="calendar-view-items" @onmousewheel="WheelHandler">
@@ -15,6 +17,6 @@
     }
     @foreach (DateTime date in CalendarHelpers.CalendarDaysInView(StartDate, EndDate))
     {
-        <CalendarDayComponent Date="@date" StateChangedCallback="StateChanged"></CalendarDayComponent>
+        <CalendarDayComponent Date="@date"></CalendarDayComponent>
     }
 </div>

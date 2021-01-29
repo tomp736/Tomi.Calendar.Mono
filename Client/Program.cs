@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Blazored.Modal;
+using Fluxor;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +8,6 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
-using Tomi.Calendar.Mono.Client.State;
 
 namespace Tomi.Calendar.Mono.Client
 {
@@ -17,6 +17,15 @@ namespace Tomi.Calendar.Mono.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
+
+            // Add Fluxor
+            var currentAssembly = typeof(Program).Assembly;
+            builder.Services.AddFluxor(config =>
+            {
+                config
+                    .ScanAssemblies(currentAssembly)
+                    .UseReduxDevTools();
+            });
 
             builder.Services.AddHttpClient<CalendarHttpService>("CalendarApi", client =>
             {
@@ -37,16 +46,12 @@ namespace Tomi.Calendar.Mono.Client
 
             builder.Services.AddApiAuthorization();
 
-
-            builder.Services.AddSingleton<CalendarItemState>();
+            builder.Services.AddScoped<StateFacade>();
 
             builder.Services.AddBlazoredModal();
             builder.Services.AddBlazoredLocalStorage();
 
             var host = builder.Build();
-
-            var calendarService = host.Services.GetRequiredService<CalendarItemState>();
-            await calendarService.InitializeCalendarItemsAsync();
 
             await host.RunAsync();
         }

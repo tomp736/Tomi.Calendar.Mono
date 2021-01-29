@@ -1,76 +1,86 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
+using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Client.State;
+using Tomi.Calendar.Mono.Client.Services;
+using Tomi.Calendar.Mono.Client.Store.State;
+using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 
 namespace Tomi.Calendar.Mono.Client.Components.Notes
 {
-    public partial class NoteEditView : ComponentBase
+    public partial class NoteEditView : FluxorComponent
     {
         [Inject]
-        public CalendarItemState CalendarState { get; set; }
-
+        protected IState<CalendarState> CalendarState { get; set; }
+        [Inject]
+        protected StateFacade StateFacade { get; set; }
         [Inject]
         public IModalService Modal { get; set; }
-
         [Parameter]
         public Guid Id { get; set; } = Guid.Empty;
-
-        [Parameter]
-        public Action StateChangedCallback { get; set; }
-
-        [Parameter]
-        public bool ReadOnly { get; set; }
 
         [CascadingParameter]
         protected BlazoredModalInstance ModalInstance { get; set; }
 
-        protected Mono.Shared.Entities.Note Note { get; set; }
-
         protected TextEditor NoteTextEditor { get; set; }
 
-        protected bool IsNew => Note.Key == 0;
+        private CreateOrUpdateNoteValidationModel validationModel =
+            new CreateOrUpdateNoteValidationModel();
 
-
-        protected async override Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             if (Id != Guid.Empty)
             {
-                Note = CalendarState.GetNote(Id);
+                StateFacade.LoadNoteById(Id);
             }
-            if (Note == null)
+
+            // Register a state change to assign the validation fields
+            CalendarState.StateChanged += (sender, state) =>
             {
-                Note = new Mono.Shared.Entities.Note();
-                Note.Id = Id;
-            }
-            await base.OnInitializedAsync();
+                if (state.CurrentCalendarItem is null)
+                {
+                    return;
+                }
+                validationModel.Title = state.CurrentNote.Title;
+                validationModel.Content = state.CurrentNote.Content;
+
+                StateHasChanged();
+            };
+
+            base.OnInitialized();
         }
 
         protected async Task DeleteItem()
         {
-            await CalendarState.Delete(Note);
+            StateFacade.DeleteNote(CalendarState.Value.CurrentNote!.Id);
             await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
-        protected async Task SaveItem()
+        public async Task HandleSubmit(EditContext editContext)
         {
-            Note.Content = await NoteTextEditor.GetHtmlContent();
-            await CalendarState.Save(Note);
-            await ModalInstance?.CloseAsync(ModalResult.Ok(this));
+            bool formIsValid = editContext.Validate();
+            if (formIsValid)
+            {
+                HandleValidSubmit();
+                await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            }
+        }
+        private void HandleValidSubmit()
+        {
+            // We use the bang operator (!) to tell the compiler we'll know this string field will not be null
+            StateFacade.UpdateNote(
+                CalendarState.Value.CurrentNote!.Id,
+                validationModel.Title!,
+                validationModel.Content!);
         }
 
-        public void StateChanged()
+        protected override void Dispose(bool disposing)
         {
-            if (StateChangedCallback != null)
-            {
-                StateChangedCallback.Invoke();
-            }
-            else
-            {
-                StateHasChanged();
-            }
+            base.Dispose(disposing);
         }
     }
 }

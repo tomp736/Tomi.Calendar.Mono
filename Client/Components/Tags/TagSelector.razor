@@ -1,27 +1,29 @@
-﻿@foreach (Mono.Shared.Entities.Tag tag in Values)
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@foreach (TagDto tag in CalendarState.Value.Tags)
 {
-    if (SelectedKeys.Contains(tag.Key))
+    if (SelectedValues.Contains(tag.Id))
     {
-        <span class="badge bg-success" @onclick="@(() => OnClick(tag.Key))">@tag.Name</span>
+        <span class="badge bg-success" @onclick="@(() => OnClick(tag.Id))">@tag.Name</span>
     }
     else
     {
-        <span class="badge bg-primary" @onclick="@(() => OnClick(tag.Key))">@tag.Name</span>
+        <span class="badge bg-primary" @onclick="@(() => OnClick(tag.Id))">@tag.Name</span>
     }
 }
 
 @code {
 
-    void OnClick(int key)
+    void OnClick(Guid key)
     {
-        if (SelectedKeys.Contains(key))
+        if (SelectedValues.Contains(key))
         {
-            SelectedKeys.Remove(key);
+            SelectedValues.Remove(key);
         }
         else
         {
-            SelectedKeys.Add(key);
+            SelectedValues.Add(key);
         }
-        Console.WriteLine(string.Join(",", SelectedKeys.Select(n => $"{n}")));
+        Console.WriteLine(string.Join(",", SelectedValues.Select(n => $"{n}")));
     }
 }

@@ -1,17 +1,21 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
+using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Client.State;
+using Tomi.Calendar.Mono.Client.Services;
+using Tomi.Calendar.Mono.Client.Store.State;
 
 namespace Tomi.Calendar.Mono.Client.Components.Tags
 {
-    public partial class TagList : ComponentBase
+    public partial class TagList : FluxorComponent
     {
         [Inject]
-        public CalendarItemState CalendarState { get; set; }
+        protected IState<CalendarState> CalendarState { get; set; }
+
+        protected StateFacade StateFacade { get; set; }
 
         [Inject]
         public IModalService Modal { get; set; }

@@ -1,11 +1,16 @@
-﻿<div class="calendar-view-day @ClassNames">
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<div class="calendar-view-day @ClassNames">
     <heading>
         @Heading
     </heading>
     <div class="calendar-view-day-items">
-        @foreach (var item in CalendarState.CalendarItems.GetCalendarItems(Date.Date))
+        @if (CalendarState.Value.CalendarItemsLoaded)
         {
-            <button class="btn btn-primary btn-sm calendar-item" @onclick="@(async() => await ShowEditItem(item.Id))">@item.Title</button>
+            @foreach (var item in CalendarState.Value.CalendarItems.GetCalendarItems(Date.Date))
+            {
+                <button class="btn btn-primary btn-sm calendar-item" @onclick="@(async () => await ShowEditItem(item.Id))">@item.Title</button>
+            }
         }
     </div>
 </div>

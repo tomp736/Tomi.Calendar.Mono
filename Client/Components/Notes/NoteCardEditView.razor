@@ -1,18 +1,22 @@
-﻿@if (this.Note != null)
-{
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<EditForm Model="validationModel" OnSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <div class="d-flex flex-column align-items-center">
+        <ValidationSummary />
+    </div>
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">
-                <input class="form-control" type="text" id="tag-name" @bind="Note.Title" />
+                <input class="form-control" type="text" id="tag-name" @bind="validationModel.Title" />
             </h5>
             <p class="card-text">
-                <TextEditor @ref="NoteTextEditor" HTMLContent="@Note.Content"></TextEditor>
+                <TextEditor @ref="NoteTextEditor" HTMLContent="@validationModel.Content"></TextEditor>
             </p>
-            <button class="btn btn-primary" @onclick="SaveItem">Ok</button>
-            @if (!IsNew)
-            {
-                <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>
-            }
+            <button class="btn btn-primary" type="submit">Ok</button>
+            <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>
+            <button class="btn btn-secondary" @onclick="ModalInstance.CancelAsync">Cancel</button>
         </div>
     </div>
-}
+</EditForm>
+

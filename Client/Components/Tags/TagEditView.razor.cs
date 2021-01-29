@@ -1,69 +1,81 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
+using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Client.State;
+using Tomi.Calendar.Mono.Client.Services;
+using Tomi.Calendar.Mono.Client.Store.State;
+using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 
 namespace Tomi.Calendar.Mono.Client.Components.Tags
 {
-    public partial class TagEditView : ComponentBase
+    public partial class TagEditView : FluxorComponent
     {
         [Inject]
-        public CalendarItemState CalendarState { get; set; }
-
+        protected IState<CalendarState> CalendarState { get; set; }
         [Inject]
-        public IModalService Modal { get; set; }
-
+        protected StateFacade StateFacade { get; set; }
         [Parameter]
         public Guid Id { get; set; } = Guid.Empty;
-
-        [Parameter]
-        public Action StateChangedCallback { get; set; }
-
         [CascadingParameter]
         protected BlazoredModalInstance ModalInstance { get; set; }
 
-        protected Mono.Shared.Entities.Tag Tag { get; set; }
+        private CreateOrUpdateTagValidationModel validationModel =
+            new CreateOrUpdateTagValidationModel();
 
-        protected bool IsNew => Tag.Key == 0;
-
-        protected async override Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             if (Id != Guid.Empty)
             {
-                Tag = CalendarState.GetTag(Id);
+                StateFacade.LoadTagById(Id);
             }
-            if (Tag == null)
+
+            // Register a state change to assign the validation fields
+            CalendarState.StateChanged += (sender, state) =>
             {
-                Tag = new Mono.Shared.Entities.Tag();
-                Tag.Id = Id;
-            }
-            await base.OnInitializedAsync();
+                if (state.CurrentCalendarItem is null)
+                {
+                    return;
+                }
+                validationModel.Name = state.CurrentTag.Name;
+                validationModel.Description = state.CurrentCalendarItem.Title;
+
+                StateHasChanged();
+            };
+
+            base.OnInitialized();
         }
 
         protected async Task DeleteItem()
         {
-            await CalendarState.Delete(Tag);
-            await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            StateFacade.DeleteTag(CalendarState.Value.CurrentTag!.Id);
+            await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
-        protected async Task SaveItem()
+        public async Task HandleSubmit(EditContext editContext)
         {
-            await CalendarState.Save(Tag);
-            await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            bool formIsValid = editContext.Validate();
+            if (formIsValid)
+            {
+                HandleValidSubmit();
+                await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            }
+        }
+        private void HandleValidSubmit()
+        {
+            // We use the bang operator (!) to tell the compiler we'll know this string field will not be null
+            StateFacade.UpdateTag(
+                CalendarState.Value.CurrentTag!.Id,
+                validationModel.Name!,
+                validationModel.Description!);
         }
 
-        public void StateChanged()
+        protected override void Dispose(bool disposing)
         {
-            if (StateChangedCallback != null)
-            {
-                StateChangedCallback.Invoke();
-            }
-            else
-            {
-                StateHasChanged();
-            }
+            base.Dispose(disposing);
         }
     }
 }

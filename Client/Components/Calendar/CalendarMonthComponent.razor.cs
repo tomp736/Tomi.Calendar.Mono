@@ -1,32 +1,40 @@
 ﻿using Blazored.Modal.Services;
+using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Client.State;
+using Tomi.Calendar.Mono.Client.Components.CalendarItem;
+using Tomi.Calendar.Mono.Client.Services;
+using Tomi.Calendar.Mono.Client.Store.State;
 using Tomi.Calendar.Mono.Shared;
 
 namespace Tomi.Calendar.Mono.Client.Components.Calendar
 {
-
-    public partial class CalendarMonthComponent : ComponentBase
+    public partial class CalendarMonthComponent : FluxorComponent
     {
         [Inject]
-        public CalendarItemState CalendarState { get; set; }
-
+        public IState<CalendarState> CalendarState { get; set; }
+        [Inject]
+        public StateFacade StateFacade { get; set; }
         [Inject]
         public IModalService Modal { get; set; }
-
-
         [Parameter]
         public DateTime Date { get; set; }
 
-        [Parameter]
-        public Action StateChangedCallback { get; set; }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            if (CalendarState.Value?.CalendarItems == null || !CalendarState.Value.CalendarItems.Any())
+            {
+                StateFacade.LoadCalendarItems();
+            }
+        }
 
-        protected DateTime StartDate => CalendarHelpers.GetStartDateOfWeek(new DateTime(Date.Year, Date.Month, Date.Day), CalendarState.StartDayOfWeek);
+        protected DateTime StartDate => CalendarHelpers.GetStartDateOfWeek(new DateTime(Date.Year, Date.Month, Date.Day), CalendarState.Value.StartDayOfWeek);
         protected DateTime EndDate => StartDate.AddDays(34);
 
 
@@ -52,27 +60,12 @@ namespace Tomi.Calendar.Mono.Client.Components.Calendar
         {
             int weeks = wheelEventArgs.DeltaY > 0 ? 1 : -1;
             AddWeeks(weeks);
-            StateChanged();
         }
 
         protected async Task AddNewItem()
         {
             var modal = Modal.Show<CalendarItemEditComponent>("Add Calendar Item");
             var result = await modal.Result;
-
-            StateChanged();
-        }
-
-        protected void StateChanged()
-        {
-            if (StateChangedCallback != null)
-            {
-                StateChangedCallback.Invoke();
-            }
-            else
-            {
-                StateHasChanged();
-            }
         }
     }
 }

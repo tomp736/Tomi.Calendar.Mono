@@ -1,34 +1,29 @@
-﻿using Blazored.Modal;
-using Blazored.Modal.Services;
+﻿using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using System;
-using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Client.State;
+using System.Linq;
+using Tomi.Calendar.Mono.Client.Store.State;
+using Tomi.Calendar.Mono.Shared.Dtos.Note;
 
 namespace Tomi.Calendar.Mono.Client.Components.Notes
 {
-    public partial class NoteCardView : ComponentBase
+    public partial class NoteCardView : FluxorComponent
     {
         [Inject]
-        public CalendarItemState CalendarState { get; set; }
-
+        protected IState<CalendarState> CalendarState { get; set; }
         [Parameter]
         public Guid Id { get; set; } = Guid.Empty;
 
-        protected Mono.Shared.Entities.Note Note { get; set; }
+        protected NoteDto Note { get; set; }
 
-        protected async override Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
+            base.OnInitialized();
             if (Id != Guid.Empty)
             {
-                Note = CalendarState.GetNote(Id);
+                Note = CalendarState.Value.Notes.FirstOrDefault(n => n.Id == Id);
             }
-            if (Note == null)
-            {
-                Note = new Mono.Shared.Entities.Note();
-                Note.Id = Id;
-            }
-            await base.OnInitializedAsync();
         }
     }
 }

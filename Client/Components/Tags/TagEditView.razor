@@ -1,22 +1,30 @@
-﻿@if (this.Tag != null)
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@if (CalendarState.Value.IsLoading)
 {
-<div>
-    <div class="form-group">
-        <label for="tag-name">Title</label>
-        <input class="form-control" type="text" id="tag-name" @bind="Tag.Name" />
+    <div class="d-flex flex-column align-items-center">
+        Loading ...
     </div>
-    <div class="form-group">
-        <label for="tag-description">Description</label>
-        <input class="form-control" type="text" id="tag-description" @bind="Tag.Description" />
-    </div>
-    <button class="btn btn-primary" @onclick="SaveItem">Ok</button>
-    @if (!IsNew)
-    {
-        <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>
-    }
-    @if (ModalInstance != null)
-    {
-        <button class="btn btn-secondary" @onclick="ModalInstance.CancelAsync">Cancel</button>
-    }
-</div>
+}
+else
+{
+    <EditForm Model="validationModel" OnSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <div class="d-flex flex-column align-items-center">
+            <ValidationSummary />
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="tag-name">Title</label>
+                <input class="form-control" type="text" id="tag-name" @bind="validationModel.Name" />
+            </div>
+            <div class="form-group">
+                <label for="tag-description">Description</label>
+                <input class="form-control" type="text" id="tag-description" @bind="validationModel.Description" />
+            </div>
+            <button class="btn btn-primary" type="submit">Ok</button>
+            <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>
+            <button class="btn btn-secondary" @onclick="ModalInstance.CancelAsync">Cancel</button>
+        </div>
+    </EditForm>
 }

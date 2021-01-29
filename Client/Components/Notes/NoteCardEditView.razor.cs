@@ -1,48 +1,83 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
+using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Client.State;
+using Tomi.Calendar.Mono.Client.Services;
+using Tomi.Calendar.Mono.Client.Store.State;
+using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 
 namespace Tomi.Calendar.Mono.Client.Components.Notes
 {
-    public partial class NoteCardEditView : ComponentBase
+    public partial class NoteCardEditView : FluxorComponent
     {
         [Inject]
-        public CalendarItemState CalendarState { get; set; }
-
+        protected IState<CalendarState> CalendarState { get; set; }
+        [Inject]
+        protected StateFacade StateFacade { get; set; }
         [Parameter]
         public Guid Id { get; set; } = Guid.Empty;
+        [CascadingParameter]
+        protected BlazoredModalInstance ModalInstance { get; set; }
 
-        protected Mono.Shared.Entities.Note Note { get; set; }
+        protected CreateOrUpdateNoteValidationModel validationModel =
+            new CreateOrUpdateNoteValidationModel();
 
         protected TextEditor NoteTextEditor { get; set; }
 
-        protected bool IsNew => Note.Key == 0;
-
-        protected async override Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             if (Id != Guid.Empty)
             {
-                Note = CalendarState.GetNote(Id);
+                StateFacade.LoadNoteById(Id);
             }
-            if (Note == null)
+
+            // Register a state change to assign the validation fields
+            CalendarState.StateChanged += (sender, state) =>
             {
-                Note = new Mono.Shared.Entities.Note();
-                Note.Id = Id;
-            }
-            await base.OnInitializedAsync();
-        }
-        protected async Task DeleteItem()
-        {
-            await CalendarState.Delete(Note);
+                if (state.CurrentCalendarItem is null)
+                {
+                    return;
+                }
+                validationModel.Title = state.CurrentNote.Title;
+                validationModel.Content = state.CurrentNote.Content;
+
+                StateHasChanged();
+            };
+
+            base.OnInitialized();
         }
 
-        protected async Task SaveItem()
+        protected async Task DeleteItem()
         {
-            Note.Content = await NoteTextEditor.GetHtmlContent();
-            await CalendarState.Save(Note);
+            StateFacade.DeleteNote(CalendarState.Value.CurrentNote!.Id);
+            await ModalInstance?.CloseAsync(ModalResult.Ok(this));
+        }
+
+        public async Task HandleSubmit(EditContext editContext)
+        {
+            bool formIsValid = editContext.Validate();
+            if (formIsValid)
+            {
+                HandleValidSubmit();
+                await ModalInstance.CloseAsync(ModalResult.Ok(this));
+            }
+        }
+        private void HandleValidSubmit()
+        {
+            // We use the bang operator (!) to tell the compiler we'll know this string field will not be null
+            StateFacade.UpdateTag(
+                CalendarState.Value.CurrentNote!.Id,
+                validationModel.Title!,
+                validationModel.Content!);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
         }
     }
 }

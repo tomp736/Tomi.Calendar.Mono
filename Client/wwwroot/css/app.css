@@ -25,7 +25,7 @@ html, body {
 
 .calendar-view {
     height: 100%;
-    padding-top: 40px;
+    /*padding-top: 40px;*/
     padding-bottom: 40px;
 }
 
@@ -169,6 +169,24 @@ div .calendar-item {
         border-color: #000 transparent #000 transparent;
         animation: lds-hourglass 1.2s infinite;
     }
+
+.note-view {
+    width: 75%;
+    float: left;
+}
+
+    .note-view .card {
+        margin: 5px;
+    }
+
+    .note-view .card-text {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 13px;
+    }
+
+        .note-view .card-text p {
+            margin-bottom: 0px;
+        }
 
 @keyframes lds-hourglass {
     0% {

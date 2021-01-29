@@ -30,6 +30,16 @@ namespace Tomi.Calendar.Mono.Server.Controllers
             return new JsonResult(items.ToList());
         }
 
+        [HttpGet("{id:guid}")]
+        public ActionResult Get(Guid id)
+        {
+            var item = _dataContext.CalendarItems
+                .Include(item => item.CalendarItemTags)
+                .FirstOrDefault(n => n.Id == id);
+
+            return new JsonResult(item);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post(CalendarItem CalendarItem)
         {

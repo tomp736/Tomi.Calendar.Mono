@@ -1,7 +1,9 @@
-﻿<h3>Note List</h3>
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>Note List</h3>
 
 <ol>
-    @foreach (var note in CalendarState.Notes)
+    @foreach (var note in CalendarState.Value.Notes)
     {
         <li @onclick="@(async() => await ShowEditItem(note.Id))">@note.Title - @note.CreateDate</li>
     }
