@@ -9,6 +9,9 @@ services:
       - AllowedOrigins=http://localhost:8080,https://localhost:8081
       - AllowedOriginsHeaders=Origin,X-Requested-With,Content-Type,Accept
       - AllowedOriginsMethods=POST,GET,OPTIONS,DELETE
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=SecurePassword
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     depends_on:
       - "pgdb"
     volumes:
