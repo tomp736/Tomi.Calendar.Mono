@@ -139,10 +139,29 @@ div .calendar-view-dayofweek {
         width: 14.2%;
     }
 
-div .calendar-item {
+
+.calendar-view-day .calendar-view-day-items .calendar-item {
     font-size: .7em;
     border-radius: 5px;
     padding: 2px;
+    width: 50%;
+    margin-bottom: 2px;
+}
+
+.calendar-view-week .calendar-view-day-items .calendar-item {
+    font-size: .7em;
+    border-radius: 5px;
+    padding: 2px;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.calendar-view-month .calendar-view-day-items .calendar-item {
+    font-size: .7em;
+    border-radius: 5px;
+    padding: 2px;
+    width: 100%;
+    margin-bottom: 2px;
 }
 
 .calendar-view-day > .lds-hourglass {

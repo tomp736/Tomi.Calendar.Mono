@@ -7,9 +7,9 @@
     <div class="calendar-view-day-items">
         @if (CalendarState.Value.CalendarItemsLoaded)
         {
-            @foreach (var item in CalendarState.Value.CalendarItems.GetCalendarItems(NodaTime.LocalDate.FromDateTime(Date.Date)))
+            @foreach (var item in CalendarState.Value.CalendarItems.GetCalendarItems(NodaTime.LocalDate.FromDateTime(Date.Date)).OrderBy(n => n.StartTime))
             {
-                <button class="btn btn-primary btn-sm calendar-item" @onclick="@(async () => await ShowEditItem(item.Id))">@item.Title</button>
+                <button class="btn btn-primary btn-md calendar-item" @onclick="@(async () => await ShowEditItem(item.Id))">@item.Title</button>
             }
         }
     </div>
