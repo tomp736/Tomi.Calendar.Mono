@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4D1E3C3A
 		create-migration.txt = create-migration.txt
 		docker-compose.yaml = docker-compose.yaml
 		Dockerfile = Dockerfile
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global

@@ -1,0 +1,36 @@
+﻿@using NodaTime
+@using Microsoft.Extensions.Logging
+
+<input type="date" @bind="CurrentDateTime" />
+
+@code {
+    private DateTime CurrentDateTime
+    {
+        get
+        {
+            // Logger.LogInformation($"Get CurrentDateTime {LocalDate.ToDateTimeUnspecified()}");
+            return LocalDate.ToDateTimeUnspecified();
+        }
+        set
+        {
+            LocalDate = LocalDate.FromDateTime(value);
+            // Logger.LogInformation($"Set CurrentDateTime to {value}");
+            OnLocalDateChanged();
+        }
+    }
+
+    [Parameter]
+    public LocalDate LocalDate { get; set; }
+
+    [Parameter]
+    public EventCallback<LocalDate> LocalDateChanged { get; set; }
+
+    [Inject]
+    public ILogger<NoDaTimeDatePicker> Logger { get; set; }
+
+    public void OnLocalDateChanged()
+    {
+        // Logger.LogInformation($"OnLocalDateChanged: {LocalDate.ToString()}");
+        LocalDateChanged.InvokeAsync(LocalDate.FromDateTime(CurrentDateTime));
+    }
+}

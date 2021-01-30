@@ -24,8 +24,8 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 
     public record CreateCalendarItemAction
     {
-        public CreateCalendarItemAction(CreateOrUpdateCalendarItemDto note) => CalendarItem = note;
-        public CreateOrUpdateCalendarItemDto CalendarItem { get; }
+        public CreateCalendarItemAction(CreateOrUpdateCalendarItemDto note) => CalendarItemDto = note;
+        public CreateOrUpdateCalendarItemDto CalendarItemDto { get; }
     }
     public record CreateCalendarItemFailureAction : FailureAction
     {

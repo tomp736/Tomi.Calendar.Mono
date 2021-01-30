@@ -4,8 +4,11 @@ using Fluxor;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using NodaTime;
+using NodaTime.Serialization.SystemTextJson;
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
 
@@ -27,6 +30,12 @@ namespace Tomi.Calendar.Mono.Client
                     .UseReduxDevTools();
             });
 
+            JsonSerializerOptions options = 
+                new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                .ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+
+            builder.Services.AddSingleton(options);
+
             builder.Services.AddHttpClient<CalendarHttpService>("CalendarApi", client =>
             {
                 // client.BaseAddress = new Uri("https://localhost:8091");
@@ -47,6 +56,7 @@ namespace Tomi.Calendar.Mono.Client
             builder.Services.AddApiAuthorization();
 
             builder.Services.AddScoped<StateFacade>();
+
 
             builder.Services.AddBlazoredModal();
             builder.Services.AddBlazoredLocalStorage();

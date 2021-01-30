@@ -4,6 +4,7 @@ using Fluxor;
 using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using NodaTime;
 using System;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Components.Tags;
@@ -58,8 +59,10 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
                 Id = state.CurrentCalendarItem.Id;
                 validationModel.Title = state.CurrentCalendarItem.Title;
                 validationModel.Description = state.CurrentCalendarItem.Title;
-                validationModel.StartDate = state.CurrentCalendarItem.StartDate.GetValueOrDefault(DateTime.Today);
-                validationModel.EndDate = state.CurrentCalendarItem.EndDate.GetValueOrDefault(DateTime.Today);
+                validationModel.StartDate = state.CurrentCalendarItem.StartDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
+                validationModel.EndDate = state.CurrentCalendarItem.EndDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
+                validationModel.StartTime = state.CurrentCalendarItem.StartTime.GetValueOrDefault(LocalTime.MinValue);
+                validationModel.EndTime = state.CurrentCalendarItem.EndTime.GetValueOrDefault(LocalTime.MaxValue);
 
                 StateHasChanged();
             };
@@ -90,7 +93,9 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
                 validationModel.Title!,
                 validationModel.Description!,
                 validationModel.StartDate,
-                validationModel.EndDate);
+                validationModel.EndDate,
+                validationModel.StartTime,
+                validationModel.EndTime);
         }
 
         protected override void Dispose(bool disposing)

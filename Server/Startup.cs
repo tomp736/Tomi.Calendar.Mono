@@ -5,8 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Npgsql;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
+using Npgsql.NodaTime;
+using NodaTime;
+using NodaTime.Serialization.SystemTextJson;
 
 namespace Tomi.Calendar.Mono.Server
 {
@@ -25,7 +29,7 @@ namespace Tomi.Calendar.Mono.Server
         {
             services.AddDbContext<AppNpgSqlDataContext>(options =>
             {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), o => o.UseNodaTime());
             });
 
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -39,7 +43,8 @@ namespace Tomi.Calendar.Mono.Server
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
             services.AddRazorPages();
 
             // ConfigureSwagger.ConfigureServices(services);

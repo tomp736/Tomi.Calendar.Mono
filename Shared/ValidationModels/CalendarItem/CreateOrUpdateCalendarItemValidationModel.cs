@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
@@ -12,9 +13,12 @@ namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Must have a Start Date")]
-        public DateTime StartDate { get; set; } = DateTime.Today;
+        public LocalDate StartDate { get; set; }
 
         [Required(ErrorMessage = "Must have an End Date")]
-        public DateTime EndDate { get; set; } = DateTime.Today;
+        public LocalDate EndDate { get; set; } 
+
+        public LocalTime StartTime { get; set; }
+        public LocalTime EndTime { get; set; }
     }
 }

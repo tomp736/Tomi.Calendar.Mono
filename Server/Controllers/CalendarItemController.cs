@@ -56,6 +56,8 @@ namespace Tomi.Calendar.Mono.Server.Controllers
             {
                 calendarItem.StartDate = CalendarItem.StartDate;
                 calendarItem.EndDate = CalendarItem.EndDate;
+                calendarItem.StartTime = CalendarItem.StartTime;
+                calendarItem.EndTime = CalendarItem.EndTime;
                 calendarItem.Title = CalendarItem.Title;
                 calendarItem.Description = CalendarItem.Description;
                 calendarItem.CalendarItemTags = CalendarItem.CalendarItemTags;

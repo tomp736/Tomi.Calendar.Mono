@@ -1,0 +1,47 @@
+﻿@using NodaTime
+@using Microsoft.Extensions.Logging
+
+<input type="time" @bind="CurrentDateTime" />
+
+@code {
+    // I would much rather use timespan???
+    private DateTime CurrentDateTime
+    {
+        get
+        {
+            // Logger.LogInformation($"Get CurrentDateTime {DateTimeFromLocalTime(LocalTime)}");
+            return DateTimeFromLocalTime(LocalTime);
+        }
+        set
+        {
+            LocalTime = LocalTimeFromDateTime(value);
+            // Logger.LogInformation($"Set CurrentDateTime to {value}");
+            OnLocalTimeChanged();
+        }
+    }
+
+    [Parameter]
+    public LocalTime LocalTime { get; set; }
+
+    [Parameter]
+    public EventCallback<LocalTime> LocalTimeChanged { get; set; }
+
+    [Inject]
+    public ILogger<NoDaTimeDatePicker> Logger { get; set; }
+
+    public LocalTime LocalTimeFromDateTime(DateTime dateTime)
+    {
+        return new LocalTime(dateTime.Hour, dateTime.Minute, dateTime.Second);
+    }
+
+    public DateTime DateTimeFromLocalTime(LocalTime localTime)
+    {
+        return new DateTime(DateTime.MinValue.Year, DateTime.MinValue.Month, DateTime.MinValue.Day, localTime.Hour, localTime.Minute, localTime.Second);
+    }
+
+    public void OnLocalTimeChanged()
+    {
+        // Logger.LogInformation($"OnLocalTimeChanged: {LocalTime.ToString()}");
+        LocalTimeChanged.InvokeAsync(LocalTime);
+    }
+}

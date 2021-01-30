@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,37 +11,11 @@ namespace Tomi.Calendar.Mono.Shared.Entities
         public int Key { get; set; }
         public Guid Id { get; set; }
 
-        private DateTime? _startDate;
-        public DateTime StartDate
-        {
-            get
-            {
-                if (_startDate.HasValue)
-                    return _startDate.Value;
-                return DateTime.Today;
-            }
-            set
-            {
-                _startDate = value;
-            }
-        }
+        public LocalDate StartDate { get; set; }
+        public LocalDate EndDate { get; set; }
 
-        private DateTime? _endDate;
-        public DateTime EndDate
-        {
-            get
-            {
-                if (_endDate.HasValue)
-                    return _endDate.Value;
-                if (_startDate.HasValue)
-                    return _startDate.Value;
-                return DateTime.MaxValue;
-            }
-            set
-            {
-                _endDate = value;
-            }
-        }
+        public LocalTime StartTime { get; set; }
+        public LocalTime EndTime { get; set; }
 
         public string Title { get; set; }
         public string Description { get; set; }

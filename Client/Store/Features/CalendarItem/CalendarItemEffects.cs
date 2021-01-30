@@ -41,7 +41,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             try
             {
                 var calendarItem = await _calendarHttpService.GetCalendarItemAsync(action.Id);
-                if(calendarItem != null)
+                if (calendarItem != null)
                 {
                     dispatcher.Dispatch(new NewCalendarItemFailureAction($"Resource already exists for {action.Id}"));
                 }
@@ -81,6 +81,8 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.Description = action.CalendarItemDto.Description;
                 calendarItemDto.StartDate = action.CalendarItemDto.StartDate;
                 calendarItemDto.EndDate = action.CalendarItemDto.EndDate;
+                calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
+                calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
                 await _calendarHttpService.Save(calendarItemDto);
                 dispatcher.Dispatch(new UpdateCalendarItemSuccessAction(calendarItemDto));
@@ -97,10 +99,12 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             try
             {
                 CalendarItemDto calendarItemDto = new CalendarItemDto();
-                calendarItemDto.Title = action.CalendarItem.Title;
-                calendarItemDto.Description = action.CalendarItem.Description;
-                calendarItemDto.StartDate = action.CalendarItem.StartDate;
-                calendarItemDto.EndDate = action.CalendarItem.EndDate;
+                calendarItemDto.Title = action.CalendarItemDto.Title;
+                calendarItemDto.Description = action.CalendarItemDto.Description;
+                calendarItemDto.StartDate = action.CalendarItemDto.StartDate;
+                calendarItemDto.EndDate = action.CalendarItemDto.EndDate;
+                calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
+                calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
                 await _calendarHttpService.Save(calendarItemDto);
                 dispatcher.Dispatch(new UpdateCalendarItemSuccessAction(calendarItemDto));

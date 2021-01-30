@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 using System;
 using Tomi.Calendar.Mono.Client.Store.Features.CalendarItem;
 using Tomi.Calendar.Mono.Client.Store.Features.Note;
@@ -33,14 +34,14 @@ namespace Tomi.Calendar.Mono.Client.Services
         {
             _dispatcher.Dispatch(new NewCalendarItemAction(id));
         }
-        public void CreateCalendarItem(string title, string description, DateTime startDate, DateTime endDate)
+        public void CreateCalendarItem(string title, string description, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime)
         {
-            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate);
+            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate, startTime, endTime);
             _dispatcher.Dispatch(new CreateCalendarItemAction(dto));
         }
-        public void UpdateCalendarItem(Guid id, string title, string description, DateTime startDate, DateTime endDate)
+        public void UpdateCalendarItem(Guid id, string title, string description, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime)
         {
-            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate);
+            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate, startTime, endTime);
             _dispatcher.Dispatch(new UpdateCalendarItemAction(id, dto));
         }
         public void DeleteCalendarItem(Guid id)
