@@ -9,6 +9,8 @@ namespace Tomi.Calendar.Mono.Server.Data
 {
     public class AppNpgSqlDataContext : ApiAuthorizationDbContext<ApplicationUser>
     {
+        public DbSet<ApplicationUserCalendarItem> ApplicationUserCalendarItem { get; set; }
+
         public DbSet<CalendarItem> CalendarItems { get; set; }
 
         public DbSet<CalendarItemTag> CalendarItemTags { get; set; }
@@ -29,14 +31,22 @@ namespace Tomi.Calendar.Mono.Server.Data
             modelBuilder.Entity<CalendarItem>().Property(f => f.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<CalendarItem>().Property(f => f.Key).ValueGeneratedOnAdd();
 
+
             modelBuilder.Entity<Tag>().Property(f => f.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Tag>().Property(f => f.Key).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Note>().Property(f => f.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Note>().Property(f => f.Key).ValueGeneratedOnAdd();
 
-
             // Relationships
+            modelBuilder.Entity<ApplicationUserCalendarItem>()
+                .HasKey(bc => new { bc.CalendarItemKey, bc.UserKey });
+
+            modelBuilder.Entity<ApplicationUserCalendarItem>()
+                .HasOne(c => c.User)
+                .WithMany(bc => bc.UserCalendarItems)
+                .HasForeignKey(k => k.UserKey);
+
             modelBuilder.Entity<CalendarItemTag>()
                 .HasKey(bc => new { bc.CalendarItemKey, bc.TagKey });
 
@@ -50,8 +60,6 @@ namespace Tomi.Calendar.Mono.Server.Data
                 .WithMany(c => c.CalendarItemTags)
                 .HasForeignKey(bc => bc.TagKey);
 
-
-            // Relationships
             modelBuilder.Entity<CalendarItemNote>()
                 .HasKey(bc => new { bc.CalendarItemKey, bc.NoteKey });
 

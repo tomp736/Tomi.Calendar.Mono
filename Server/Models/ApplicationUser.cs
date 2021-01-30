@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Tomi.Calendar.Mono.Server.Models
 {
@@ -11,5 +9,7 @@ namespace Tomi.Calendar.Mono.Server.Models
         // Extended Properties
         public string Nickname { get; set; }
         public DateTime BirthDate { get; set; }
+
+        public IEnumerable<ApplicationUserCalendarItem> UserCalendarItems { get; set; }
     }
 }

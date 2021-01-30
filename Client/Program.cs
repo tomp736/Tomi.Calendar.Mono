@@ -42,7 +42,7 @@ namespace Tomi.Calendar.Mono.Client
                 client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
-            }); //.AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+            }).AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("CalendarApi"));
