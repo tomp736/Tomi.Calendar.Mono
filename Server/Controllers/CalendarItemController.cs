@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
@@ -54,7 +52,7 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(CalendarItem calendarItem)
         {
-            ActionResult result;
+            ActionResult result = new OkResult();
             ApplicationUserCalendarItem userCalendarItem = CurrentUser.UserCalendarItems.FirstOrDefault(n => n.CalendarItem.Id == calendarItem.Id);
             try
             {
@@ -75,14 +73,6 @@ namespace Tomi.Calendar.Mono.Server.Controllers
                 }
 
                 int rowsAffected = await _dataContext.SaveChangesAsync();
-                if (rowsAffected == 1)
-                {
-                    result = new OkResult();
-                }
-                else
-                {
-                    result = new BadRequestResult();
-                }
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -96,27 +86,26 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         {
             ActionResult result = new OkResult();
 
-            string currentUser = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var applicationUser = await _dataContext.Users.Where(n => n.Id == currentUser)
-                .Include(item => item.UserCalendarItems.Where(n => n.UserKey == currentUser))
-                .ThenInclude(item => item.CalendarItem).FirstOrDefaultAsync();
-
-            CalendarItem calendarItem = applicationUser.UserCalendarItems.Select(n => n.CalendarItem).FirstOrDefault(n => n.Id == id);
-            try
+            if (CurrentUser != null)
             {
-                if (calendarItem == null)
+                CalendarItem calendarItem = CurrentUser.UserCalendarItems
+                    .FirstOrDefault(n => n.CalendarItem.Id == id)?.CalendarItem;
+                try
                 {
-                    EntityEntry entityEntry = _dataContext.CalendarItems.Remove(calendarItem);
-                    int rowsAffected = await _dataContext.SaveChangesAsync();
+                    if (calendarItem != null)
+                    {
+                        EntityEntry entityEntry = _dataContext.CalendarItems.Remove(calendarItem);
+                        int rowsAffected = await _dataContext.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        result = new NotFoundResult();
+                    }
                 }
-                else
+                catch (DbUpdateException dbUpdateException)
                 {
-                    result = new NotFoundResult();
+                    result = new StatusCodeResult(500);
                 }
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                result = new StatusCodeResult(500);
             }
 
             return result;

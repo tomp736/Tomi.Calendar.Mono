@@ -10,7 +10,9 @@ using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Tomi.Blazor.Notification.Services;
 using Tomi.Calendar.Mono.Client.Services;
+using Tomi.Calendar.Mono.Client.Store.Features.CalendarItem;
 
 namespace Tomi.Calendar.Mono.Client
 {
@@ -30,7 +32,7 @@ namespace Tomi.Calendar.Mono.Client
                     .UseReduxDevTools();
             });
 
-            JsonSerializerOptions options = 
+            JsonSerializerOptions options =
                 new JsonSerializerOptions(JsonSerializerDefaults.Web)
                 .ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
 
@@ -57,6 +59,7 @@ namespace Tomi.Calendar.Mono.Client
 
             builder.Services.AddScoped<StateFacade>();
 
+            builder.Services.AddSingleton<NotificationService>();
 
             builder.Services.AddBlazoredModal();
             builder.Services.AddBlazoredLocalStorage();

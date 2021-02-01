@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-<html manifest="application.appcache">
 
 <head>
     <meta charset="utf-8" />
@@ -25,6 +24,7 @@
     <script src="_content/Blazored.Modal/blazored.modal.js"></script>
     <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="_content/Fluxor.Blazor.Web/scripts/index.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 
 </html>
