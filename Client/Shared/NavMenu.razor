@@ -67,7 +67,7 @@
 
     protected async Task AddNewNote()
     {
-        var modal = ModalService.Show<NoteEditView>("Add Note");
+        var modal = ModalService.Show<NoteCardEditView>("Add Note");
         var result = await modal.Result;
 
         StateHasChanged();

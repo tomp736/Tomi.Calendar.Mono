@@ -37,7 +37,7 @@ namespace Tomi.Calendar.Mono.Client.Services
 
             await _httpClient.PostAsJsonAsync("/api/calendaritem", calendarItemDto, _jsonSerializerOptions);
         }
-        public async Task Delete(Guid id)
+        public async Task DeleteCalendarItem(Guid id)
         {
             await _httpClient.DeleteAsync($"/api/calendaritem/{id}");
         }
@@ -59,9 +59,9 @@ namespace Tomi.Calendar.Mono.Client.Services
 
             await _httpClient.PostAsJsonAsync("/api/tag", calendarItemModel, _jsonSerializerOptions);
         }
-        public async Task Delete(TagDto calendarItemModel)
+        public async Task DeleteTag(Guid id)
         {
-            await _httpClient.DeleteAsync($"/api/tag/{calendarItemModel.Id}");
+            await _httpClient.DeleteAsync($"/api/tag/{id}");
         }
         #endregion
 
@@ -83,9 +83,9 @@ namespace Tomi.Calendar.Mono.Client.Services
 
             await _httpClient.PostAsJsonAsync("/api/note", note, _jsonSerializerOptions);
         }
-        public async Task Delete(NoteDto note)
+        public async Task DeleteNote(Guid id)
         {
-            await _httpClient.DeleteAsync($"/api/note/{note.Id}");
+            await _httpClient.DeleteAsync($"/api/note/{id}");
         }
         #endregion
     }

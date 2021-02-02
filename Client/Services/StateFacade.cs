@@ -86,6 +86,10 @@ namespace Tomi.Calendar.Mono.Client.Services
         {
             _dispatcher.Dispatch(new LoadNoteDetailAction(id));
         }
+        internal void NewNote(Guid id)
+        {
+            _dispatcher.Dispatch(new NewNoteAction(id));
+        }
         public void CreateNote(string title, string content)
         {
             var dto = new CreateOrUpdateNoteDto(title, content);

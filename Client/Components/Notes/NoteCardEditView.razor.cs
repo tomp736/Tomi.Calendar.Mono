@@ -1,9 +1,11 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
+using Blazored.TextEditor;
 using Fluxor;
 using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
@@ -18,32 +20,40 @@ namespace Tomi.Calendar.Mono.Client.Components.Notes
         protected IState<CalendarState> CalendarState { get; set; }
         [Inject]
         protected StateFacade StateFacade { get; set; }
+
         [Parameter]
-        public Guid Id { get; set; } = Guid.Empty;
+        public Guid? Id { get; set; }
+
         [CascadingParameter]
         protected BlazoredModalInstance ModalInstance { get; set; }
 
         protected CreateOrUpdateNoteValidationModel validationModel =
             new CreateOrUpdateNoteValidationModel();
 
-        protected TextEditor NoteTextEditor { get; set; }
+        protected BlazoredTextEditor NoteTextEditor { get; set; }
 
         protected override void OnInitialized()
         {
-            if (Id != Guid.Empty)
+            if (Id.HasValue)
             {
-                StateFacade.LoadNoteById(Id);
+                StateFacade.LoadNoteById(Id.Value);
+            }
+            else
+            {
+                Id = Guid.NewGuid();
+                StateFacade.NewNote(Id.Value);
             }
 
             // Register a state change to assign the validation fields
-            CalendarState.StateChanged += (sender, state) =>
+            CalendarState.StateChanged += async (sender, state) =>
             {
-                if (state.CurrentCalendarItem is null)
+                if (state.CurrentNote is null)
                 {
                     return;
                 }
                 validationModel.Title = state.CurrentNote.Title;
                 validationModel.Content = state.CurrentNote.Content;
+                await NoteTextEditor.LoadHTMLContent(state.CurrentNote.Content);                
 
                 StateHasChanged();
             };
@@ -53,15 +63,18 @@ namespace Tomi.Calendar.Mono.Client.Components.Notes
 
         protected async Task DeleteItem()
         {
-            StateFacade.DeleteNote(CalendarState.Value.CurrentNote!.Id);
+            StateFacade.DeleteNote(Id.Value);
             await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
         public async Task HandleSubmit(EditContext editContext)
         {
+            validationModel.ContentText = await NoteTextEditor.GetText();
+            editContext.IsModified();
             bool formIsValid = editContext.Validate();
             if (formIsValid)
             {
+                validationModel.Content = await NoteTextEditor.GetHTML();
                 HandleValidSubmit();
                 await ModalInstance.CloseAsync(ModalResult.Ok(this));
             }
@@ -69,8 +82,8 @@ namespace Tomi.Calendar.Mono.Client.Components.Notes
         private void HandleValidSubmit()
         {
             // We use the bang operator (!) to tell the compiler we'll know this string field will not be null
-            StateFacade.UpdateTag(
-                CalendarState.Value.CurrentNote!.Id,
+            StateFacade.UpdateNote(
+                Id.Value,
                 validationModel.Title!,
                 validationModel.Content!);
         }

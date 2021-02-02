@@ -3,8 +3,11 @@
 <h3>Note List</h3>
 
 <ol>
-    @foreach (var note in CalendarState.Value.Notes)
+    @if (CalendarState.Value.Notes != null)
     {
-        <li @onclick="@(async() => await ShowEditItem(note.Id))">@note.Title - @note.CreateDate</li>
+        @foreach (var note in CalendarState.Value.Notes.OrderByDescending(n => n.CreateDate))
+        {
+            <li @onclick="@(async() => await ShowEditItem(note.Id))">@note.Title - @note.CreateDate</li>
+        }
     }
 </ol>

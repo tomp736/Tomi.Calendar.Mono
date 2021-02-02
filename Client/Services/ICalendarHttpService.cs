@@ -11,16 +11,16 @@ namespace Tomi.Calendar.Mono.Client.Services
         Task<CalendarItemDto> GetCalendarItemAsync(Guid calendarItemId);
         Task<CalendarItemDto[]> GetCalendarItemsAsync();
         Task Save(CalendarItemDto calendarItemDto);
-        Task Delete(Guid id);
+        Task DeleteCalendarItem(Guid id);
 
         Task<TagDto> GetTagAsync(Guid tagId);
         Task<TagDto[]> GetTagsAsync();
         Task Save(TagDto tag);
-        Task Delete(TagDto tag);
+        Task DeleteTag(Guid id);
 
         Task<NoteDto> GetNoteAsync(Guid noteId);
         Task<NoteDto[]> GetNotesAsync();
         Task Save(NoteDto note);
-        Task Delete(NoteDto note);
+        Task DeleteNote(Guid id);
     }
 }
