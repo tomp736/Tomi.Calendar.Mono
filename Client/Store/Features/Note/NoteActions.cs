@@ -5,6 +5,23 @@ using Tomi.Calendar.Mono.Shared.Dtos.Note;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.Note
 {
+
+    public record NewNoteAction
+    {
+        public NewNoteAction(Guid id) => Id = id;
+        public Guid Id { get; }
+    }
+    public record NewNoteSuccessAction
+    {
+        public NewNoteSuccessAction(Guid id) => Id = id;
+        public Guid Id { get; }
+    }
+    public record NewNoteFailureAction : FailureAction
+    {
+        public NewNoteFailureAction(string errorMessage) : base(errorMessage) { }
+    }
+
+
     public record CreateNoteAction
     {
         public CreateNoteAction(CreateOrUpdateNoteDto note) => Note = note;

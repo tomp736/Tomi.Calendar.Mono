@@ -8,7 +8,9 @@ namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
         [Required(AllowEmptyStrings = false, ErrorMessage = "Must have a Title")]
         public string Title { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Must have a Description")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Must have Content")]
+        public string ContentText { get; set; }
+
         public string Content { get; set; }
     }
 }

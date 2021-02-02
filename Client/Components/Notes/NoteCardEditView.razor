@@ -1,5 +1,6 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
-
+@using Blazored.TextEditor
+ 
 <EditForm Model="validationModel" OnSubmit="HandleSubmit">
     <DataAnnotationsValidator />
     <div class="d-flex flex-column align-items-center">
@@ -11,7 +12,36 @@
                 <input class="form-control" type="text" id="tag-name" @bind="validationModel.Title" />
             </h5>
             <p class="card-text">
-                <TextEditor @ref="NoteTextEditor" HTMLContent="@validationModel.Content"></TextEditor>
+                <BlazoredTextEditor @ref="@NoteTextEditor">
+                    <ToolbarContent>
+                        <select class="ql-header">
+                            <option selected=""></option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                            <option value="3"></option>
+                            <option value="4"></option>
+                            <option value="5"></option>
+                        </select>
+                        <span class="ql-formats">
+                            <button class="ql-bold"></button>
+                            <button class="ql-italic"></button>
+                            <button class="ql-underline"></button>
+                            <button class="ql-strike"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <select class="ql-color"></select>
+                            <select class="ql-background"></select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-list" value="ordered"></button>
+                            <button class="ql-list" value="bullet"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-link"></button>
+                        </span>
+                    </ToolbarContent>
+                    <EditorContent>@((MarkupString)validationModel.Content)</EditorContent>
+                </BlazoredTextEditor>
             </p>
             <button class="btn btn-primary" type="submit">Ok</button>
             <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>

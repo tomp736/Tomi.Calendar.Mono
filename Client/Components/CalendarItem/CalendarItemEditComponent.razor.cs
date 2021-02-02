@@ -72,7 +72,7 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
 
         protected async Task DeleteItem()
         {
-            StateFacade.DeleteCalendarItem(CalendarState.Value.CurrentCalendarItem!.Id);
+            StateFacade.DeleteCalendarItem(Id.Value);
             await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 

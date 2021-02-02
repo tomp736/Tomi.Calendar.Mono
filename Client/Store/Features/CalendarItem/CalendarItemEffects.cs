@@ -121,7 +121,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                await _calendarHttpService.Delete(action.Id);
+                await _calendarHttpService.DeleteCalendarItem(action.Id);
                 dispatcher.Dispatch(new DeleteCalendarItemSuccessAction(action.Id));
             }
             catch (Exception e)

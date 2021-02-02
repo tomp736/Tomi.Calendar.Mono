@@ -15,46 +15,28 @@ namespace Tomi.Calendar.Mono.Client.Components.Notes
         [Inject]
         protected IState<CalendarState> CalendarState { get; set; }
 
+        [Inject]
         protected StateFacade StateFacade { get; set; }
 
         [Inject]
         public IModalService Modal { get; set; }
 
-        [Parameter]
-        public Action StateChangedCallback { get; set; }
-
 
         protected async override Task OnInitializedAsync()
         {
+            StateFacade.LoadNotes();
             await base.OnInitializedAsync();
-        }
-
-        protected async override Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
         }
 
         protected async Task ShowEditItem(Guid itemId)
         {
             var parameters = new ModalParameters();
-            parameters.Add(nameof(NoteEditView.Id), itemId);
+            parameters.Add(nameof(NoteCardEditView.Id), itemId);
 
-            var modal = Modal.Show<NoteEditView>("Edit Note", parameters);
+            var modal = Modal.Show<NoteCardEditView>("Edit Note", parameters);
             var result = await modal.Result;
 
-            StateChanged();
-        }
-
-        public void StateChanged()
-        {
-            if (StateChangedCallback != null)
-            {
-                StateChangedCallback.Invoke();
-            }
-            else
-            {
-                StateHasChanged();
-            }
+            StateHasChanged();
         }
     }
 }
