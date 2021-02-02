@@ -1,1 +1,1 @@
-docker build -t tomp736/tomi.calendar.mono.server .
+docker build --no-cache -t tomp736/tomi.calendar.mono.server .

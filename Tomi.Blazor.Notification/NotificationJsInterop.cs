@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 namespace Tomi.Blazor.Notification
 {
-    public class NotificationApiInterop : IAsyncDisposable
+    public class NotificationJsInterop : IAsyncDisposable
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
-        private DotNetObjectReference<NotificationApiInterop> dotNetReference;
+        private DotNetObjectReference<NotificationJsInterop> dotNetReference;
 
-        public NotificationApiInterop(IJSRuntime jsRuntime)
+        public NotificationJsInterop(IJSRuntime jsRuntime)
         {
             moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
                "import", "./_content/Tomi.Blazor.Notification/index.js").AsTask());
@@ -77,6 +77,7 @@ namespace Tomi.Blazor.Notification
                 var module = await moduleTask.Value;
                 await module.DisposeAsync();
             }
+            dotNetReference?.Dispose();
         }
     }
 }

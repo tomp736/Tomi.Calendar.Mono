@@ -12,12 +12,12 @@ namespace Tomi.Blazor.Notification.Services
         private Dictionary<Guid, List<int>> _scheduledNotifications
             = new Dictionary<Guid, List<int>>();
 
-        private NotificationApiInterop _notificationApiInterop;
+        private NotificationJsInterop _notificationApiInterop;
         private ILogger<NotificationService> _logger;
 
         public NotificationService(IJSRuntime jsRuntime, ILogger<NotificationService> logger)
         {
-            _notificationApiInterop = new NotificationApiInterop(jsRuntime);
+            _notificationApiInterop = new NotificationJsInterop(jsRuntime);
             _logger = logger;
         }
 
@@ -73,7 +73,6 @@ namespace Tomi.Blazor.Notification.Services
                     int endJsHandle = await _notificationApiInterop.ScheduleNotification((long)millisecondsUntilEnd, "END: " + notify.Title, notify.Description, notify.ImgUrl);
                     _scheduledNotifications[notify.Id].Add(endJsHandle);
                 }
-                currentDate = currentDate.AddDays(1);
             }
         }
 
