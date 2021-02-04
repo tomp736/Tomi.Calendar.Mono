@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -10,6 +10,8 @@
     <PackageReference Include="Blazored.TextEditor" Version="1.0.3" />
     <PackageReference Include="Fluxor.Blazor.Web" Version="3.9.0" />
     <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="3.9.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.35.0-pre1" />
+    <PackageReference Include="Grpc.Net.Client.Web" Version="2.35.0-pre1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.2" />
@@ -20,8 +22,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.14.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.34.0" />
+    <PackageReference Include="Grpc.Net.Client.Web" Version="2.34.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.35.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="protobuf-net.Grpc" Version="1.0.147" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\Shared\Tomi.Calendar.Mono.Shared.csproj" />
     <ProjectReference Include="..\Tomi.Blazor.Notification\Tomi.Blazor.Notification.csproj" />
+    <ProjectReference Include="..\Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Tomi.Calendar.Proto\Protos\greet.proto" GrpcServices="Client" Access="Internal">
+      <Link>Protos\greet.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

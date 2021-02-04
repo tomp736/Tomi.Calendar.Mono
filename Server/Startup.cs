@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Npgsql;
-using Tomi.Calendar.Mono.Server.Data;
-using Tomi.Calendar.Mono.Server.Models;
-using Npgsql.NodaTime;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
+using Npgsql;
+using ProtoBuf.Grpc.Server;
+using System.Linq;
+using Tomi.Calendar.Mono.Server.Data;
+using Tomi.Calendar.Mono.Server.Models;
 
 namespace Tomi.Calendar.Mono.Server
 {
@@ -47,13 +49,33 @@ namespace Tomi.Calendar.Mono.Server
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
             services.AddRazorPages();
 
-            // ConfigureSwagger.ConfigureServices(services);
-            // ConfigureCors.ConfigureServices(services);
+
+            services.AddGrpc(options =>
+            {
+                options.ResponseCompressionLevel = System.IO.Compression.CompressionLevel.Optimal;
+                options.EnableDetailedErrors = true;
+                options.MaxReceiveMessageSize = int.MaxValue;
+                options.MaxSendMessageSize = int.MaxValue;
+            });
+            services.AddCodeFirstGrpc(options =>
+            {
+                options.ResponseCompressionLevel = System.IO.Compression.CompressionLevel.Optimal;
+                options.EnableDetailedErrors = true;
+                options.MaxReceiveMessageSize = int.MaxValue;
+                options.MaxSendMessageSize = int.MaxValue;
+            });
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -80,8 +102,11 @@ namespace Tomi.Calendar.Mono.Server
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseGrpcWeb();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<GrpcDataTableService>().EnableGrpcWeb();
+                endpoints.MapGrpcService<GrpcGreeterService>().EnableGrpcWeb();
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");

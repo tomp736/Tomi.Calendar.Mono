@@ -1,0 +1,39 @@
+﻿@using System.Data
+<h3>DataTableComponent</h3>
+
+@if (DataTable != null)
+{
+    <table>
+        <thead>
+            <tr>
+                @foreach (DataColumn column in DataTable.Columns)
+                {
+                    <th>
+                        @column.ColumnName.ToString()
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Math.Min(ShowsRows, 50); i++)
+            {
+                <tr>
+                    @foreach (DataColumn column in DataTable.Columns)
+                    {
+                        <td>
+                            @DataTable.Rows[i].ItemArray[column.Ordinal].ToString()
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public DataTable DataTable { get; set; }
+
+    [Parameter]
+    public int ShowsRows { get; set; }
+}
