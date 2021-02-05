@@ -2,9 +2,8 @@ using Microsoft.Extensions.Logging;
 using ProtoBuf.Grpc;
 using System.Data;
 using System.Threading.Tasks;
-using Tomi.Calendar.Proto.CodeFirst;
-using System.Xml.Serialization;
 using Tomi.Calendar.Mono.Shared;
+using Tomi.Calendar.Proto.CodeFirst;
 
 namespace Tomi.Calendar.Mono.Server
 {
@@ -21,7 +20,7 @@ namespace Tomi.Calendar.Mono.Server
             DataTable dt = DataTableHelper.GenerateTable(request.TableName, request.Columns, request.Rows);
             DataTableResult dtResult = new DataTableResult()
             {
-                Result = dt
+                DataTable = dt
             };
             return ValueTask.FromResult(dtResult);
         }

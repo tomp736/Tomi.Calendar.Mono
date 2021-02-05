@@ -10,9 +10,12 @@ using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Npgsql;
 using ProtoBuf.Grpc.Server;
+using ProtoBuf.Meta;
+using System.Data;
 using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
+using Tomi.Calendar.Proto.CodeFirst;
 
 namespace Tomi.Calendar.Mono.Server
 {
@@ -49,6 +52,9 @@ namespace Tomi.Calendar.Mono.Server
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
             services.AddRazorPages();
 
+
+            RuntimeTypeModel.Default.Add(typeof(DataTable), false)
+                .SetSurrogate(typeof(DataTableSurrogate));
 
             services.AddGrpc(options =>
             {

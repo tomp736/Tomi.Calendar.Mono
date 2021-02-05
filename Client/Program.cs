@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using Blazored.Modal;
 using Fluxor;
+using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using Microsoft.AspNetCore.Components;
@@ -11,9 +12,13 @@ using Microsoft.Extensions.DependencyInjection;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using ProtoBuf.Grpc.Client;
+using ProtoBuf.Meta;
 using System;
+using System.Data;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Tomi.Blazor.Notification.Services;
 using Tomi.Calendar.Mono.Client.Services;
@@ -95,44 +100,17 @@ namespace Tomi.Calendar.Mono.Client
                     backendUrl = navigationManager.BaseUri;
                 }
 
-                // Create a channel with a GrpcWebHandler that is addressed to the backend server.
-                //
-                // GrpcWebText is used because server streaming requires it. If server streaming is not used in your app
-                // then GrpcWeb is recommended because it produces smaller messages.
-                var httpHandler = new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler());
-
+                var httpClient = new HttpClient(new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler());
                 return GrpcChannel.ForAddress(backendUrl, new GrpcChannelOptions
                 {
-                    HttpHandler = httpHandler,
+                    HttpClient = httpClient,
                     MaxReceiveMessageSize = int.MaxValue,
                     MaxSendMessageSize = int.MaxValue
                 });
             });
 
-            builder.Services.AddSingleton(services =>
-            {
-                // Get the service address from appsettings.json
-                var config = services.GetRequiredService<IConfiguration>();
-                var backendUrl = config["BackendUrl"];
-
-                // If no address is set then fallback to the current webpage URL
-                if (string.IsNullOrEmpty(backendUrl))
-                {
-                    var navigationManager = services.GetRequiredService<NavigationManager>();
-                    backendUrl = navigationManager.BaseUri;
-                }
-
-                // Create a gRPC-Web channel pointing to the backend server
-                var httpHandler = new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler());
-
-                // Now we can instantiate gRPC clients for this channel
-                return GrpcChannel.ForAddress(backendUrl, new GrpcChannelOptions
-                {
-                    HttpHandler = httpHandler,
-                    MaxReceiveMessageSize = int.MaxValue,
-                    MaxSendMessageSize = int.MaxValue
-                });
-            });
+            RuntimeTypeModel.Default.Add(typeof(DataTable), false)
+                .SetSurrogate(typeof(DataTableSurrogate));
 
             builder.Services.AddSingleton<GrpcHelloService>();
             builder.Services.AddSingleton<GrpcDataTableServiceClient>();

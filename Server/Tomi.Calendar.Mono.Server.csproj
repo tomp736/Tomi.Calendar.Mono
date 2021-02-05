@@ -8,21 +8,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.2" />
-    <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="5.0.2" />
-    <PackageReference Include="protobuf-net-data" Version="3.0.1" />
-    <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.147" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Client\Tomi.Calendar.Mono.Client.csproj" />
-    <ProjectReference Include="..\Shared\Tomi.Calendar.Mono.Shared.csproj" />
-    <ProjectReference Include="..\Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.2" />
@@ -35,6 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="5.0.2" />
+    <PackageReference Include="protobuf-net-data" Version="3.0.1" />
+    <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.147" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore.Web" Version="2.35.0" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.35.0" />
   </ItemGroup>
@@ -44,5 +37,12 @@
       <Link>Protos\greet.proto</Link>
     </Protobuf>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client\Tomi.Calendar.Mono.Client.csproj" />
+    <ProjectReference Include="..\Shared\Tomi.Calendar.Mono.Shared.csproj" />
+    <ProjectReference Include="..\Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj" />
+  </ItemGroup>
+
 
 </Project>
