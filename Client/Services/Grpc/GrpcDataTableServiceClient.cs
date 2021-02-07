@@ -1,8 +1,7 @@
 ﻿using Grpc.Net.Client;
 using ProtoBuf.Grpc.Client;
-using System.Data;
 using System.Threading.Tasks;
-using Tomi.Calendar.Proto.CodeFirst;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client.Services
 {

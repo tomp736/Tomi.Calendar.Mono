@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Client.Store.State;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
-using Tomi.Calendar.Proto.CodeFirst;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 {

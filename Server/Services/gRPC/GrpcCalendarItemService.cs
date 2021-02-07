@@ -10,7 +10,7 @@ using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Mono.Shared.Entities;
-using Tomi.Calendar.Proto.CodeFirst;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Server
 {

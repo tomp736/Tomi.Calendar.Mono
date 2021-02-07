@@ -3,14 +3,14 @@ using ProtoBuf.Grpc;
 using System.Data;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Shared;
-using Tomi.Calendar.Proto.CodeFirst;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Server
 {
     public class GrpcDataTableService : IDataTableService
     {
-        private readonly ILogger<GrpcGreeterService> _logger;
-        public GrpcDataTableService(ILogger<GrpcGreeterService> logger)
+        private readonly ILogger<GrpcDataTableService> _logger;
+        public GrpcDataTableService(ILogger<GrpcDataTableService> logger)
         {
             _logger = logger;
         }

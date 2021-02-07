@@ -11,6 +11,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tomi.Notification.Core\Tomi.Notification.Core.csproj" />
   </ItemGroup>
 
 </Project>

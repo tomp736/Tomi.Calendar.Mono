@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tomi.Blazor.Notification
+namespace Tomi.Notification.Core
 {
     public class NotificationItem : INotify
     {
@@ -8,9 +8,5 @@ namespace Tomi.Blazor.Notification
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImgUrl { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
     }
 }

@@ -19,7 +19,7 @@
     public DataTable DataTable { get; set; }
     public async Task GetDataTableReply()
     {
-        var dataTableResult = await GrpcDataTableServiceClient.GetDataTable(new Proto.CodeFirst.DataTableRequest()
+        var dataTableResult = await GrpcDataTableServiceClient.GetDataTable(new Proto.DataTableRequest()
         {
             TableName = _name,
             Rows = _rows,

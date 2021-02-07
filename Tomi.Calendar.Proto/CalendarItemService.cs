@@ -1,15 +1,13 @@
 ﻿using NodaTime;
-using NodaTime.Serialization.SystemTextJson;
 using ProtoBuf.Grpc;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 
-namespace Tomi.Calendar.Proto.CodeFirst
+namespace Tomi.Calendar.Proto
 {
     [ServiceContract(Name = "Mono.Calendar.CalendarItem")]
     public interface ICalendarItemService

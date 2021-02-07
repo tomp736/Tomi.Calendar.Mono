@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Mono.Shared.Dtos.Note;
 using Tomi.Calendar.Mono.Shared.Dtos.Tag;
 

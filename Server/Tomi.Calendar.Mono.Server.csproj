@@ -34,15 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\Tomi.Calendar.Proto\Protos\greet.proto" GrpcServices="Server">
-      <Link>Protos\greet.proto</Link>
-    </Protobuf>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Client\Tomi.Calendar.Mono.Client.csproj" />
     <ProjectReference Include="..\Shared\Tomi.Calendar.Mono.Shared.csproj" />
     <ProjectReference Include="..\Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj" />
+    <ProjectReference Include="..\Tomi.Notification.AspNetCore\Tomi.Notification.AspNetCore.csproj" />
   </ItemGroup>
 
 

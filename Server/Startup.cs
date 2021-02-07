@@ -17,7 +17,9 @@ using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
-using Tomi.Calendar.Proto.CodeFirst;
+using Tomi.Calendar.Proto;
+using Tomi.Notification.AspNetCore.Hubs;
+using Tomi.Notification.AspNetCore.Services;
 
 namespace Tomi.Calendar.Mono.Server
 {
@@ -34,6 +36,8 @@ namespace Tomi.Calendar.Mono.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+            services.AddSingleton<NotificationService>();
             services.AddDbContext<AppNpgSqlDataContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), o => o.UseNodaTime());
@@ -121,7 +125,8 @@ namespace Tomi.Calendar.Mono.Server
                     .RequireAuthorization(new AuthorizeAttribute())
                     .EnableGrpcWeb();
 
-                endpoints.MapGrpcService<GrpcGreeterService>().EnableGrpcWeb();
+                endpoints.MapHub<NotificationHub>("/notificationhub");
+
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");

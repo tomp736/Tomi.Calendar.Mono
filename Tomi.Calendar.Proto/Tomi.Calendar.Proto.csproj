@@ -5,14 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="NodaTime.Serialization.Protobuf" Version="2.0.0" />
     <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
-    <PackageReference Include="protobuf-net.Grpc" Version="1.0.147" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+    <PackageReference Include="protobuf-net.Grpc" Version="1.0.147" />
   </ItemGroup>
 
   <ItemGroup>

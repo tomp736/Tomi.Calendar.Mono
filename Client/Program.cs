@@ -1,7 +1,6 @@
 using Blazored.LocalStorage;
 using Blazored.Modal;
 using Fluxor;
-using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using Microsoft.AspNetCore.Components;
@@ -11,20 +10,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
-using ProtoBuf.Grpc.Client;
 using ProtoBuf.Meta;
 using System;
 using System.Data;
-using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
-using Tomi.Blazor.Notification.Services;
+using Tomi.Notification.Blazor.Services;
 using Tomi.Calendar.Mono.Client.Services;
-using Tomi.Calendar.Mono.Client.Store.Features.CalendarItem;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
-using Tomi.Calendar.Proto.CodeFirst;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client
 {
@@ -61,18 +56,6 @@ namespace Tomi.Calendar.Mono.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("CalendarApi"));
 
-
-            builder.Services.AddHttpClient<RestDataTableServiceClient>("DataTableApi", client =>
-            {
-                // client.BaseAddress = new Uri("https://localhost:8091");
-                client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
-                client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
-            }).AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-
-            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("DataTableApi"));
-
             builder.Services.AddHttpClient("Tomi.Calendar.Mono.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
@@ -83,7 +66,7 @@ namespace Tomi.Calendar.Mono.Client
 
             builder.Services.AddScoped<StateFacade>();
 
-            builder.Services.AddSingleton<NotificationService>();
+            builder.Services.AddSingleton<NotificationHubService>();
 
             builder.Services.AddBlazoredModal();
             builder.Services.AddBlazoredLocalStorage();
@@ -113,13 +96,12 @@ namespace Tomi.Calendar.Mono.Client
                 });
             });
 
-            RuntimeTypeModel.Default.Add(typeof(DataTable), false).SetSurrogate(typeof(DataTableSurrogate));
             RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
             RuntimeTypeModel.Default.AddNodaTime();
-
-            builder.Services.AddSingleton<GrpcHelloService>();
-            builder.Services.AddSingleton<GrpcDataTableServiceClient>();
             builder.Services.AddScoped<GrpcCalendarItemServiceClient>();
+
+            //RuntimeTypeModel.Default.Add(typeof(DataTable), false).SetSurrogate(typeof(DataTableSurrogate));
+            //builder.Services.AddSingleton<GrpcDataTableServiceClient>();
 
             var host = builder.Build();
 

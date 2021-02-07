@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
-namespace Tomi.Calendar.Proto.CodeFirst
+namespace Tomi.Calendar.Proto
 {
     [DataContract]
     public class DataTableRequest

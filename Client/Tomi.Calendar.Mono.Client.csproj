@@ -37,14 +37,8 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Shared\Tomi.Calendar.Mono.Shared.csproj" />
-    <ProjectReference Include="..\Tomi.Blazor.Notification\Tomi.Blazor.Notification.csproj" />
     <ProjectReference Include="..\Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="..\Tomi.Calendar.Proto\Protos\greet.proto" GrpcServices="Client" Access="Internal">
-      <Link>Protos\greet.proto</Link>
-    </Protobuf>
+    <ProjectReference Include="..\Tomi.Notification.Blazor\Tomi.Notification.Blazor.csproj" />
   </ItemGroup>
 
 </Project>
