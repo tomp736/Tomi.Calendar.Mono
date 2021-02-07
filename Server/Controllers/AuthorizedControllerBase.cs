@@ -17,7 +17,6 @@ namespace Tomi.Calendar.Mono.Server.Controllers
     [Authorize]
     public class AuthorizedControllerBase : ControllerBase
     {
-        private readonly ILogger<CalendarItemController> _logger;
         private readonly AppNpgSqlDataContext _dataContext;
 
         public AuthorizedControllerBase(AppNpgSqlDataContext dataContext)
@@ -30,13 +29,11 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         {
             get
             {
-                if(CurrentUserId != null && _applicationUser == null)
+                if (CurrentUserId != null && _applicationUser == null)
                 {
-                    var applicationUser = _dataContext.Users.Where(n => n.Id == CurrentUserId)
-                        .Include(item => item.UserCalendarItems.Where(n => n.UserKey == CurrentUserId))
-                        .ThenInclude(item => item.CalendarItem).FirstOrDefault();
+                    var applicationUser = _dataContext.Users.Where(n => n.Id == CurrentUserId);
 
-                    return applicationUser;
+                    return applicationUser.FirstOrDefault();
                 }
                 return _applicationUser;
             }

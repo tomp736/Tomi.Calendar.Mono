@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 
 namespace Tomi.Calendar.Mono.Shared.Entities
 {
@@ -21,5 +22,19 @@ namespace Tomi.Calendar.Mono.Shared.Entities
         public string Description { get; set; }
         public List<CalendarItemTag> CalendarItemTags { get; set; }
         public List<CalendarItemNote> CalendarItemNotes { get; set; }
+
+        public CalendarItemDto ToDto()
+        {
+            return new CalendarItemDto()
+            {
+                Id = Id,
+                Title = Title,
+                Description = Description,
+                StartDate = StartDate,
+                EndDate = EndDate,
+                StartTime = StartTime,
+                EndTime = EndTime
+            };
+        }
     }
 }

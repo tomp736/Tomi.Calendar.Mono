@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -15,6 +16,7 @@ using System.Data;
 using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
+using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Proto.CodeFirst;
 
 namespace Tomi.Calendar.Mono.Server
@@ -53,8 +55,9 @@ namespace Tomi.Calendar.Mono.Server
             services.AddRazorPages();
 
 
-            RuntimeTypeModel.Default.Add(typeof(DataTable), false)
-                .SetSurrogate(typeof(DataTableSurrogate));
+            RuntimeTypeModel.Default.Add(typeof(DataTable), false).SetSurrogate(typeof(DataTableSurrogate));
+            RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
+            RuntimeTypeModel.Default.AddNodaTime();
 
             services.AddGrpc(options =>
             {
@@ -111,7 +114,13 @@ namespace Tomi.Calendar.Mono.Server
             app.UseGrpcWeb();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GrpcDataTableService>().EnableGrpcWeb();
+                endpoints.MapGrpcService<GrpcDataTableService>()
+                    .EnableGrpcWeb();
+
+                endpoints.MapGrpcService<GrpcCalendarItemService>()
+                    .RequireAuthorization(new AuthorizeAttribute())
+                    .EnableGrpcWeb();
+
                 endpoints.MapGrpcService<GrpcGreeterService>().EnableGrpcWeb();
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();

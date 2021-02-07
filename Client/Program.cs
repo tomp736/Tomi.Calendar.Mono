@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Tomi.Blazor.Notification.Services;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Client.Store.Features.CalendarItem;
+using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Proto.CodeFirst;
 
 namespace Tomi.Calendar.Mono.Client
@@ -87,7 +88,7 @@ namespace Tomi.Calendar.Mono.Client
             builder.Services.AddBlazoredModal();
             builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddSingleton(services =>
+            builder.Services.AddScoped(services =>
             {
                 // Get the service address from appsettings.json
                 var config = services.GetRequiredService<IConfiguration>();
@@ -100,20 +101,25 @@ namespace Tomi.Calendar.Mono.Client
                     backendUrl = navigationManager.BaseUri;
                 }
 
-                var httpClient = new HttpClient(new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler());
+                var baseAddressMessageHandler = services.GetRequiredService<BaseAddressAuthorizationMessageHandler>();
+                baseAddressMessageHandler.InnerHandler = new HttpClientHandler();
+                var grpcWebHandler = new GrpcWebHandler(GrpcWebMode.GrpcWeb, baseAddressMessageHandler);
+
                 return GrpcChannel.ForAddress(backendUrl, new GrpcChannelOptions
                 {
-                    HttpClient = httpClient,
+                    HttpHandler = grpcWebHandler,
                     MaxReceiveMessageSize = int.MaxValue,
                     MaxSendMessageSize = int.MaxValue
                 });
             });
 
-            RuntimeTypeModel.Default.Add(typeof(DataTable), false)
-                .SetSurrogate(typeof(DataTableSurrogate));
+            RuntimeTypeModel.Default.Add(typeof(DataTable), false).SetSurrogate(typeof(DataTableSurrogate));
+            RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
+            RuntimeTypeModel.Default.AddNodaTime();
 
             builder.Services.AddSingleton<GrpcHelloService>();
             builder.Services.AddSingleton<GrpcDataTableServiceClient>();
+            builder.Services.AddScoped<GrpcCalendarItemServiceClient>();
 
             var host = builder.Build();
 

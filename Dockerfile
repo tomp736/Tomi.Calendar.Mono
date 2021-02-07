@@ -16,6 +16,10 @@ COPY ["Server/Tomi.Calendar.Mono.Server.csproj", "Tomi.Calendar.Mono.Server.cspr
 RUN dotnet restore "/src/Tomi.Calendar.Mono.Server.csproj"
 
 COPY Tomi.Blazor.Notification/. Tomi.Blazor.Notification
+COPY Tomi.Calendar.Proto/. Tomi.Calendar.Proto
+
+RUN dotnet restore "/src/Tomi.Calendar.Proto/Tomi.Calendar.Proto.csproj"
+
 COPY Client/. Client
 COPY Server/. Server
 COPY Shared/. Shared
