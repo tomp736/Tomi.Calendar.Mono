@@ -1,0 +1,31 @@
+﻿@inject GrpcDataTableServiceClient GrpcDataTableServiceClient
+@using System.Data
+@page "/grpc-datatable"
+
+<h3>Grpc DataTable</h3>
+
+<input type="text" @bind-value="_name" />
+<input type="number" @bind-value="_rows" />
+<input type="number" @bind-value="_columns" />
+<input type="button" @onclick="GetDataTableReply" />
+
+<DataTableComponent DataTable="DataTable" ShowsRows="50"></DataTableComponent>
+
+@code {
+    private string _name { get; set; }
+    private int _rows { get; set; }
+    private int _columns { get; set; }
+
+    public DataTable DataTable { get; set; }
+    public async Task GetDataTableReply()
+    {
+        var dataTableResult = await GrpcDataTableServiceClient.GetDataTable(new Proto.DataTableRequest()
+        {
+            TableName = _name,
+            Rows = _rows,
+            Columns = _columns
+        });
+        DataTable = dataTableResult.DataTable;
+        StateHasChanged();
+    }
+}

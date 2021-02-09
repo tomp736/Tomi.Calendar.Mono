@@ -1,22 +1,30 @@
 ﻿using Fluxor;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Client.Store.State;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 {
     public class CalendarItemEffects
     {
         private readonly CalendarHttpService _calendarHttpService;
+        private readonly GrpcCalendarItemServiceClient _grpcCalendarItemService;
         private readonly ILogger<CalendarItemEffects> _logger;
         private readonly IState<CalendarState> _state;
 
-        public CalendarItemEffects(CalendarHttpService calendarHttpService, ILogger<CalendarItemEffects> logger, IState<CalendarState> state)
+        public CalendarItemEffects(
+            CalendarHttpService calendarHttpService,
+            GrpcCalendarItemServiceClient grpcCalendarItemServiceClient,
+            ILogger<CalendarItemEffects> logger,
+            IState<CalendarState> state)
         {
             _calendarHttpService = calendarHttpService;
+            _grpcCalendarItemService = grpcCalendarItemServiceClient;
             _logger = logger;
             _state = state;
         }
@@ -26,8 +34,10 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                var calendarItems = await _calendarHttpService.GetCalendarItemsAsync();
-                dispatcher.Dispatch(new LoadCalendarItemsSuccessAction(calendarItems));
+                GetCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                {
+                });
+                dispatcher.Dispatch(new LoadCalendarItemsSuccessAction(calendarItemsResponse.CalendarItems));
             }
             catch (Exception e)
             {
@@ -40,8 +50,12 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                var calendarItem = await _calendarHttpService.GetCalendarItemAsync(action.Id);
-                if (calendarItem != null)
+                GetCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                {
+                    CalendarItemIds = new Guid[] { action.Id }
+                });
+                if (calendarItemsResponse.CalendarItems != null && 
+                    calendarItemsResponse.CalendarItems.Any())
                 {
                     dispatcher.Dispatch(new NewCalendarItemFailureAction($"Resource already exists for {action.Id}"));
                 }
@@ -61,8 +75,19 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                var calendarItem = await _calendarHttpService.GetCalendarItemAsync(action.Id);
-                dispatcher.Dispatch(new LoadCalendarItemDetailSuccessAction(calendarItem));
+                GetCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                {
+                    CalendarItemIds = new Guid[] { action.Id }
+                });
+                CalendarItemDto calendarItemDto = calendarItemsResponse.CalendarItems.FirstOrDefault();
+                if (calendarItemDto != null)
+                {
+                    dispatcher.Dispatch(new LoadCalendarItemDetailSuccessAction(calendarItemDto));
+                }
+                else
+                {
+                    dispatcher.Dispatch(new LoadCalendarItemDetailFailureAction("Resource does not exist"));
+                }
             }
             catch (Exception e)
             {
@@ -84,8 +109,14 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
-                await _calendarHttpService.Save(calendarItemDto);
-                dispatcher.Dispatch(new UpdateCalendarItemSuccessAction(calendarItemDto));
+                SaveCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
+                {
+                    CalendarItems = new CalendarItemDto[] { calendarItemDto }
+                });
+                if (calendarItemsResponse.CalendarItems.Any())
+                {
+                    dispatcher.Dispatch(new UpdateCalendarItemSuccessAction(calendarItemsResponse.CalendarItems.FirstOrDefault()));
+                }
             }
             catch (Exception e)
             {
@@ -106,8 +137,14 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
-                await _calendarHttpService.Save(calendarItemDto);
-                dispatcher.Dispatch(new UpdateCalendarItemSuccessAction(calendarItemDto));
+                SaveCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
+                {
+                    CalendarItems = new CalendarItemDto[] { calendarItemDto }
+                });
+                if (calendarItemsResponse.CalendarItems.Any())
+                {
+                    dispatcher.Dispatch(new UpdateCalendarItemSuccessAction(calendarItemsResponse.CalendarItems.FirstOrDefault()));
+                }
             }
             catch (Exception e)
             {
@@ -121,7 +158,10 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                await _calendarHttpService.DeleteCalendarItem(action.Id);
+                DeleteCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.DeleteCalendarItems(new DeleteCalendarItemsRequest()
+                {
+                    CalendarItemIds = new Guid[] { action.Id }
+                });
                 dispatcher.Dispatch(new DeleteCalendarItemSuccessAction(action.Id));
             }
             catch (Exception e)

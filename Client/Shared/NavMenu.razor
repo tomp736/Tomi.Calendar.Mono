@@ -59,7 +59,10 @@
 
     protected async Task AddNewCalendarItem()
     {
-        var modal = ModalService.Show<CalendarItemEditComponent>("Add Calendar Item");
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(CalendarItemEditComponent.Id), Guid.Empty);
+
+        var modal = ModalService.Show<CalendarItemEditComponent>("Add Calendar Item", parameters);
         var result = await modal.Result;
 
         StateHasChanged();

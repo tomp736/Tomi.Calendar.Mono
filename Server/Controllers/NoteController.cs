@@ -33,7 +33,7 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            Note item = _dataContext.Notes.FirstOrDefault(n => n.Id == id);
+            Note item = await _dataContext.Notes.FirstOrDefaultAsync(n => n.Id == id);
             if(item != null)
             {
                 return new JsonResult(item);
@@ -47,7 +47,7 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(NoteDto noteDto)
         {
-            Note note = _dataContext.Notes.FirstOrDefault(n => n.Id == noteDto.Id);
+            Note note = await _dataContext.Notes.FirstOrDefaultAsync(n => n.Id == noteDto.Id);
             if (note == null)
             {
                 _dataContext.Notes.Add(new Note()
@@ -72,7 +72,7 @@ namespace Tomi.Calendar.Mono.Server.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             ActionResult result;
-            Note note = _dataContext.Notes.FirstOrDefault(n => n.Id == id);
+            Note note = await _dataContext.Notes.FirstOrDefaultAsync(n => n.Id == id);
             EntityEntry entityEntry = _dataContext.Notes.Remove(note);
             int rowsAffected = await _dataContext.SaveChangesAsync();
             if (rowsAffected == 1)

@@ -21,28 +21,6 @@ namespace Tomi.Calendar.Mono.Client.Services
             _jsonSerializerOptions = jsonSerializerOptions;
         }
 
-        #region CalendarItems
-        public async Task<CalendarItemDto> GetCalendarItemAsync(Guid calendarItemId)
-        {
-            return await _httpClient.GetFromJsonAsync<CalendarItemDto>($"/api/calendaritem/{calendarItemId}", _jsonSerializerOptions);
-        }
-        public async Task<CalendarItemDto[]> GetCalendarItemsAsync()
-        {
-            return await _httpClient.GetFromJsonAsync<CalendarItemDto[]>("/api/calendaritem", _jsonSerializerOptions);
-        }
-        public async Task Save(CalendarItemDto calendarItemDto)
-        {
-            if (calendarItemDto.Id == Guid.Empty)
-                calendarItemDto.Id = Guid.NewGuid();
-
-            await _httpClient.PostAsJsonAsync("/api/calendaritem", calendarItemDto, _jsonSerializerOptions);
-        }
-        public async Task DeleteCalendarItem(Guid id)
-        {
-            await _httpClient.DeleteAsync($"/api/calendaritem/{id}");
-        }
-        #endregion
-
         #region Tags
         public async Task<TagDto> GetTagAsync(Guid tagId)
         {
