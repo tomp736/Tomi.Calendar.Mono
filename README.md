@@ -6,6 +6,7 @@ Using
 - Fluxor for Centralized State
 - Blazored Components (Modal, LocalStorage, TextEditor)
 - SignalR for server push Desktop Notification
+- gRPC-Web for unary server-client calls.
 
 ![alt text](https://github.com/tomp736/Tomi.Calendar.Mono/blob/master/FooBar%20Calendar.png?raw=true)
 
