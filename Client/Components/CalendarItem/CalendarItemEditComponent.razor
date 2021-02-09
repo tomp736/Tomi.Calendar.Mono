@@ -1,6 +1,5 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
-@using Tomi.Calendar.Mono.Client.Components.Shared
- 
+
 @page "/calendaritem/{id:guid}"
 
 <EditForm Model="validationModel" OnSubmit="HandleSubmit">
@@ -19,11 +18,11 @@
         </div>
         <div class="form-group">
             <label for="calendar-item-startdate">Start Date</label>
-            <NoDaTimeDatePicker @bind-LocalDate="validationModel.StartDate" />            
+            <NoDaTimeDatePicker @bind-LocalDate="validationModel.StartDate" />
         </div>
         <div class="form-group">
             <label for="calendar-item-enddate">End Date</label>
-            <NoDaTimeDatePicker @bind-LocalDate="validationModel.EndDate"  />
+            <NoDaTimeDatePicker @bind-LocalDate="validationModel.EndDate" />
         </div>
         <div class="form-group">
             <label for="calendar-item-startdate">Start Time</label>

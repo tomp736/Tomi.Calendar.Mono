@@ -26,7 +26,7 @@
     <PackageReference Include="protobuf-net-data" Version="3.0.1" />
     <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.147" />
     <PackageReference Include="protobuf-net.NodaTime" Version="3.0.73" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.2" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore.Web" Version="2.35.0" />
@@ -34,11 +34,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Tomi.Notification.AspNetCore" Version="1.0.0-*" />
+    <PackageReference Include="Tomi.Notification.Core" Version="1.0.0-*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Client\Tomi.Calendar.Mono.Client.csproj" />
     <ProjectReference Include="..\Shared\Tomi.Calendar.Mono.Shared.csproj" />
     <ProjectReference Include="..\Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj" />
-    <ProjectReference Include="..\Tomi.Notification.AspNetCore\Tomi.Notification.AspNetCore.csproj" />
   </ItemGroup>
-
 
 </Project>

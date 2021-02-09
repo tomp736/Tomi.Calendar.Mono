@@ -38,7 +38,7 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
         protected override void OnInitialized()
         {
             // Load the note detail on initial page navigation
-            if (Id.HasValue)
+            if (Id.HasValue && Id.Value != Guid.Empty)
             {
                 StateFacade.LoadCalendarItemById(Id.Value);
             }

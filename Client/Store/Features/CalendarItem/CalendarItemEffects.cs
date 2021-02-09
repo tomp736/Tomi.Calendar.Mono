@@ -54,7 +54,8 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 {
                     CalendarItemIds = new Guid[] { action.Id }
                 });
-                if (calendarItemsResponse.CalendarItems.Any())
+                if (calendarItemsResponse.CalendarItems != null && 
+                    calendarItemsResponse.CalendarItems.Any())
                 {
                     dispatcher.Dispatch(new NewCalendarItemFailureAction($"Resource already exists for {action.Id}"));
                 }

@@ -34,9 +34,14 @@ namespace Tomi.Calendar.Mono.Server
                 IEnumerable<CalendarItem> userCalendarItems = _dataContext.ApplicationUserCalendarItem
                     .Where(n => n.UserKey == applicationUser.Id)
                     .Include(n => n.CalendarItem)
-                    .Select(n => n.CalendarItem);
+                    .Select(n => n.CalendarItem).ToList();
 
                 getCalendarItemsResponse.CalendarItems = userCalendarItems.Select(n => n.ToDto());
+                if (request.CalendarItemIds != null && request.CalendarItemIds.Any())
+                {
+                    getCalendarItemsResponse.CalendarItems = getCalendarItemsResponse.CalendarItems.Where(n => (request.CalendarItemIds.Contains(n.Id)));
+                }
+                
             }
             return ValueTask.FromResult(getCalendarItemsResponse);
         }

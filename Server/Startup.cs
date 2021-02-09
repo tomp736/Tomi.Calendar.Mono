@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +17,10 @@ using System.Data;
 using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
+using Tomi.Calendar.Mono.Server.Services.Notification;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Proto;
+using Tomi.Notification.AspNetCore;
 using Tomi.Notification.AspNetCore.Hubs;
 using Tomi.Notification.AspNetCore.Services;
 
@@ -36,8 +39,6 @@ namespace Tomi.Calendar.Mono.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
-            services.AddSingleton<NotificationService>();
             services.AddDbContext<AppNpgSqlDataContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), o => o.UseNodaTime());
@@ -59,9 +60,16 @@ namespace Tomi.Calendar.Mono.Server
             services.AddRazorPages();
 
 
-            RuntimeTypeModel.Default.Add(typeof(DataTable), false).SetSurrogate(typeof(DataTableSurrogate));
-            RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
-            RuntimeTypeModel.Default.AddNodaTime();
+            RuntimeTypeModel.Default
+                .Add(typeof(DataTable), false)
+                .SetSurrogate(typeof(DataTableSurrogate));
+
+            RuntimeTypeModel.Default
+                .Add(typeof(CalendarItemDto), false)
+                .SetSurrogate(typeof(CalendarItemSurrogate));
+
+            RuntimeTypeModel.Default
+                .AddNodaTime();
 
             services.AddGrpc(options =>
             {
@@ -82,6 +90,13 @@ namespace Tomi.Calendar.Mono.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
+
+            services.AddSignalR();
+            //services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
+
+            services.AddHostedService<NotificationHostedService>();
+            services.AddScoped<INotificationProcessingService, NotificationProcessingService>();
+            services.AddTransient<UserCalendarItemsNotificationItemsProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

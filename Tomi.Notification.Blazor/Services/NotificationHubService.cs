@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -17,20 +18,45 @@ namespace Tomi.Notification.Blazor.Services
 
         public NotificationHubService(
             NavigationManager navigationManager,
+            IAccessTokenProvider accessTokenProvider,
             ILogger<NotificationHubService> logger,
             IJSRuntime jsRuntime)
         {
-            _hubConnection = new HubConnectionBuilder()
-                .WithUrl(navigationManager.ToAbsoluteUri("/chathub"))
-                .Build();
-
-            _hubConnection.On<INotify>(nameof(INotificationPush.NotifyClient), async (notify) =>
-            {
-                await ShowNotification(notify);
-            });
 
             _notificationApiInterop = new NotificationJsInterop(jsRuntime);
             _logger = logger;
+            _hubConnection = new HubConnectionBuilder()
+                .WithUrl(navigationManager.ToAbsoluteUri("/notificationhub"), options =>
+                {
+                    options.AccessTokenProvider = async () =>
+                    {
+                        AccessTokenResult accessTokenResult = await accessTokenProvider.RequestAccessToken();
+                        AccessToken accessToken;
+                        if(accessTokenResult.TryGetToken(out accessToken))
+                        {
+                            return accessToken.Value;
+                        }
+                        return "";
+                    };
+                })
+                .Build();
+
+            _hubConnection.On<string, string, string>("ReceiveNotification",
+                async (title, description, iconurl) =>
+                {
+                    _logger.LogInformation($"{title}");
+                    await ShowNotification(title, description, iconurl);
+                });
+        }
+
+        public async Task Start()
+        {
+            await _hubConnection.StartAsync();
+        }
+
+        public async Task Stop()
+        {
+            await _hubConnection.StopAsync();
         }
 
         public async ValueTask<bool> NotificationsAllowed()
@@ -45,9 +71,9 @@ namespace Tomi.Notification.Blazor.Services
             await _notificationApiInterop.AskForApproval();
         }
 
-        public async Task ShowNotification(INotify notify)
+        public async Task ShowNotification(string title, string description, string iconurl)
         {
-            await _notificationApiInterop.Notify(notify.Title, notify.Description, notify.ImgUrl);
+            await _notificationApiInterop.Notify(title, description, iconurl);
         }
     }
 }

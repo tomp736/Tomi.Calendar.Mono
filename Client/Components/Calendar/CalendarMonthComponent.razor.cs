@@ -24,14 +24,17 @@ namespace Tomi.Calendar.Mono.Client.Components.Calendar
         [Parameter]
         public DateTime Date { get; set; }
 
+        [Inject]
+        public Notification.Blazor.Services.NotificationHubService NotificationHub { get; set; }
 
-        protected override void OnInitialized()
+        protected async override Task OnInitializedAsync()
         {
-            base.OnInitialized();
+            await base.OnInitializedAsync();
             if (CalendarState.Value?.CalendarItems == null || !CalendarState.Value.CalendarItems.Any())
             {
                 StateFacade.LoadCalendarItems();
             }
+            await NotificationHub.Start();
         }
 
         protected DateTime StartDate => CalendarHelpers.GetStartDateOfWeek(new DateTime(Date.Year, Date.Month, Date.Day), CalendarState.Value.StartDayOfWeek);

@@ -1,15 +1,22 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Tomi.Notification.Core;
 
 namespace Tomi.Notification.AspNetCore.Hubs
 {
-    public class NotificationHub : Hub<INotificationPush>
+    [Authorize]
+    public class NotificationHub : Hub<INotificationClient>
     {
-        public override Task OnConnectedAsync()
+        public async override Task OnConnectedAsync()
         {
-            return base.OnConnectedAsync();
+            string email = Context.UserIdentifier;
+            
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"user_{email}");
+
+            await base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -17,9 +24,17 @@ namespace Tomi.Notification.AspNetCore.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async void PushNotification(INotify notify)
+        public async void PushNotification(string title, string description, string iconurl)
         {
-            await Clients.All.NotifyClient(notify);
+            await Clients.All.ReceiveNotification(title, description, iconurl);
         }
     }
+
+    //public class NameUserIdProvider : IUserIdProvider
+    //{
+    //    public string GetUserId(HubConnectionContext connection)
+    //    {
+    //        return connection.User?.Identity?.Name;
+    //    }
+    //}
 }
