@@ -25,3 +25,18 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code
+{
+    [Inject]
+    public Notification.Blazor.Services.NotificationHubService NotificationHub { get; set; }
+
+    [Inject]
+    public StateFacade StateFacade { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        StateFacade.LoadCalendarItems();
+        await NotificationHub.Start();
+    }
+}

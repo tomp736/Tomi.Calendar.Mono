@@ -1,4 +1,4 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+﻿@inherits CalendarComponentBase
 
 <div class="calendar-view-day @ClassNames">
     <heading>
@@ -9,7 +9,7 @@
         {
             @foreach (var item in CalendarState.Value.CalendarItems.GetCalendarItems(NodaTime.LocalDate.FromDateTime(Date.Date)).OrderBy(n => n.StartTime))
             {
-                <button class="btn btn-primary btn-md calendar-item" @onclick="@(async () => await ShowEditItem(item.Id))">@item.Title</button>
+                <button class="btn btn-primary btn-md calendar-item" @onclick="@(async () => await EditCalendarItem(item.Id))">@item.Title</button>
             }
         }
     </div>
