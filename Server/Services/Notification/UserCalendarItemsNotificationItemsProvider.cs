@@ -4,21 +4,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
+using Tomi.Calendar.Mono.Server.DataServices;
+using Tomi.Calendar.Mono.Shared.Entities;
 
 namespace Tomi.Calendar.Mono.Server.Services.Notification
 {
     public class UserCalendarItemsNotificationItemsProvider
     {
         private readonly AppNpgSqlDataContext _appNpgSqlDataContext;
+        private readonly DbContextEvents _dbContextEvents;
+        private List<UserNotificationItem> _userNotificationItems;
+        private bool _userNotificationItemsRefreshRequired;
 
-        public UserCalendarItemsNotificationItemsProvider(AppNpgSqlDataContext appNpgSqlDataContext)
+        public UserCalendarItemsNotificationItemsProvider(AppNpgSqlDataContext appNpgSqlDataContext, DbContextEvents dbContextEvents)
         {
             _appNpgSqlDataContext = appNpgSqlDataContext;
+            _dbContextEvents = dbContextEvents;
+            _dbContextEvents.EntitiesChanged += EntitiesChanged;
+            _userNotificationItems = new List<UserNotificationItem>();
+            _userNotificationItemsRefreshRequired = true;
         }
 
-        private IEnumerable<UserNotificationItem> GetNotificationItems()
+        private void EntitiesChanged(IEnumerable<Type> entitiesChanged)
         {
-            List<UserNotificationItem> _userNotificationItems = new List<UserNotificationItem>();
+            if(entitiesChanged.Contains(typeof(CalendarItem)))
+            {
+                _userNotificationItemsRefreshRequired = true;
+            }
+        }
+
+        private void RefreshUserNotificationItems()
+        {
+            _userNotificationItems?.Clear();
+
             var userCalendarItemDictionary = _appNpgSqlDataContext.Users
                    .Include(user => user.UserCalendarItems)
                    .ThenInclude(uci => uci.CalendarItem)
@@ -53,12 +71,15 @@ namespace Tomi.Calendar.Mono.Server.Services.Notification
                     });
                 }
             }
-            return _userNotificationItems;
+            _userNotificationItemsRefreshRequired = false;
         }
 
         public IEnumerable<UserNotificationItem> GetNotificationItems(DateTime notificationDateTime)
         {
-            return GetNotificationItems().Where(n => n.NotificationDateTime == notificationDateTime).ToList();
+            if (_userNotificationItems == null || _userNotificationItemsRefreshRequired)
+                RefreshUserNotificationItems();
+
+            return _userNotificationItems.Where(n => n.NotificationDateTime == notificationDateTime).ToList();
         }
     }
 

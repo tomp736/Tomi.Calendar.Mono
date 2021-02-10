@@ -16,6 +16,7 @@ using ProtoBuf.Meta;
 using System.Data;
 using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
+using Tomi.Calendar.Mono.Server.DataServices;
 using Tomi.Calendar.Mono.Server.Models;
 using Tomi.Calendar.Mono.Server.Services.Notification;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
@@ -39,6 +40,7 @@ namespace Tomi.Calendar.Mono.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<DbContextEvents>();
             services.AddDbContext<AppNpgSqlDataContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), o => o.UseNodaTime());
