@@ -3,12 +3,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Mono.Shared.Dtos.Note;
 using Tomi.Calendar.Mono.Shared.Dtos.Tag;
-using Tomi.Calendar.Mono.Shared.Entities;
 
-namespace Tomi.Calendar.Mono.Client.Services
+namespace Tomi.Calendar.Mono.Client.Services.Rest
 {
     public class CalendarHttpService : ICalendarHttpService
     {

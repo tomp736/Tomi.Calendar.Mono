@@ -1,16 +1,15 @@
-﻿using Grpc.Core;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using ProtoBuf.Grpc.Client;
-using System.Data;
 using System.Threading.Tasks;
 using Tomi.Calendar.Proto;
 
-namespace Tomi.Calendar.Mono.Client.Services
+namespace Tomi.Calendar.Mono.Client.Services.Grpc
 {
-    public class GrpcCalendarItemServiceClient
+    public class CalendarGrpcService
     {
         private GrpcChannel _gRpcChannel;
-        public GrpcCalendarItemServiceClient(GrpcChannel gRpcChannel)
+
+        public CalendarGrpcService(GrpcChannel gRpcChannel)
         {
             _gRpcChannel = gRpcChannel;
         }

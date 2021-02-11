@@ -9,13 +9,13 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Tag
 {
     public class TagEffects
     {
-        private readonly CalendarHttpService _calendarHttpService;
+        private readonly CalendarDataService _calendarDataService;
         private readonly ILogger<TagEffects> _logger;
         private readonly IState<CalendarState> _state;
 
-        public TagEffects(CalendarHttpService calendarHttpService, ILogger<TagEffects> logger, IState<CalendarState> state)
+        public TagEffects(CalendarDataService calendarDataService, ILogger<TagEffects> logger, IState<CalendarState> state)
         {
-            _calendarHttpService = calendarHttpService;
+            _calendarDataService = calendarDataService;
             _logger = logger;
             _state = state;
         }
@@ -25,7 +25,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Tag
         {
             try
             {
-                var tags = await _calendarHttpService.GetTagsAsync();
+                var tags = await _calendarDataService.GetTagsAsync();
                 dispatcher.Dispatch(new LoadTagsSuccessAction(tags));
             }
             catch (Exception e)
@@ -39,7 +39,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Tag
         {
             try
             {
-                var tag = await _calendarHttpService.GetTagAsync(action.Id);
+                var tag = await _calendarDataService.GetTagAsync(action.Id);
                 dispatcher.Dispatch(new LoadTagDetailSuccessAction(tag));
             }
             catch (Exception e)

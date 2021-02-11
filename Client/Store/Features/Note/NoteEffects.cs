@@ -10,13 +10,13 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
 {
     public class NoteEffects
     {
-        private readonly CalendarHttpService _calendarHttpService;
+        private readonly CalendarDataService _calendarDataService;
         private readonly ILogger<NoteEffects> _logger;
         private readonly IState<CalendarState> _state;
 
-        public NoteEffects(CalendarHttpService calendarHttpService, ILogger<NoteEffects> logger, IState<CalendarState> state)
+        public NoteEffects(CalendarDataService calendarDataService, ILogger<NoteEffects> logger, IState<CalendarState> state)
         {
-            _calendarHttpService = calendarHttpService;
+            _calendarDataService = calendarDataService;
             _logger = logger;
             _state = state;
         }
@@ -26,7 +26,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                var notes = await _calendarHttpService.GetNotesAsync();
+                var notes = await _calendarDataService.GetNotesAsync();
                 dispatcher.Dispatch(new LoadNotesSuccessAction(notes));
             }
             catch (Exception e)
@@ -40,7 +40,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                var note = await _calendarHttpService.GetNoteAsync(action.Id);
+                var note = await _calendarDataService.GetNoteAsync(action.Id);
                 dispatcher.Dispatch(new LoadNoteDetailSuccessAction(note));
             }
             catch (Exception e)
@@ -55,7 +55,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                var note = await _calendarHttpService.GetNoteAsync(action.Id);
+                var note = await _calendarDataService.GetNoteAsync(action.Id);
                 if (note != null)
                 {
                     dispatcher.Dispatch(new NewNoteFailureAction($"Resource already exists for {action.Id}"));
@@ -81,7 +81,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
                 noteDto.Title = action.NoteDto.Title;
                 noteDto.Content = action.NoteDto.Content;
 
-                await _calendarHttpService.Save(noteDto);
+                await _calendarDataService.SaveNote(noteDto);
                 dispatcher.Dispatch(new UpdateNoteSuccessAction(noteDto));
             }
             catch (Exception e)
@@ -99,7 +99,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
                 noteDto.Title = action.Note.Title;
                 noteDto.Content = action.Note.Content;
 
-                await _calendarHttpService.Save(noteDto);
+                await _calendarDataService.SaveNote(noteDto);
                 dispatcher.Dispatch(new UpdateNoteSuccessAction(noteDto));
             }
             catch (Exception e)
@@ -114,7 +114,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                await _calendarHttpService.DeleteNote(action.Id);
+                await _calendarDataService.DeleteNote(action.Id);
                 dispatcher.Dispatch(new DeleteNoteSuccessAction(action.Id));
             }
             catch (Exception e)

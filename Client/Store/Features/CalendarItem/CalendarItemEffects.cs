@@ -12,19 +12,16 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 {
     public class CalendarItemEffects
     {
-        private readonly CalendarHttpService _calendarHttpService;
-        private readonly GrpcCalendarItemServiceClient _grpcCalendarItemService;
+        private readonly CalendarDataService _calendarItemService;
         private readonly ILogger<CalendarItemEffects> _logger;
         private readonly IState<CalendarState> _state;
 
         public CalendarItemEffects(
-            CalendarHttpService calendarHttpService,
-            GrpcCalendarItemServiceClient grpcCalendarItemServiceClient,
+            CalendarDataService calendarDataService,
             ILogger<CalendarItemEffects> logger,
             IState<CalendarState> state)
         {
-            _calendarHttpService = calendarHttpService;
-            _grpcCalendarItemService = grpcCalendarItemServiceClient;
+            _calendarItemService = calendarDataService;
             _logger = logger;
             _state = state;
         }
@@ -34,7 +31,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                GetCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                GetCalendarItemsResponse calendarItemsResponse = await _calendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
                 {
                 });
                 dispatcher.Dispatch(new LoadCalendarItemsSuccessAction(calendarItemsResponse.CalendarItems));
@@ -50,7 +47,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                GetCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                GetCalendarItemsResponse calendarItemsResponse = await _calendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
                 {
                     CalendarItemIds = new Guid[] { action.Id }
                 });
@@ -75,7 +72,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                GetCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                GetCalendarItemsResponse calendarItemsResponse = await _calendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
                 {
                     CalendarItemIds = new Guid[] { action.Id }
                 });
@@ -109,7 +106,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
-                SaveCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
+                SaveCalendarItemsResponse calendarItemsResponse = await _calendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
                 {
                     CalendarItems = new CalendarItemDto[] { calendarItemDto }
                 });
@@ -137,7 +134,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
-                SaveCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
+                SaveCalendarItemsResponse calendarItemsResponse = await _calendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
                 {
                     CalendarItems = new CalendarItemDto[] { calendarItemDto }
                 });
@@ -158,7 +155,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                DeleteCalendarItemsResponse calendarItemsResponse = await _grpcCalendarItemService.DeleteCalendarItems(new DeleteCalendarItemsRequest()
+                DeleteCalendarItemsResponse calendarItemsResponse = await _calendarItemService.DeleteCalendarItems(new DeleteCalendarItemsRequest()
                 {
                     CalendarItemIds = new Guid[] { action.Id }
                 });

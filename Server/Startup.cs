@@ -63,10 +63,6 @@ namespace Tomi.Calendar.Mono.Server
 
 
             RuntimeTypeModel.Default
-                .Add(typeof(DataTable), false)
-                .SetSurrogate(typeof(DataTableSurrogate));
-
-            RuntimeTypeModel.Default
                 .Add(typeof(CalendarItemDto), false)
                 .SetSurrogate(typeof(CalendarItemSurrogate));
 

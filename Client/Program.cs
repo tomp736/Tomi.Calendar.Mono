@@ -20,6 +20,8 @@ using Tomi.Notification.Blazor.Services;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Proto;
+using Tomi.Calendar.Mono.Client.Services.Rest;
+using Tomi.Calendar.Mono.Client.Services.Grpc;
 
 namespace Tomi.Calendar.Mono.Client
 {
@@ -32,34 +34,28 @@ namespace Tomi.Calendar.Mono.Client
 
             // Add Fluxor
             var currentAssembly = typeof(Program).Assembly;
-            builder.Services.AddFluxor(config =>
-            {
-                config
-                    .ScanAssemblies(currentAssembly)
-                    .UseReduxDevTools();
-            });
 
-            JsonSerializerOptions options =
-                new JsonSerializerOptions(JsonSerializerDefaults.Web)
-                .ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            ConfigureFluxor(builder, currentAssembly);
+            ConfigureJsonSerializer(builder);
+            ConfigureProtobufRuntimeTypeModels();
 
-            builder.Services
-                .AddSingleton(options);
+            ConfigureHttpClients(builder);
+            BuildGrpcWebHandler(builder);
 
-            builder.Services
-                .AddHttpClient<CalendarHttpService>("CalendarApi", client =>
-                {
-                    // client.BaseAddress = new Uri("https://localhost:8091");
-                    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-                    client.DefaultRequestHeaders.Add("Accept", "application/json");
-                    client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
-                })
-                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+            builder.Services.AddApiAuthorization();
+            builder.Services.AddBlazoredModal();
+            builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services
-                .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("CalendarApi"));
+            BuildNotificationServices(builder);
+            BuildCalendarServices(builder);
 
+            var host = builder.Build();
+
+            await host.RunAsync();
+        }
+
+        private static void ConfigureHttpClients(WebAssemblyHostBuilder builder)
+        {
             builder.Services
                 .AddHttpClient("Tomi.Calendar.Mono.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
@@ -68,35 +64,32 @@ namespace Tomi.Calendar.Mono.Client
             builder.Services
                 .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("Tomi.Calendar.Mono.ServerAPI"));
+        }
 
-            builder.Services
-                .AddApiAuthorization();
-
-            builder.Services
-                .AddScoped<StateFacade>();
-
-
-            builder.Services.AddNotificationHub((sp, options) =>
+        private static void ConfigureFluxor(WebAssemblyHostBuilder builder, System.Reflection.Assembly currentAssembly)
+        {
+            builder.Services.AddFluxor(config =>
             {
-                IAccessTokenProvider accessTokenProvider = sp.GetRequiredService<IAccessTokenProvider>();
-                options.Uri = new Uri(builder.HostEnvironment.BaseAddress + "notificationhub");
-                options.AccessTokenProvider = async () =>
-                {
-                    AccessTokenResult accessTokenResult = await accessTokenProvider.RequestAccessToken();
-                    AccessToken accessToken;
-                    if (accessTokenResult.TryGetToken(out accessToken))
-                    {
-                        return accessToken.Value;
-                    }
-                    return "";
-                };
+                config.ScanAssemblies(currentAssembly).UseReduxDevTools();
             });
 
-            builder.Services
-                .AddBlazoredModal();
-            builder.Services
-                .AddBlazoredLocalStorage();
+            builder.Services.AddScoped<StateFacade>();
+        }
 
+        private static void ConfigureProtobufRuntimeTypeModels()
+        {
+            RuntimeTypeModel.Default.AddNodaTime();
+            RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
+        }
+
+        private static void ConfigureJsonSerializer(WebAssemblyHostBuilder builder)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions(JsonSerializerDefaults.Web).ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+            builder.Services.AddSingleton(options);
+        }
+
+        private static void BuildGrpcWebHandler(WebAssemblyHostBuilder builder)
+        {
             builder.Services.
                 AddScoped(services =>
                 {
@@ -122,23 +115,50 @@ namespace Tomi.Calendar.Mono.Client
                         MaxSendMessageSize = int.MaxValue
                     });
                 });
+        }
 
-            RuntimeTypeModel.Default
-                .Add(typeof(CalendarItemDto), false)
-                .SetSurrogate(typeof(CalendarItemSurrogate));
+        private static void BuildNotificationServices(WebAssemblyHostBuilder builder)
+        {
+            builder.Services.AddNotificationHub(NotificationHubConfig(builder, builder.HostEnvironment.BaseAddress + "notificationHub"));
+        }
 
-            RuntimeTypeModel.Default
-                .AddNodaTime();
+        private static void BuildCalendarServices(WebAssemblyHostBuilder builder)
+        {
+            builder.Services
+                .AddHttpClient<CalendarHttpService>("CalendarApi", client =>
+                {
+                    // client.BaseAddress = new Uri("https://localhost:8091");
+                    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+                    client.DefaultRequestHeaders.Add("Accept", "application/json");
+                    client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
+                })
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             builder.Services
-                .AddScoped<GrpcCalendarItemServiceClient>();
+                .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("CalendarApi"));
 
-            //RuntimeTypeModel.Default.Add(typeof(DataTable), false).SetSurrogate(typeof(DataTableSurrogate));
-            //builder.Services.AddSingleton<GrpcDataTableServiceClient>();
+            builder.Services.AddScoped<CalendarGrpcService>();
+            builder.Services.AddScoped<CalendarDataService>();
+        }
 
-            var host = builder.Build();
-
-            await host.RunAsync();
+        private static Action<IServiceProvider, NotificationHubServiceOptions> NotificationHubConfig(WebAssemblyHostBuilder builder, string uri)
+        {
+            return (sp, options) =>
+            {
+                IAccessTokenProvider accessTokenProvider = sp.GetRequiredService<IAccessTokenProvider>();
+                options.Uri = new Uri(uri);
+                options.AccessTokenProvider = async () =>
+                {
+                    AccessTokenResult accessTokenResult = await accessTokenProvider.RequestAccessToken();
+                    AccessToken accessToken;
+                    if (accessTokenResult.TryGetToken(out accessToken))
+                    {
+                        return accessToken.Value;
+                    }
+                    return "";
+                };
+            };
         }
     }
 }
