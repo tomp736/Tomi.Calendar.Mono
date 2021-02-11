@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tomi.Calendar.Mono.Shared.Dtos.Note;
 
 namespace Tomi.Calendar.Mono.Shared.Entities
 {
@@ -17,6 +18,18 @@ namespace Tomi.Calendar.Mono.Shared.Entities
         public string Content { get; set; }
 
         public ICollection<CalendarItemNote> CalendarItemNotes { get; set; }
+
+
+        public NoteDto ToDto()
+        {
+            return new NoteDto()
+            {
+                Id = Id,
+                CreateDate = CreateDate,
+                Title = Title,
+                Content = Content
+            };
+        }
 
     }
 }

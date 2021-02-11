@@ -18,6 +18,7 @@ namespace Tomi.Calendar.Mono.Server.Data
         private readonly DbContextEvents _dbContextEvents;
 
         public DbSet<ApplicationUserCalendarItem> ApplicationUserCalendarItem { get; set; }
+        public DbSet<ApplicationUserNote> ApplicationUserNotes { get; set; }
 
         public DbSet<CalendarItem> CalendarItems { get; set; }
 
@@ -55,6 +56,15 @@ namespace Tomi.Calendar.Mono.Server.Data
             modelBuilder.Entity<ApplicationUserCalendarItem>()
                 .HasOne(c => c.User)
                 .WithMany(bc => bc.UserCalendarItems)
+                .HasForeignKey(k => k.UserKey);
+
+            // Relationships
+            modelBuilder.Entity<ApplicationUserNote>()
+                .HasKey(bc => new { bc.NoteKey, bc.UserKey });
+
+            modelBuilder.Entity<ApplicationUserNote>()
+                .HasOne(c => c.User)
+                .WithMany(bc => bc.UserNotes)
                 .HasForeignKey(k => k.UserKey);
 
             modelBuilder.Entity<CalendarItemTag>()

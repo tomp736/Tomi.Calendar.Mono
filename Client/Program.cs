@@ -22,6 +22,7 @@ using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Proto;
 using Tomi.Calendar.Mono.Client.Services.Rest;
 using Tomi.Calendar.Mono.Client.Services.Grpc;
+using Tomi.Calendar.Mono.Shared.Dtos.Note;
 
 namespace Tomi.Calendar.Mono.Client
 {
@@ -80,6 +81,7 @@ namespace Tomi.Calendar.Mono.Client
         {
             RuntimeTypeModel.Default.AddNodaTime();
             RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
+            RuntimeTypeModel.Default.Add(typeof(NoteDto), false).SetSurrogate(typeof(NoteSurrogate));
         }
 
         private static void ConfigureJsonSerializer(WebAssemblyHostBuilder builder)

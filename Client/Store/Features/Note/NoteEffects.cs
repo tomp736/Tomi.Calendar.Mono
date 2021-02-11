@@ -1,10 +1,12 @@
 ﻿using Fluxor;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Client.Store.State;
 using Tomi.Calendar.Mono.Shared.Dtos.Note;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.Note
 {
@@ -26,8 +28,8 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                var notes = await _calendarDataService.GetNotesAsync();
-                dispatcher.Dispatch(new LoadNotesSuccessAction(notes));
+                var notes = await _calendarDataService.GetNotes(new GetNotesRequest());
+                dispatcher.Dispatch(new LoadNotesSuccessAction(notes.Notes));
             }
             catch (Exception e)
             {
@@ -40,8 +42,19 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                var note = await _calendarDataService.GetNoteAsync(action.Id);
-                dispatcher.Dispatch(new LoadNoteDetailSuccessAction(note));
+                GetNotesResponse calendarItemsResponse = await _calendarDataService.GetNotes(new GetNotesRequest()
+                {
+                    NoteIds = new Guid[] { action.Id }
+                });
+                NoteDto calendarItemDto = calendarItemsResponse.Notes.FirstOrDefault();
+                if (calendarItemDto != null)
+                {
+                    dispatcher.Dispatch(new LoadNoteDetailSuccessAction(calendarItemDto));
+                }
+                else
+                {
+                    dispatcher.Dispatch(new LoadNoteDetailFailureAction("Resource does not exist"));
+                }
             }
             catch (Exception e)
             {
@@ -55,8 +68,12 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                var note = await _calendarDataService.GetNoteAsync(action.Id);
-                if (note != null)
+                GetNotesResponse calendarItemsResponse = await _calendarDataService.GetNotes(new GetNotesRequest()
+                {
+                    NoteIds = new Guid[] { action.Id }
+                });
+                if (calendarItemsResponse.Notes != null &&
+                    calendarItemsResponse.Notes.Any())
                 {
                     dispatcher.Dispatch(new NewNoteFailureAction($"Resource already exists for {action.Id}"));
                 }
@@ -81,8 +98,14 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
                 noteDto.Title = action.NoteDto.Title;
                 noteDto.Content = action.NoteDto.Content;
 
-                await _calendarDataService.SaveNote(noteDto);
-                dispatcher.Dispatch(new UpdateNoteSuccessAction(noteDto));
+                SaveNotesResponse calendarItemsResponse = await _calendarDataService.SaveNotes(new SaveNotesRequest()
+                {
+                    Notes = new NoteDto[] { noteDto }
+                });
+                if (calendarItemsResponse.Notes.Any())
+                {
+                    dispatcher.Dispatch(new UpdateNoteSuccessAction(calendarItemsResponse.Notes.FirstOrDefault()));
+                }
             }
             catch (Exception e)
             {
@@ -99,8 +122,14 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
                 noteDto.Title = action.Note.Title;
                 noteDto.Content = action.Note.Content;
 
-                await _calendarDataService.SaveNote(noteDto);
-                dispatcher.Dispatch(new UpdateNoteSuccessAction(noteDto));
+                SaveNotesResponse calendarItemsResponse = await _calendarDataService.SaveNotes(new SaveNotesRequest()
+                {
+                    Notes = new NoteDto[] { noteDto }
+                });
+                if (calendarItemsResponse.Notes.Any())
+                {
+                    dispatcher.Dispatch(new UpdateNoteSuccessAction(calendarItemsResponse.Notes.FirstOrDefault()));
+                }
             }
             catch (Exception e)
             {
@@ -114,7 +143,10 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Note
         {
             try
             {
-                await _calendarDataService.DeleteNote(action.Id);
+                DeleteNotesResponse calendarItemsResponse = await _calendarDataService.DeleteNotes(new DeleteNotesRequest()
+                {
+                    NoteIds = new Guid[] { action.Id }
+                });
                 dispatcher.Dispatch(new DeleteNoteSuccessAction(action.Id));
             }
             catch (Exception e)

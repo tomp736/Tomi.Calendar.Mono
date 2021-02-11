@@ -36,6 +36,22 @@ namespace Tomi.Calendar.Mono.Client.Services
         }
 
 
+        public async ValueTask<GetNotesResponse> GetNotes(GetNotesRequest getNotesRequest)
+        {
+            return await _calendarGrpcService.GetNotes(getNotesRequest);
+        }
+
+        public async ValueTask<SaveNotesResponse> SaveNotes(SaveNotesRequest saveNotesRequest)
+        {
+            return await _calendarGrpcService.SaveNotes(saveNotesRequest);
+        }
+
+        public async ValueTask<DeleteNotesResponse> DeleteNotes(DeleteNotesRequest deleteNotesRequest)
+        {
+            return await _calendarGrpcService.DeleteNotes(deleteNotesRequest);
+        }
+
+
         public async ValueTask<TagDto> GetTagAsync(Guid tagId)
         {
             return await _calendarHttpService.GetTagAsync(tagId);
@@ -54,21 +70,5 @@ namespace Tomi.Calendar.Mono.Client.Services
         }
 
 
-        public async ValueTask<NoteDto> GetNoteAsync(Guid noteId)
-        {
-            return await _calendarHttpService.GetNoteAsync(noteId);
-        }
-        public async ValueTask<NoteDto[]> GetNotesAsync()
-        {
-            return await _calendarHttpService.GetNotesAsync();
-        }
-        public async ValueTask SaveNote(NoteDto NoteDto)
-        {
-            await _calendarHttpService.Save(NoteDto);
-        }
-        public async ValueTask DeleteNote(Guid id)
-        {
-            await _calendarHttpService.DeleteNote(id);
-        }
     }
 }

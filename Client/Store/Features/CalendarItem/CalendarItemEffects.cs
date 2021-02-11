@@ -12,7 +12,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 {
     public class CalendarItemEffects
     {
-        private readonly CalendarDataService _calendarItemService;
+        private readonly CalendarDataService _calendarDataService;
         private readonly ILogger<CalendarItemEffects> _logger;
         private readonly IState<CalendarState> _state;
 
@@ -21,7 +21,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             ILogger<CalendarItemEffects> logger,
             IState<CalendarState> state)
         {
-            _calendarItemService = calendarDataService;
+            _calendarDataService = calendarDataService;
             _logger = logger;
             _state = state;
         }
@@ -31,7 +31,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                GetCalendarItemsResponse calendarItemsResponse = await _calendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                GetCalendarItemsResponse calendarItemsResponse = await _calendarDataService.GetCalendarItems(new GetCalendarItemsRequest()
                 {
                 });
                 dispatcher.Dispatch(new LoadCalendarItemsSuccessAction(calendarItemsResponse.CalendarItems));
@@ -47,7 +47,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                GetCalendarItemsResponse calendarItemsResponse = await _calendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                GetCalendarItemsResponse calendarItemsResponse = await _calendarDataService.GetCalendarItems(new GetCalendarItemsRequest()
                 {
                     CalendarItemIds = new Guid[] { action.Id }
                 });
@@ -72,7 +72,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                GetCalendarItemsResponse calendarItemsResponse = await _calendarItemService.GetCalendarItems(new GetCalendarItemsRequest()
+                GetCalendarItemsResponse calendarItemsResponse = await _calendarDataService.GetCalendarItems(new GetCalendarItemsRequest()
                 {
                     CalendarItemIds = new Guid[] { action.Id }
                 });
@@ -106,7 +106,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
-                SaveCalendarItemsResponse calendarItemsResponse = await _calendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
+                SaveCalendarItemsResponse calendarItemsResponse = await _calendarDataService.SaveCalendarItems(new SaveCalendarItemsRequest()
                 {
                     CalendarItems = new CalendarItemDto[] { calendarItemDto }
                 });
@@ -134,7 +134,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
 
-                SaveCalendarItemsResponse calendarItemsResponse = await _calendarItemService.SaveCalendarItems(new SaveCalendarItemsRequest()
+                SaveCalendarItemsResponse calendarItemsResponse = await _calendarDataService.SaveCalendarItems(new SaveCalendarItemsRequest()
                 {
                     CalendarItems = new CalendarItemDto[] { calendarItemDto }
                 });
@@ -155,7 +155,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         {
             try
             {
-                DeleteCalendarItemsResponse calendarItemsResponse = await _calendarItemService.DeleteCalendarItems(new DeleteCalendarItemsRequest()
+                DeleteCalendarItemsResponse calendarItemsResponse = await _calendarDataService.DeleteCalendarItems(new DeleteCalendarItemsRequest()
                 {
                     CalendarItemIds = new Guid[] { action.Id }
                 });
