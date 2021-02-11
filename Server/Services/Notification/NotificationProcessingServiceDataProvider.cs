@@ -6,17 +6,19 @@ using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.DataServices;
 using Tomi.Calendar.Mono.Shared.Entities;
+using Tomi.Notification.AspNetCore;
+using Tomi.Notification.Core;
 
 namespace Tomi.Calendar.Mono.Server.Services.Notification
 {
-    public class UserCalendarItemsNotificationItemsProvider
+    public class NotificationProcessingServiceDataProvider : INotificationProcessingServiceDataProvider
     {
         private readonly AppNpgSqlDataContext _appNpgSqlDataContext;
         private readonly DbContextEvents _dbContextEvents;
         private List<UserNotificationItem> _userNotificationItems;
         private bool _userNotificationItemsRefreshRequired;
 
-        public UserCalendarItemsNotificationItemsProvider(AppNpgSqlDataContext appNpgSqlDataContext, DbContextEvents dbContextEvents)
+        public NotificationProcessingServiceDataProvider(AppNpgSqlDataContext appNpgSqlDataContext, DbContextEvents dbContextEvents)
         {
             _appNpgSqlDataContext = appNpgSqlDataContext;
             _dbContextEvents = dbContextEvents;
@@ -27,7 +29,7 @@ namespace Tomi.Calendar.Mono.Server.Services.Notification
 
         private void EntitiesChanged(IEnumerable<Type> entitiesChanged)
         {
-            if(entitiesChanged.Contains(typeof(CalendarItem)))
+            if (entitiesChanged.Contains(typeof(CalendarItem)))
             {
                 _userNotificationItemsRefreshRequired = true;
             }
@@ -54,7 +56,8 @@ namespace Tomi.Calendar.Mono.Server.Services.Notification
                 {
                     _userNotificationItems.Add(new UserNotificationItem()
                     {
-                        UserName = userCalendarItems.Key,
+                        NotificationType = NotificationType.Group,
+                        NotifyTypeName = userCalendarItems.Key,
                         Title = calendarItem.Title,
                         Description = calendarItem.Description,
                         IconUrl = "https://i.imgur.com/LU8e5sj.jpg",
@@ -63,7 +66,8 @@ namespace Tomi.Calendar.Mono.Server.Services.Notification
 
                     _userNotificationItems.Add(new UserNotificationItem()
                     {
-                        UserName = userCalendarItems.Key,
+                        NotificationType = NotificationType.Group,
+                        NotifyTypeName = userCalendarItems.Key,
                         Title = calendarItem.Title,
                         Description = calendarItem.Description,
                         IconUrl = "https://i.imgur.com/LU8e5sj.jpg",
@@ -74,7 +78,7 @@ namespace Tomi.Calendar.Mono.Server.Services.Notification
             _userNotificationItemsRefreshRequired = false;
         }
 
-        public IEnumerable<UserNotificationItem> GetNotificationItems(DateTime notificationDateTime)
+        public IEnumerable<INotificationHubItem> GetNotificationItems(DateTime notificationDateTime)
         {
             if (_userNotificationItems == null || _userNotificationItemsRefreshRequired)
                 RefreshUserNotificationItems();
@@ -83,9 +87,11 @@ namespace Tomi.Calendar.Mono.Server.Services.Notification
         }
     }
 
-    public class UserNotificationItem
+    public class UserNotificationItem : INotificationHubItem
     {
-        public string UserName { get; set; }
+        public NotificationType NotificationType { get; set; } = NotificationType.Group;
+        public string NotifyTypeName { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public string IconUrl { get; set; }

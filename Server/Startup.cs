@@ -96,9 +96,12 @@ namespace Tomi.Calendar.Mono.Server
             services.AddSignalR();
             //services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
-            services.AddHostedService<NotificationHostedService>();
+            services.AddTransient<INotificationProcessingServiceDataProvider, NotificationProcessingServiceDataProvider>();
             services.AddScoped<INotificationProcessingService, NotificationProcessingService>();
-            services.AddTransient<UserCalendarItemsNotificationItemsProvider>();
+            services.AddNotificationHostedService((sp, options) =>
+            {
+                options = new NotificationHostedServiceOptions(services);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -135,9 +138,6 @@ namespace Tomi.Calendar.Mono.Server
             app.UseGrpcWeb();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GrpcDataTableService>()
-                    .EnableGrpcWeb();
-
                 endpoints.MapGrpcService<GrpcCalendarItemService>()
                     .RequireAuthorization(new AuthorizeAttribute())
                     .EnableGrpcWeb();

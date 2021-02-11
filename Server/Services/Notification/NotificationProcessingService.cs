@@ -12,35 +12,31 @@ namespace Tomi.Calendar.Mono.Server.Services.Notification
     internal class NotificationProcessingService : INotificationProcessingService
     {
         private readonly ILogger _logger;
-        private readonly UserCalendarItemsNotificationItemsProvider _userNotificationItemsProvider;
 
-        public NotificationProcessingService(
-            ILogger<NotificationProcessingService> logger,
-            UserCalendarItemsNotificationItemsProvider userNotificationItemsProvider)
+        public NotificationProcessingService(ILogger<NotificationProcessingService> logger)
         {
             _logger = logger;
-            _userNotificationItemsProvider = userNotificationItemsProvider;
         }
 
-        public async Task ProcessNotifications(IHubContext<NotificationHub, INotificationClient> hubContext, CancellationToken stoppingToken)
+        public async Task ProcessNotifications(IHubContext<NotificationHub, INotificationHubService> hubContext, INotificationProcessingServiceDataProvider notificationProcessingServiceDataProvider, CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await ProcessUserCalendarItemNotifications(hubContext);
+                await ProcessUserCalendarItemNotifications(hubContext, notificationProcessingServiceDataProvider);
 
                 // delay until next HH:mm:00 instance
                 await Task.Delay(TimeSpan.FromSeconds(60 - DateTime.Now.Second), stoppingToken);
             }
         }
 
-        private async Task ProcessUserCalendarItemNotifications(IHubContext<NotificationHub, INotificationClient> hubContext)
+        private async Task ProcessUserCalendarItemNotifications(IHubContext<NotificationHub, INotificationHubService> hubContext, INotificationProcessingServiceDataProvider notificationProcessingServiceDataProvider)
         {
             DateTime notificationDateTime = DateTime.Today.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute);
-            var userNotificationItems = _userNotificationItemsProvider.GetNotificationItems(notificationDateTime);
+            var userNotificationItems = notificationProcessingServiceDataProvider.GetNotificationItems(notificationDateTime);
 
             foreach (var userNotificationItem in userNotificationItems)
             {
-                await hubContext.Clients.Group($"user_{userNotificationItem.UserName}")
+                await hubContext.Clients.Group($"user_{userNotificationItem.NotifyTypeName}")
                     .ReceiveNotification(userNotificationItem.Title, userNotificationItem.Description, userNotificationItem.IconUrl);
             }
         }
