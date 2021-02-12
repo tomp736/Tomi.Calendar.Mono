@@ -19,6 +19,7 @@ namespace Tomi.Calendar.Mono.Server.Data
 
         public DbSet<ApplicationUserCalendarItem> ApplicationUserCalendarItem { get; set; }
         public DbSet<ApplicationUserNote> ApplicationUserNotes { get; set; }
+        public DbSet<ApplicationUserTag> ApplicationUserTags { get; set; }
 
         public DbSet<CalendarItem> CalendarItems { get; set; }
 
@@ -65,6 +66,15 @@ namespace Tomi.Calendar.Mono.Server.Data
             modelBuilder.Entity<ApplicationUserNote>()
                 .HasOne(c => c.User)
                 .WithMany(bc => bc.UserNotes)
+                .HasForeignKey(k => k.UserKey);
+
+            // Relationships
+            modelBuilder.Entity<ApplicationUserTag>()
+                .HasKey(bc => new { bc.TagKey, bc.UserKey });
+
+            modelBuilder.Entity<ApplicationUserTag>()
+                .HasOne(c => c.User)
+                .WithMany(bc => bc.UserTags)
                 .HasForeignKey(k => k.UserKey);
 
             modelBuilder.Entity<CalendarItemTag>()

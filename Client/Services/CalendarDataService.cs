@@ -1,23 +1,16 @@
-﻿using ProtoBuf.Grpc.Client;
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services.Grpc;
-using Tomi.Calendar.Mono.Client.Services.Rest;
-using Tomi.Calendar.Mono.Shared.Dtos.Note;
-using Tomi.Calendar.Mono.Shared.Dtos.Tag;
 using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client.Services
 {
     public class CalendarDataService
     {
-        private CalendarHttpService _calendarHttpService;
         private CalendarGrpcService _calendarGrpcService;
 
-        public CalendarDataService(CalendarGrpcService calendarGrpcService, CalendarHttpService calendarHttpService)
+        public CalendarDataService(CalendarGrpcService calendarGrpcService)
         {
             _calendarGrpcService = calendarGrpcService;
-            _calendarHttpService = calendarHttpService;
         }
 
         public async ValueTask<GetCalendarItemsResponse> GetCalendarItems(GetCalendarItemsRequest getCalendarItemsRequest)
@@ -52,23 +45,19 @@ namespace Tomi.Calendar.Mono.Client.Services
         }
 
 
-        public async ValueTask<TagDto> GetTagAsync(Guid tagId)
+        public async ValueTask<GetTagsResponse> GetTags(GetTagsRequest getTagsRequest)
         {
-            return await _calendarHttpService.GetTagAsync(tagId);
-        }
-        public async ValueTask<TagDto[]> GetTagsAsync()
-        {
-            return await _calendarHttpService.GetTagsAsync();
-        }
-        public async ValueTask SaveTag(TagDto tagDto)
-        {
-            await _calendarHttpService.Save(tagDto);
-        }
-        public async ValueTask DeleteTag(Guid id)
-        {
-            await _calendarHttpService.DeleteTag(id);
+            return await _calendarGrpcService.GetTags(getTagsRequest);
         }
 
+        public async ValueTask<SaveTagsResponse> SaveTags(SaveTagsRequest saveTagsRequest)
+        {
+            return await _calendarGrpcService.SaveTags(saveTagsRequest);
+        }
 
+        public async ValueTask<DeleteTagsResponse> DeleteTags(DeleteTagsRequest deleteTagsRequest)
+        {
+            return await _calendarGrpcService.DeleteTags(deleteTagsRequest);
+        }
     }
 }

@@ -1,14 +1,17 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-@foreach (TagDto tag in CalendarState.Value.Tags)
+@if (CalendarState.Value.TagsLoaded)
 {
-    if (SelectedValues.Contains(tag.Id))
+    @foreach (TagDto tag in CalendarState.Value.Tags)
     {
-        <span class="badge bg-success" @onclick="@(() => OnClick(tag.Id))">@tag.Name</span>
-    }
-    else
-    {
-        <span class="badge bg-primary" @onclick="@(() => OnClick(tag.Id))">@tag.Name</span>
+        if (SelectedValues.Contains(tag.Id))
+        {
+            <span class="badge" style="background-color: @($"{tag.Color};")" @onclick="@(() => OnClick(tag.Id))">@tag.Name</span>
+        }
+        else
+        {
+            <span class="badge" style="background-color: @($"{tag.Color}; opacity: 0.5;")" @onclick="@(() => OnClick(tag.Id))">@tag.Name</span>
+        }
     }
 }
 

@@ -76,6 +76,10 @@ namespace Tomi.Calendar.Proto
         public LocalTime? StartTime { get; set; }
         [DataMember(Order = 7)]
         public LocalTime? EndTime { get; set; }
+        [DataMember(Order = 8)]
+        public IEnumerable<Guid>? TagIds { get; set; }
+        [DataMember(Order = 9)]
+        public IEnumerable<Guid>? NoteIds { get; set; }
 
         // protobuf-net wants an implicit or explicit operator between the types
         public static implicit operator CalendarItemDto(CalendarItemSurrogate value)
@@ -91,7 +95,9 @@ namespace Tomi.Calendar.Proto
                 StartDate = value.StartDate,
                 EndDate = value.EndDate,
                 StartTime = value.StartTime,
-                EndTime = value.EndTime
+                EndTime = value.EndTime,
+                TagIds = value.TagIds,
+                NoteIds = value.NoteIds
             };
         }
 
@@ -108,7 +114,9 @@ namespace Tomi.Calendar.Proto
                 StartDate = value.StartDate,
                 EndDate = value.EndDate,
                 StartTime = value.StartTime,
-                EndTime = value.EndTime
+                EndTime = value.EndTime,
+                TagIds = value.TagIds,
+                NoteIds = value.NoteIds
             };
         }
     }

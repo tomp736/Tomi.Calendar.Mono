@@ -12,17 +12,16 @@ using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using ProtoBuf.Meta;
 using System;
-using System.Data;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Tomi.Notification.Blazor.Services;
 using Tomi.Calendar.Mono.Client.Services;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
-using Tomi.Calendar.Proto;
-using Tomi.Calendar.Mono.Client.Services.Rest;
 using Tomi.Calendar.Mono.Client.Services.Grpc;
+using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Mono.Shared.Dtos.Note;
+using Tomi.Calendar.Mono.Shared.Dtos.Tag;
+using Tomi.Calendar.Proto;
+using Tomi.Notification.Blazor.Services;
 
 namespace Tomi.Calendar.Mono.Client
 {
@@ -82,6 +81,7 @@ namespace Tomi.Calendar.Mono.Client
             RuntimeTypeModel.Default.AddNodaTime();
             RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
             RuntimeTypeModel.Default.Add(typeof(NoteDto), false).SetSurrogate(typeof(NoteSurrogate));
+            RuntimeTypeModel.Default.Add(typeof(TagDto), false).SetSurrogate(typeof(TagSurrogate));
         }
 
         private static void ConfigureJsonSerializer(WebAssemblyHostBuilder builder)
@@ -126,19 +126,18 @@ namespace Tomi.Calendar.Mono.Client
 
         private static void BuildCalendarServices(WebAssemblyHostBuilder builder)
         {
-            builder.Services
-                .AddHttpClient<CalendarHttpService>("CalendarApi", client =>
-                {
-                    // client.BaseAddress = new Uri("https://localhost:8091");
-                    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-                    client.DefaultRequestHeaders.Add("Accept", "application/json");
-                    client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
-                })
-                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+            //builder.Services.AddHttpClient<CalendarHttpService>("CalendarApi", client =>
+            //    {
+            //        // client.BaseAddress = new Uri("https://localhost:8091");
+            //        client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+            //        client.DefaultRequestHeaders.Add("Accept", "application/json");
+            //        client.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
+            //    })
+            //    .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-            builder.Services
-                .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("CalendarApi"));
+            //builder.Services
+            //    .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+            //    .CreateClient("CalendarApi"));
 
             builder.Services.AddScoped<CalendarGrpcService>();
             builder.Services.AddScoped<CalendarDataService>();

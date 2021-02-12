@@ -1,6 +1,8 @@
 ﻿using NodaTime;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Tomi.Calendar.Mono.Shared.Dtos.Tag;
 
 namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
 {
@@ -20,5 +22,8 @@ namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
 
         public LocalTime StartTime { get; set; }
         public LocalTime EndTime { get; set; }
+
+        public List<Guid> TagIds { get; set; }
+        public List<Guid> NoteIds { get; set; }
     }
 }

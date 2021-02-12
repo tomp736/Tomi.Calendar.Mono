@@ -15,17 +15,16 @@ namespace Tomi.Calendar.Mono.Client.Components.Tags
         [Inject]
         protected IState<CalendarState> CalendarState { get; set; }
 
+        [Inject]
         protected StateFacade StateFacade { get; set; }
 
         [Inject]
         public IModalService Modal { get; set; }
 
-        [Parameter]
-        public Action StateChangedCallback { get; set; }
-
 
         protected async override Task OnInitializedAsync()
         {
+            StateFacade.LoadTags();
             await base.OnInitializedAsync();
         }
 
@@ -42,19 +41,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Tags
             var modal = Modal.Show<TagEditView>("Edit Tag", parameters);
             var result = await modal.Result;
 
-            StateChanged();
-        }
-
-        public void StateChanged()
-        {
-            if (StateChangedCallback != null)
-            {
-                StateChangedCallback.Invoke();
-            }
-            else
-            {
-                StateHasChanged();
-            }
+            StateHasChanged();
         }
     }
 }

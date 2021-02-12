@@ -1,30 +1,36 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-@if (CalendarState.Value.IsLoading)
-{
+
+<EditForm Model="validationModel" OnSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
     <div class="d-flex flex-column align-items-center">
-        Loading ...
+        <ValidationSummary />
     </div>
-}
-else
-{
-    <EditForm Model="validationModel" OnSubmit="HandleSubmit">
-        <DataAnnotationsValidator />
-        <div class="d-flex flex-column align-items-center">
-            <ValidationSummary />
-        </div>
-        <div>
-            <div class="form-group">
-                <label for="tag-name">Title</label>
-                <input class="form-control" type="text" id="tag-name" @bind="validationModel.Name" />
-            </div>
-            <div class="form-group">
-                <label for="tag-description">Description</label>
-                <input class="form-control" type="text" id="tag-description" @bind="validationModel.Description" />
-            </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                Edit Tag
+            </h5>
+            <p class="card-text">
+                <div>
+                    <div class="form-group">
+                        <label for="tag-name">Title</label>
+                        <input class="form-control" type="text" id="tag-name" @bind="validationModel.Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="tag-description">Description</label>
+                        <input class="form-control" type="text" id="tag-description" @bind="validationModel.Description" />
+                    </div>
+                    <div class="form-group">
+                        <label for="tag-color">Color</label>
+                        <input class="form-control" type="color" id="color" @bind="validationModel.Color" />
+                    </div>
+                </div>
+            </p>
             <button class="btn btn-primary" type="submit">Ok</button>
             <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>
             <button class="btn btn-secondary" @onclick="ModalInstance.CancelAsync">Cancel</button>
         </div>
-    </EditForm>
-}
+    </div>
+</EditForm>

@@ -8,6 +8,24 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.Tag
 {
     public static class TagReducer
     {
+        #region New
+
+        [ReducerMethod]
+        public static CalendarState Reduce(CalendarState state, NewTagSuccessAction action) =>
+            state with
+            {
+                CurrentTag = new TagDto() { Id = action.Id }
+            };
+
+        [ReducerMethod]
+        public static CalendarState Reduce(CalendarState state, NewTagFailureAction action) =>
+            state with
+            {
+                CurrentErrorMessage = action.ErrorMessage
+            };
+
+        #endregion
+
         #region Create
 
         [ReducerMethod]

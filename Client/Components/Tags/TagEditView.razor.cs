@@ -16,10 +16,13 @@ namespace Tomi.Calendar.Mono.Client.Components.Tags
     {
         [Inject]
         protected IState<CalendarState> CalendarState { get; set; }
+
         [Inject]
         protected StateFacade StateFacade { get; set; }
+
         [Parameter]
-        public Guid Id { get; set; } = Guid.Empty;
+        public Guid? Id { get; set; } = Guid.Empty;
+
         [CascadingParameter]
         protected BlazoredModalInstance ModalInstance { get; set; }
 
@@ -28,30 +31,36 @@ namespace Tomi.Calendar.Mono.Client.Components.Tags
 
         protected override void OnInitialized()
         {
-            if (Id != Guid.Empty)
-            {
-                StateFacade.LoadTagById(Id);
-            }
-
             // Register a state change to assign the validation fields
             CalendarState.StateChanged += (sender, state) =>
             {
-                if (state.CurrentCalendarItem is null)
+                if (state.CurrentTag is null)
                 {
                     return;
                 }
+
+                Id = state.CurrentTag.Id;
                 validationModel.Name = state.CurrentTag.Name;
-                validationModel.Description = state.CurrentCalendarItem.Title;
+                validationModel.Description = state.CurrentTag.Description;
 
                 StateHasChanged();
             };
+
+            if (Id.HasValue && Id.Value != Guid.Empty)
+            {
+                StateFacade.LoadTagById(Id.Value);
+            }
+            else
+            {
+                StateFacade.NewTag(Guid.NewGuid());
+            }
 
             base.OnInitialized();
         }
 
         protected async Task DeleteItem()
         {
-            StateFacade.DeleteTag(CalendarState.Value.CurrentTag!.Id);
+            StateFacade.DeleteTag(Id.Value);
             await ModalInstance?.CloseAsync(ModalResult.Ok(this));
         }
 
@@ -66,11 +75,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Tags
         }
         private void HandleValidSubmit()
         {
-            // We use the bang operator (!) to tell the compiler we'll know this string field will not be null
-            StateFacade.UpdateTag(
-                CalendarState.Value.CurrentTag!.Id,
-                validationModel.Name!,
-                validationModel.Description!);
+            StateFacade.UpdateTag(Id.Value, validationModel.ToCreateOrUpdateTagDto());
         }
 
         protected override void Dispose(bool disposing)

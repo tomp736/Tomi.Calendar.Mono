@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Tomi.Calendar.Mono.Shared.Dtos.Tag;
 
 namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
 {
@@ -10,5 +11,12 @@ namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Must have a Description")]
         public string Description { get; set; }
+
+        public string Color { get; set; }
+
+        public CreateOrUpdateTagDto ToCreateOrUpdateTagDto()
+        {
+            return new CreateOrUpdateTagDto(Name, Description, Color);
+        }
     }
 }

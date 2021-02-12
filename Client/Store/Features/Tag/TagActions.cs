@@ -5,6 +5,21 @@ using Tomi.Calendar.Mono.Shared.Dtos.Tag;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.Tag
 {
+    public record NewTagAction
+    {
+        public NewTagAction(Guid id) => Id = id;
+        public Guid Id { get; }
+    }
+    public record NewTagSuccessAction
+    {
+        public NewTagSuccessAction(Guid id) => Id = id;
+        public Guid Id { get; }
+    }
+    public record NewTagFailureAction : FailureAction
+    {
+        public NewTagFailureAction(string errorMessage) : base(errorMessage) { }
+    }
+
     public record CreateTagAction
     {
         public CreateTagAction(CreateOrUpdateTagDto note) => Tag = note;
