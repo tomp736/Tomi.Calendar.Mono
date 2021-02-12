@@ -34,7 +34,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Notes
 
         protected override void OnInitialized()
         {
-            if (Id.HasValue)
+            if (Id.HasValue && Id.Value != Guid.Empty)
             {
                 StateFacade.LoadNoteById(Id.Value);
             }

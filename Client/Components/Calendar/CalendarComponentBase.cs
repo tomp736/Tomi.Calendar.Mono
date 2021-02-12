@@ -43,19 +43,16 @@ namespace Tomi.Calendar.Mono.Client.Components.Calendar
             Date = Date.AddDays(days);
         }
 
-        protected async Task EditCalendarItem(Guid itemId)
+        protected void EditCalendarItem(Guid itemId)
         {
             var parameters = new ModalParameters();
             parameters.Add(nameof(CalendarItemEditComponent.Id), itemId);
-
-            var modal = Modal.Show<CalendarItemEditComponent>("Edit Calendar Item", parameters);
-            var result = await modal.Result;
+            Modal.Show<CalendarItemEditComponent>("Edit Calendar Item", parameters);
         }
 
-        protected async Task AddCalendarItem()
+        protected void AddCalendarItem()
         {
-            var modal = Modal.Show<CalendarItemEditComponent>("Add Calendar Item");
-            var result = await modal.Result;
+            Modal.Show<CalendarItemEditComponent>("Add Calendar Item");
         }
     }
 }

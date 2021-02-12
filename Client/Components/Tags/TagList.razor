@@ -3,12 +3,11 @@
 <h3>TagList</h3>
 
 <ol>
-    @foreach (var tag in CalendarState.Value.Tags)
+    @if (CalendarState.Value.Tags != null)
     {
-        <li @onclick="@(async() => await ShowEditItem(tag.Id))">@tag.Name - @tag.Description</li>
+        @foreach (var tag in CalendarState.Value.Tags)
+        {
+            <li @onclick="@(async () => await ShowEditItem(tag.Id))">@tag.Name - @tag.Description</li>
+        }
     }
 </ol>
-
-@code {
-
-}

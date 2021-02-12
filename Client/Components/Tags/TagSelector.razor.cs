@@ -13,10 +13,17 @@ namespace Tomi.Calendar.Mono.Client.Components.Tags
     {
         [Inject]
         protected IState<CalendarState> CalendarState { get; set; }
+        [Inject]
         protected StateFacade StateFacade { get; set; }
         [Inject]
         public IModalService Modal { get; set; }
         [Parameter]
         public List<Guid> SelectedValues { get; set; }
+
+        protected override void OnInitialized()
+        {
+            StateFacade.LoadTags();
+            base.OnInitialized();
+        }
     }
 }

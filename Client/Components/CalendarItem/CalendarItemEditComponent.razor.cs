@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using NodaTime;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Tomi.Calendar.Mono.Client.Components.Tags;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Client.Store.State;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
@@ -27,8 +28,6 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
         [Parameter]
         public Guid? Id { get; set; }
 
-        public TagSelector TagSelector { get; set; }
-
         [CascadingParameter]
         protected BlazoredModalInstance ModalInstance { get; set; }
 
@@ -37,6 +36,9 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
 
         protected override void OnInitialized()
         {
+            // Register a state change to assign the validation fields
+            CalendarState.StateChanged += OnCalendarStateChanged;
+
             // Load the note detail on initial page navigation
             if (Id.HasValue && Id.Value != Guid.Empty)
             {
@@ -48,26 +50,27 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
                 StateFacade.NewCalendarItem(Id.Value);
             }
 
-            // Register a state change to assign the validation fields
-            CalendarState.StateChanged += (sender, state) =>
-            {
-                if (state.CurrentCalendarItem is null)
-                {
-                    return;
-                }
-
-                Id = state.CurrentCalendarItem.Id;
-                validationModel.Title = state.CurrentCalendarItem.Title;
-                validationModel.Description = state.CurrentCalendarItem.Title;
-                validationModel.StartDate = state.CurrentCalendarItem.StartDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
-                validationModel.EndDate = state.CurrentCalendarItem.EndDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
-                validationModel.StartTime = state.CurrentCalendarItem.StartTime.GetValueOrDefault(LocalTime.MinValue);
-                validationModel.EndTime = state.CurrentCalendarItem.EndTime.GetValueOrDefault(LocalTime.MaxValue);
-
-                StateHasChanged();
-            };
-
             base.OnInitialized();
+        }
+
+        private void OnCalendarStateChanged(object sender, CalendarState state)
+        {
+            if (state.CurrentCalendarItem is null)
+            {
+                return;
+            }
+
+            Id = state.CurrentCalendarItem.Id;
+            validationModel.Title = state.CurrentCalendarItem.Title;
+            validationModel.Description = state.CurrentCalendarItem.Title;
+            validationModel.StartDate = state.CurrentCalendarItem.StartDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
+            validationModel.EndDate = state.CurrentCalendarItem.EndDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
+            validationModel.StartTime = state.CurrentCalendarItem.StartTime.GetValueOrDefault(LocalTime.MinValue);
+            validationModel.EndTime = state.CurrentCalendarItem.EndTime.GetValueOrDefault(LocalTime.MaxValue);
+            validationModel.TagIds = state.CurrentCalendarItem.TagIds?.ToList() ?? new List<Guid>();
+            validationModel.NoteIds = state.CurrentCalendarItem.NoteIds?.ToList() ?? new List<Guid>();
+
+            StateHasChanged();
         }
 
         protected async Task DeleteItem()
@@ -95,12 +98,9 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
                 validationModel.StartDate,
                 validationModel.EndDate,
                 validationModel.StartTime,
-                validationModel.EndTime);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
+                validationModel.EndTime,
+                validationModel.TagIds,
+                validationModel.NoteIds);
         }
     }
 }

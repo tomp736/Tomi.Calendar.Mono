@@ -21,6 +21,7 @@ using Tomi.Calendar.Mono.Server.Models;
 using Tomi.Calendar.Mono.Server.Services.Notification;
 using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Mono.Shared.Dtos.Note;
+using Tomi.Calendar.Mono.Shared.Dtos.Tag;
 using Tomi.Calendar.Proto;
 using Tomi.Notification.AspNetCore;
 using Tomi.Notification.AspNetCore.Hubs;
@@ -70,6 +71,10 @@ namespace Tomi.Calendar.Mono.Server
             RuntimeTypeModel.Default
                 .Add(typeof(NoteDto), false)
                 .SetSurrogate(typeof(NoteSurrogate));
+
+            RuntimeTypeModel.Default
+                .Add(typeof(TagDto), false)
+                .SetSurrogate(typeof(TagSurrogate));
 
             RuntimeTypeModel.Default
                 .AddNodaTime();
@@ -144,6 +149,10 @@ namespace Tomi.Calendar.Mono.Server
                     .EnableGrpcWeb();
 
                 endpoints.MapGrpcService<GrpcNoteService>()
+                    .RequireAuthorization(new AuthorizeAttribute())
+                    .EnableGrpcWeb();
+
+                endpoints.MapGrpcService<GrpcTagService>()
                     .RequireAuthorization(new AuthorizeAttribute())
                     .EnableGrpcWeb();
 

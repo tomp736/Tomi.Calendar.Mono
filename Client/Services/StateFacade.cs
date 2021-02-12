@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NodaTime;
 using System;
+using System.Collections.Generic;
 using Tomi.Calendar.Mono.Client.Store.Features.CalendarItem;
 using Tomi.Calendar.Mono.Client.Store.Features.Note;
 using Tomi.Calendar.Mono.Client.Store.Features.Tag;
@@ -34,14 +35,14 @@ namespace Tomi.Calendar.Mono.Client.Services
         {
             _dispatcher.Dispatch(new NewCalendarItemAction(id));
         }
-        public void CreateCalendarItem(string title, string description, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime)
+        public void CreateCalendarItem(string title, string description, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, IEnumerable<Guid> tagIds, IEnumerable<Guid> noteIds)
         {
-            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate, startTime, endTime);
+            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate, startTime, endTime, tagIds, noteIds);
             _dispatcher.Dispatch(new CreateCalendarItemAction(dto));
         }
-        public void UpdateCalendarItem(Guid id, string title, string description, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime)
+        public void UpdateCalendarItem(Guid id, string title, string description, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, IEnumerable<Guid> tagIds, IEnumerable<Guid> noteIds)
         {
-            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate, startTime, endTime);
+            var dto = new CreateOrUpdateCalendarItemDto(title, description, startDate, endDate, startTime, endTime, tagIds, noteIds);
             _dispatcher.Dispatch(new UpdateCalendarItemAction(id, dto));
         }
         public void DeleteCalendarItem(Guid id)
@@ -60,15 +61,17 @@ namespace Tomi.Calendar.Mono.Client.Services
         {
             _dispatcher.Dispatch(new LoadTagDetailAction(id));
         }
-        public void CreateTag(string name, string description)
+        internal void NewTag(Guid id)
         {
-            var dto = new CreateOrUpdateTagDto(name, description);
-            _dispatcher.Dispatch(new CreateTagAction(dto));
+            _dispatcher.Dispatch(new NewTagAction(id));
         }
-        public void UpdateTag(Guid id, string name, string description)
+        public void CreateTag(CreateOrUpdateTagDto createOrUpdateTagDto)
         {
-            var dto = new CreateOrUpdateTagDto(name, description);
-            _dispatcher.Dispatch(new UpdateTagAction(id, dto));
+            _dispatcher.Dispatch(new CreateTagAction(createOrUpdateTagDto));
+        }
+        public void UpdateTag(Guid id, CreateOrUpdateTagDto createOrUpdateTagDto)
+        {
+            _dispatcher.Dispatch(new UpdateTagAction(id, createOrUpdateTagDto));
         }
         public void DeleteTag(Guid id)
         {

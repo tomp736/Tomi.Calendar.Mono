@@ -8,6 +8,7 @@
         <ValidationSummary />
     </div>
     <div>
+        <TagSelector SelectedValues="validationModel.TagIds"></TagSelector>
         <div class="form-group">
             <label for="calendar-item-title">Title</label>
             <input class="form-control" type="text" id="calendar-item-title" @bind="validationModel.Title" />

@@ -50,5 +50,24 @@ namespace Tomi.Calendar.Mono.Client.Services.Grpc
             var client = _gRpcChannel.CreateGrpcService<INoteService>();
             return await client.DeleteNotes(deleteNotesRequest);
         }
+
+
+        public async ValueTask<GetTagsResponse> GetTags(GetTagsRequest getTagsRequest)
+        {
+            var client = _gRpcChannel.CreateGrpcService<ITagService>();
+            return await client.GetTags(getTagsRequest);
+        }
+
+        public async ValueTask<SaveTagsResponse> SaveTags(SaveTagsRequest saveTagsRequest)
+        {
+            var client = _gRpcChannel.CreateGrpcService<ITagService>();
+            return await client.SaveTags(saveTagsRequest);
+        }
+
+        public async ValueTask<DeleteTagsResponse> DeleteTags(DeleteTagsRequest deleteTagsRequest)
+        {
+            var client = _gRpcChannel.CreateGrpcService<ITagService>();
+            return await client.DeleteTags(deleteTagsRequest);
+        }
     }
 }
