@@ -42,6 +42,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Tags
                 Id = state.CurrentTag.Id;
                 validationModel.Name = state.CurrentTag.Name;
                 validationModel.Description = state.CurrentTag.Description;
+                validationModel.Color = state.CurrentTag.Color;
 
                 StateHasChanged();
             };
