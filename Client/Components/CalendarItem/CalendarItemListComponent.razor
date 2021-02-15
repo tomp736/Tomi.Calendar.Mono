@@ -1,0 +1,6 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@foreach (var calendarItemDto in CalendarItems)
+{
+    @CalendarItemFormat(calendarItemDto);
+}
