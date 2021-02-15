@@ -1,13 +1,6 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+﻿@inherits Tomi.Calendar.Mono.Client.Components._.GenericList<TagDto>
 
-<h3>TagList</h3>
-
-<ol>
-    @if (CalendarState.Value.Tags != null)
-    {
-        @foreach (var tag in CalendarState.Value.Tags)
-        {
-            <li @onclick="@(async () => await ShowEditItem(tag.Id))">@tag.Name - @tag.Description</li>
-        }
-    }
-</ol>
+@foreach (TagDto tagDto in Items)
+{
+    @ItemFormat(tagDto);
+}

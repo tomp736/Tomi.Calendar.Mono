@@ -1,13 +1,11 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+﻿@inherits Tomi.Calendar.Mono.Client.Components._.GenericList<NoteDto>
 
-<h3>Note List</h3>
+<h3>Notes</h3>
 
-<ol>
-    @if (CalendarState.Value.Notes != null)
+@if (Items != null)
+{
+    @foreach (NoteDto noteDto in Items)
     {
-        @foreach (var note in CalendarState.Value.Notes.OrderByDescending(n => n.CreateDate))
-        {
-            <li @onclick="@(async() => await ShowEditItem(note.Id))">@note.Title - @note.CreateDate</li>
-        }
+        @ItemFormat(noteDto);
     }
-</ol>
+}

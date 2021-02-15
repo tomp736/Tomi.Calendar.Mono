@@ -1,6 +1,6 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+﻿@inherits Tomi.Calendar.Mono.Client.Components._.GenericList<CalendarItemDto>
 
-@foreach (var calendarItemDto in CalendarItems)
+@foreach (CalendarItemDto calendarItemDto in Items)
 {
-    @CalendarItemFormat(calendarItemDto);
+    @ItemFormat(calendarItemDto);
 }

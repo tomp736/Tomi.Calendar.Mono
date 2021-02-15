@@ -1,0 +1,10 @@
+﻿@typeparam ItemType
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@if (Items != null)
+{
+    @foreach (var item in Items)
+    {
+        @ItemFormat(item);
+    }
+}

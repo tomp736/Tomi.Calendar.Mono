@@ -1,0 +1,34 @@
+﻿@page "/notes"
+
+<ol>
+    <GenericList ItemType="NoteDto" Items="CalendarState.Value.Notes">
+        <ItemFormat>
+            <li>@context.Title</li>
+        </ItemFormat>
+    </GenericList>
+</ol>
+@code
+{
+    [Inject]
+    public IState<CalendarState> CalendarState { get; set; }
+
+    [Inject]
+    public StateFacade StateFacade { get; set; }
+
+    public IEnumerable<NoteDto> NoteItems => CalendarState.Value.Notes ?? Enumerable.Empty<NoteDto>();
+
+    protected override void OnInitialized()
+    {
+        CalendarState.StateChanged += (o, e) =>
+        {
+            StateHasChanged();
+        };
+
+        if (!CalendarState.Value.NotesLoaded)
+        {
+            StateFacade.LoadNotes();
+        }
+
+        base.OnInitialized();
+    }
+}
