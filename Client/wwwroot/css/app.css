@@ -39,15 +39,15 @@ html, body {
         }
 
     .calendar-view .calendar-view-daysofweek {
-        height: 100%;
-        margin-top: -20px;
-        padding-top: 20px;
+        height: 30px;
+        text-align: center;
     }
 
     .calendar-view .calendar-view-items {
-        height: 100%;
-        margin-top: -20px;
-        padding-top: 20px;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        padding-top: 30px;
     }
 
 .calendar-view-day {
@@ -70,7 +70,7 @@ html, body {
 .calendar-view-month .calendar-view-day {
     float: left;
     width: 14.3%;
-    height: 18%;
+    height: 20%;
     overflow: hidden;
     position: relative;
 }
@@ -91,10 +91,6 @@ html, body {
     width: 14.2%;
 }
 
-.calendar-view-month .calendar-view-day.today heading {
-    border-top: 3px solid #4800ff;
-}
-
 .calendar-view-day heading {
     padding: 10px;
     font-weight: bold;
@@ -102,10 +98,11 @@ html, body {
     color: #FFF;
     font-size: 1vh;
     display: block;
+    height: 40px;
 }
 
 .calendar-view-day.today heading {
-    margin-top: -2px;
+    background-color: #4800ff;
 }
 
 div .calendar-view-day-items {
@@ -127,10 +124,8 @@ div .calendar-view-day-items {
 div .calendar-view-dayofweek {
     float: left;
     width: 14.3%;
-    height: 30px;
-    overflow: hidden;
     position: relative;
-    padding-left: 8px;
+    padding: 5px;
 }
 
     div .calendar-view-dayofweek.last {
