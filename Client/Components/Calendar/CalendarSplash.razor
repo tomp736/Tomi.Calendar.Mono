@@ -11,24 +11,19 @@
                     <div class="p-4 col-sm" style="background-color: salmon;">
                         <div class="row">
                             <div class="col-12">
-                                <h6>
-                                    Today
-                                </h6>
-                            </div>
-                            <div class="col-12">
-                                <h2>
+                                <h3>
                                     @SelectedDayDate.ToString("dddd, MMMM d")
-                                </h2>
+                                </h3>
                             </div>
                             <div class="col-12">
                                 @if (CalendarState.Value.CalendarItems != null)
                                 {
 
-                                    <CalendarItemListComponent Items="CalendarState.Value.CalendarItems.GetCalendarItems(SelectedDayDate.ToLocalDate())">
+                                    <CalendarItemListComponent Items="CalendarState.Value.CalendarItems.GetCalendarItems(SelectedDayDate.ToLocalDate()).OrderBy(n => n.StartTime)">
                                         <ItemFormat>
                                             <div role="button" class="float-start w-100" @onclick="() => EditCalendarItem(context.Id)">
-                                                <h5>@context.Title</h5>
-                                                <p>@context.StartTime.Value.Hour:@context.StartTime.Value.Minute : @context.Description</p>
+                                                <h5>@context.StartTime.Value.ToDateTime().ToString("t")</h5>
+                                                <p>@context.Title</p>
                                             </div>
                                         </ItemFormat>
                                     </CalendarItemListComponent>
@@ -40,11 +35,11 @@
                     <div class="p-4 col-sm" style="background-color: beige;">
                         <div class="clearfix">
                             <h3 class="float-start">
-                                @SelectedMonthDate.Date.ToString("MMMM")
+                                @SelectedMonthDate.Date.ToString("MMMM yyyy")
                             </h3>
-                            <div class="float-end btn-group" role="group" aria-label="Basic example">
+                            <div class="float-end btn-group" role="group">
                                 <button type="button" class="btn" @onclick="PrevMonth"><i class="bi bi-arrow-left"></i></button>
-                                <button type="button" class="btn" disabled>Today</button>
+                                <button type="button" class="btn" @onclick="ThisMonth">Today</button>
                                 <button type="button" class="btn" @onclick="NextMonth"><i class="bi bi-arrow-right"></i></button>
                             </div>
                         </div>
@@ -52,7 +47,7 @@
                             <div class="col-12" style="height: 300px;">
                                 <CalendarMonthComponent @ref="_calendarMonthComponent" Date="SelectedMonthDate" StartDayOfWeek="@CalendarState.Value.StartDayOfWeek">
                                     <CalendarDay>
-                                        <div role="button" class="calendar-day" data-day="@context.DayOfWeek" @onclick="() => SelectedDayDate = context.Date">
+                                        <div role="button" class="calendar-day" data-day="@context.DayOfWeek" @onclick="() => SelectedDayDate = context.Date" style="@(context.Date == DateTime.Today.Date ? "background-color: salmon;" : "")">
                                             @context.ToString("dd")<br />
                                             @if (CalendarState.Value.CalendarItems != null)
                                             {

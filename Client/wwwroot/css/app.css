@@ -1,6 +1,7 @@
 ﻿html {
     min-height: 100%; /* make sure it is at least as tall as the viewport */
     position: relative;
+    background: url("https://i.imgur.com/WVntmOE.jpg") no-repeat center;
 }
 
 body {
@@ -219,6 +220,8 @@ div .calendar-view-dayofweek {
 
 .card-fill {
     height: 100%;
+    background: none;
+    border: none;
 }
 
     .card-fill .card {

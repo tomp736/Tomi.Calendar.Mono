@@ -13,7 +13,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             {                
                 CalendarItems = null,
                 CurrentCalendarItem = null,
-                StartDayOfWeek = DayOfWeek.Monday
+                StartDayOfWeek = DayOfWeek.Sunday
             };
     }
 }

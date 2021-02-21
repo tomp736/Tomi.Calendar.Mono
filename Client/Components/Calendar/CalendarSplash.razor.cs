@@ -47,6 +47,11 @@ namespace Tomi.Calendar.Mono.Client.Components.Calendar
             SelectedMonthDate = new DateTime(nextMonth.Year, nextMonth.Month, 1);
         }
 
+        public void ThisMonth()
+        {
+            SelectedMonthDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+        }
+
         public void PrevMonth()
         {
             DateTime nextMonth = SelectedMonthDate.AddMonths(-1);
