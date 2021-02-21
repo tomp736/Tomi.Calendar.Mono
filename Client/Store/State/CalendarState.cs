@@ -23,5 +23,14 @@ namespace Tomi.Calendar.Mono.Client.Store.State
         public NoteDto? CurrentNote { get; init; }
 
         public DayOfWeek StartDayOfWeek { get; init; }
+
+        public CalendarSplashSettings CalendarSplashSettings {get;init;}
+    }
+
+    public class CalendarSplashSettings
+    {
+        public string PrimaryColor { get; set; }
+        public string SecondaryColor { get; set; }
+        public DayOfWeek StartDayOfWeek { get; set; }        
     }
 }

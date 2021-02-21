@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using System;
+using System.Drawing;
 using Tomi.Calendar.Mono.Client.Store.State;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
@@ -13,7 +14,12 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             {                
                 CalendarItems = null,
                 CurrentCalendarItem = null,
-                StartDayOfWeek = DayOfWeek.Sunday
+                StartDayOfWeek = DayOfWeek.Sunday,
+                CalendarSplashSettings = new CalendarSplashSettings()
+                {
+                    PrimaryColor = "#7efcfc",
+                    StartDayOfWeek = DayOfWeek.Sunday
+                }
             };
     }
 }

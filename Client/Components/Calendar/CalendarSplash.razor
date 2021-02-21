@@ -8,7 +8,7 @@
         <div class="card-body p-0">
             <div class="card-text">
                 <div class="row">
-                    <div class="p-4 col-sm" style="background-color: salmon;">
+                    <div class="p-4 col-sm" style="background-color: @CalendarState.Value.CalendarSplashSettings.PrimaryColor;">
                         <div class="row">
                             <div class="col-12">
                                 <h3>
@@ -47,7 +47,7 @@
                             <div class="col-12" style="height: 300px;">
                                 <CalendarMonthComponent @ref="_calendarMonthComponent" Date="SelectedMonthDate" StartDayOfWeek="@CalendarState.Value.StartDayOfWeek">
                                     <CalendarDay>
-                                        <div role="button" class="calendar-day" data-day="@context.DayOfWeek" @onclick="() => SelectedDayDate = context.Date" style="@(context.Date == DateTime.Today.Date ? "background-color: salmon;" : "")">
+                                        <div role="button" class="calendar-day" data-day="@context.DayOfWeek" @onclick="() => SelectedDayDate = context.Date" style="@(context.Date == DateTime.Today.Date ? $"background-color: {CalendarState.Value.CalendarSplashSettings.PrimaryColor};" : "")">
                                             @context.ToString("dd")<br />
                                             @if (CalendarState.Value.CalendarItems != null)
                                             {
