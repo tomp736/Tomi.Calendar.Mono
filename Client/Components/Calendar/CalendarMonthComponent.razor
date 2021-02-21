@@ -1,21 +1,10 @@
 ﻿@inherits CalendarComponentBase
 
-<div class="calendar-view-daysofweek">
-    @for (int i = 0; i < 7; i++)
+@foreach (DateTime date in CalendarHelpers.CalendarDaysInView(StartDate, EndDate))
+{
+    @CalendarDay(date)
+    @if (date.AddDays(1).DayOfWeek == StartDayOfWeek)
     {
-        if (i == 6)
-        {
-            <div class="calendar-view-dayofweek last">@StartDate.AddDays(i).DayOfWeek</div>
-        }
-        else
-        {
-            <div class="calendar-view-dayofweek">@StartDate.AddDays(i).DayOfWeek</div>
-        }
+        <div style="clear:both"></div>
     }
-</div>
-<div class="calendar-view-items" @onmousewheel="WheelHandler">
-    @foreach (DateTime date in CalendarHelpers.CalendarDaysInView(StartDate, EndDate))
-    {
-        <CalendarDayComponent Date="@date"></CalendarDayComponent>
-    }
-</div>
+}

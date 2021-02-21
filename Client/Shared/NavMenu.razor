@@ -5,116 +5,27 @@
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item dropdown px-3">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                <i class="bi bi-person-circle" aria-hidden="true"></i>
-            </a>
-            <AuthorizeView>
-                <Authorized>
-                    <ul class="dropdown-menu">
-                        <li class="nav-item px-3"><a href="authentication/profile">Hello, @context.User.Identity.Name!</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button></li>
-                    </ul>
-                </Authorized>
-                <NotAuthorized>
-                    <ul class="dropdown-menu">
-                        <li> <a href="authentication/register">Register</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a href="authentication/login">Log in</a></li>
-                    </ul>
-                </NotAuthorized>
-            </AuthorizeView>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/month" title="Month">
-                <i class="bi bi-calendar3" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/week" title="Week">
-                <i class="bi bi-calendar2-week" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/today" title="Today">
-                <i class="bi bi-calendar2-date" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" @onclick="@(async() => await AddNewCalendarItem())" title="Add New Item">
-                <i class="bi bi-calendar2-plus" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/notes" title="Notes">
-                <i class="bi bi-journal" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" @onclick="@(async() => await AddNewNote())" title="Add New Note">
-                <i class="bi bi-journal-plus" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/tags" title="Tags">
-                <i class="bi bi-tags" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" @onclick="@(async() => await AddNewTag())" title="Add New Tag">
-                <i class="bi bi-journal-plus" aria-hidden="true"></i>
-            </NavLink>
-        </li>
-    </ul>
-</div>
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="nav-item" href="/">Home</a>
+        <AuthorizeView>
+            <Authorized>
+                <a class="nav-item" href="authentication/profile">Hello, @context.User.Identity.Name!</a>                
+                <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+            </Authorized>
+            <NotAuthorized>
+                <a class="nav-item" href="authentication/register">Register</a>
+                <a class="nav-item" href="authentication/login">Log in</a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</nav>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
 
     private async Task BeginSignOut(MouseEventArgs args)
     {
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
-    }
-
-    protected async Task AddNewCalendarItem()
-    {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(CalendarItemEditComponent.Id), Guid.Empty);
-
-        var modal = ModalService.Show<CalendarItemEditComponent>("Add Calendar Item", parameters);
-        var result = await modal.Result;
-
-        StateHasChanged();
-    }
-
-    protected async Task AddNewNote()
-    {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(NoteCardEditView.Id), Guid.Empty);
-        var modal = ModalService.Show<NoteCardEditView>("Add Note", parameters);
-        var result = await modal.Result;
-
-        StateHasChanged();
-    }
-
-    protected async Task AddNewTag()
-    {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(TagEditView.Id), Guid.Empty);
-        var modal = ModalService.Show<TagEditView>("Add Tag", parameters);
-        var result = await modal.Result;
-
-        StateHasChanged();
     }
 }

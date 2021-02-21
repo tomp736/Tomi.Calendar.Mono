@@ -2,36 +2,36 @@
 
 @page "/calendaritem/{id:guid}"
 
-<EditForm Model="validationModel" OnSubmit="HandleSubmit">
+<EditForm Model="_validationModel" OnSubmit="HandleSubmit">
     <DataAnnotationsValidator />
     <div class="d-flex flex-column align-items-center">
         <ValidationSummary />
     </div>
     <div>
-        <TagSelector SelectedValues="validationModel.TagIds"></TagSelector>
+        <TagSelector SelectedValues="_validationModel.TagIds"></TagSelector>
         <div class="form-group">
             <label for="calendar-item-title">Title</label>
-            <input class="form-control" type="text" id="calendar-item-title" @bind="validationModel.Title" />
+            <input class="form-control" type="text" id="calendar-item-title" @bind="_validationModel.Title" />
         </div>
         <div class="form-group">
             <label for="calendar-item-description">Description</label>
-            <input class="form-control" type="text" id="calendar-item-description" @bind="validationModel.Description" />
+            <input class="form-control" type="text" id="calendar-item-description" @bind="_validationModel.Description" />
         </div>
         <div class="form-group">
             <label for="calendar-item-startdate">Start Date</label>
-            <NoDaTimeDatePicker @bind-LocalDate="validationModel.StartDate" />
+            <NoDaTimeDatePicker Class="form-control" @bind-LocalDate="_validationModel.StartDate" />
         </div>
         <div class="form-group">
             <label for="calendar-item-enddate">End Date</label>
-            <NoDaTimeDatePicker @bind-LocalDate="validationModel.EndDate" />
+            <NoDaTimeDatePicker Class="form-control" @bind-LocalDate="_validationModel.EndDate" />
         </div>
         <div class="form-group">
             <label for="calendar-item-startdate">Start Time</label>
-            <NoDaTimeTimePicker @bind-LocalTime="validationModel.StartTime" />
+            <NoDaTimeTimePicker Class="form-control" @bind-LocalTime="_validationModel.StartTime" />
         </div>
         <div class="form-group">
             <label for="calendar-item-enddate">End Time</label>
-            <NoDaTimeTimePicker @bind-LocalTime="validationModel.EndTime" />
+            <NoDaTimeTimePicker Class="form-control" @bind-LocalTime="_validationModel.EndTime" />
         </div>
         <button class="btn btn-primary" type="submit">Ok</button>
         <button class="btn btn-danger" @onclick="DeleteItem">Delete</button>

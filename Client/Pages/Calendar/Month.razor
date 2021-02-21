@@ -1,9 +1,11 @@
 ﻿@page "/month/{date}"
 @page "/month"
 
-<div class="calendar-view calendar-view-month">
-    <CalendarMonthComponent Date="ViewDate" />
-</div>
+<CalendarMonthComponent Date="ViewDate">
+    <CalendarDay>
+        <CalendarDayComponent Date="@context"></CalendarDayComponent>
+    </CalendarDay>
+</CalendarMonthComponent>
 
 @code
 {

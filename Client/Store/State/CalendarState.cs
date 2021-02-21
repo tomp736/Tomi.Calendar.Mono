@@ -10,13 +10,13 @@ namespace Tomi.Calendar.Mono.Client.Store.State
     public record CalendarState : RootState
     {
         public IEnumerable<CalendarItemDto>? CalendarItems { get; init; }
-        public bool CalendarItemsLoaded => CalendarItems != null && CalendarItems.Any();
+        public bool CalendarItemsLoaded => CalendarItems != null;
 
         public IEnumerable<TagDto>? Tags { get; init; }
-        public bool TagsLoaded => Tags != null && Tags.Any();
+        public bool TagsLoaded => Tags != null;
 
         public IEnumerable<NoteDto>? Notes { get; init; }
-        public bool NotesLoaded => Notes != null && Notes.Any();
+        public bool NotesLoaded => Notes != null;
 
         public CalendarItemDto? CurrentCalendarItem { get; init; }
         public TagDto? CurrentTag { get; init; }

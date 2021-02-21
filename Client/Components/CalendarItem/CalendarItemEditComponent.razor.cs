@@ -21,18 +21,29 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
         public IState<CalendarState> CalendarState { get; set; }
         [Inject]
         protected StateFacade StateFacade { get; set; }
-
         [Inject]
         public IModalService Modal { get; set; }
 
+        private CreateOrUpdateCalendarItemValidationModel _validationModel =
+            new CreateOrUpdateCalendarItemValidationModel();
+
         [Parameter]
         public Guid? Id { get; set; }
+        [Parameter]
+        public LocalDate StartDate
+        {
+            get => _validationModel.StartDate;
+            set => _validationModel.StartDate = value;
+        }
+        [Parameter]
+        public LocalDate EndDate
+        {
+            get => _validationModel.EndDate;
+            set => _validationModel.EndDate = value;
+        }
 
         [CascadingParameter]
         protected BlazoredModalInstance ModalInstance { get; set; }
-
-        private CreateOrUpdateCalendarItemValidationModel validationModel =
-            new CreateOrUpdateCalendarItemValidationModel();
 
         protected override void OnInitialized()
         {
@@ -49,7 +60,6 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
                 Id = Guid.NewGuid();
                 StateFacade.NewCalendarItem(Id.Value);
             }
-
             base.OnInitialized();
         }
 
@@ -61,14 +71,14 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
             }
 
             Id = state.CurrentCalendarItem.Id;
-            validationModel.Title = state.CurrentCalendarItem.Title;
-            validationModel.Description = state.CurrentCalendarItem.Title;
-            validationModel.StartDate = state.CurrentCalendarItem.StartDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
-            validationModel.EndDate = state.CurrentCalendarItem.EndDate.GetValueOrDefault(LocalDate.FromDateTime(DateTime.Today));
-            validationModel.StartTime = state.CurrentCalendarItem.StartTime.GetValueOrDefault(LocalTime.MinValue);
-            validationModel.EndTime = state.CurrentCalendarItem.EndTime.GetValueOrDefault(LocalTime.MaxValue);
-            validationModel.TagIds = state.CurrentCalendarItem.TagIds?.ToList() ?? new List<Guid>();
-            validationModel.NoteIds = state.CurrentCalendarItem.NoteIds?.ToList() ?? new List<Guid>();
+            _validationModel.Title = state.CurrentCalendarItem.Title;
+            _validationModel.Description = state.CurrentCalendarItem.Description;
+            _validationModel.StartDate = state.CurrentCalendarItem.StartDate.GetValueOrDefault(_validationModel.StartDate);
+            _validationModel.EndDate = state.CurrentCalendarItem.EndDate.GetValueOrDefault(_validationModel.EndDate);
+            _validationModel.StartTime = state.CurrentCalendarItem.StartTime.GetValueOrDefault(LocalTime.MinValue);
+            _validationModel.EndTime = state.CurrentCalendarItem.EndTime.GetValueOrDefault(LocalTime.MaxValue);
+            _validationModel.TagIds = state.CurrentCalendarItem.TagIds?.ToList() ?? new List<Guid>();
+            _validationModel.NoteIds = state.CurrentCalendarItem.NoteIds?.ToList() ?? new List<Guid>();
 
             StateHasChanged();
         }
@@ -93,14 +103,14 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
             // We use the bang operator (!) to tell the compiler we'll know this string field will not be null
             StateFacade.UpdateCalendarItem(
                 Id.Value,
-                validationModel.Title!,
-                validationModel.Description!,
-                validationModel.StartDate,
-                validationModel.EndDate,
-                validationModel.StartTime,
-                validationModel.EndTime,
-                validationModel.TagIds,
-                validationModel.NoteIds);
+                _validationModel.Title!,
+                _validationModel.Description!,
+                _validationModel.StartDate,
+                _validationModel.EndDate,
+                _validationModel.StartTime,
+                _validationModel.EndTime,
+                _validationModel.TagIds,
+                _validationModel.NoteIds);
         }
     }
 }

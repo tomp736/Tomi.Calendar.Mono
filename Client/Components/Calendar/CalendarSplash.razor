@@ -1,0 +1,74 @@
+﻿@using System.Linq
+@using Fluxor.Blazor.Web.Components
+
+@inherits FluxorComponent
+
+<div class="container-fluid">
+    <div class="card card-fill">
+        <div class="card-body p-0">
+            <div class="card-text">
+                <div class="row">
+                    <div class="p-4 col-sm" style="background-color: salmon;">
+                        <div class="row">
+                            <div class="col-12">
+                                <h6>
+                                    Today
+                                </h6>
+                            </div>
+                            <div class="col-12">
+                                <h2>
+                                    @SelectedDayDate.ToString("dddd, MMMM d")
+                                </h2>
+                            </div>
+                            <div class="col-12">
+                                @if (CalendarState.Value.CalendarItems != null)
+                                {
+
+                                    <CalendarItemListComponent Items="CalendarState.Value.CalendarItems.GetCalendarItems(SelectedDayDate.ToLocalDate())">
+                                        <ItemFormat>
+                                            <div role="button" class="float-start w-100" @onclick="() => EditCalendarItem(context.Id)">
+                                                <h5>@context.Title</h5>
+                                                <p>@context.StartTime.Value.Hour:@context.StartTime.Value.Minute : @context.Description</p>
+                                            </div>
+                                        </ItemFormat>
+                                    </CalendarItemListComponent>
+                                }
+                                <button class="btn btn-small" @onclick="AddCalendarItem"><i class="bi bi-calendar-plus"></i> Add New</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 col-sm" style="background-color: beige;">
+                        <div class="clearfix">
+                            <h3 class="float-start">
+                                @SelectedMonthDate.Date.ToString("MMMM")
+                            </h3>
+                            <div class="float-end btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn" @onclick="PrevMonth"><i class="bi bi-arrow-left"></i></button>
+                                <button type="button" class="btn" disabled>Today</button>
+                                <button type="button" class="btn" @onclick="NextMonth"><i class="bi bi-arrow-right"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" style="height: 300px;">
+                                <CalendarMonthComponent @ref="_calendarMonthComponent" Date="SelectedMonthDate" StartDayOfWeek="@CalendarState.Value.StartDayOfWeek">
+                                    <CalendarDay>
+                                        <div role="button" class="calendar-day" data-day="@context.DayOfWeek" @onclick="() => SelectedDayDate = context.Date">
+                                            @context.ToString("dd")<br />
+                                            @if (CalendarState.Value.CalendarItems != null)
+                                            {
+                                                @if (CalendarState.Value.CalendarItems.GetCalendarItems(context.ToLocalDate()).Count() > 0)
+                                                {
+                                                    <span class="badge rounded-pill bg-primary">@($"{CalendarState.Value.CalendarItems.GetCalendarItems(context.ToLocalDate()).Count()}")</span>
+                                                }
+                                            }
+                                        </div>
+                                    </CalendarDay>
+                                </CalendarMonthComponent>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

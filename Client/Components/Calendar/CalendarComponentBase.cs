@@ -43,14 +43,14 @@ namespace Tomi.Calendar.Mono.Client.Components.Calendar
             Date = Date.AddDays(days);
         }
 
-        protected void EditCalendarItem(Guid itemId)
+        public void EditCalendarItem(Guid itemId)
         {
             var parameters = new ModalParameters();
             parameters.Add(nameof(CalendarItemEditComponent.Id), itemId);
             Modal.Show<CalendarItemEditComponent>("Edit Calendar Item", parameters);
         }
 
-        protected void AddCalendarItem()
+        public void AddCalendarItem()
         {
             Modal.Show<CalendarItemEditComponent>("Add Calendar Item");
         }
