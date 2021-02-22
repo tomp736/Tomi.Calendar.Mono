@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-4 col-sm" style="background-color: beige;">
+                    <div class="p-4 col-sm" style="background-color: @CalendarState.Value.CalendarSplashSettings.SecondaryColor;">
                         <div class="clearfix">
                             <h3 class="float-start">
                                 @SelectedMonthDate.Date.ToString("MMMM yyyy")
@@ -47,8 +47,18 @@
                             <div class="col-12" style="height: 300px;">
                                 <CalendarMonthComponent @ref="_calendarMonthComponent" Date="SelectedMonthDate" StartDayOfWeek="@CalendarState.Value.StartDayOfWeek">
                                     <CalendarDay>
-                                        <div role="button" class="calendar-day" data-day="@context.DayOfWeek" @onclick="() => SelectedDayDate = context.Date" style="@(context.Date == DateTime.Today.Date ? $"background-color: {CalendarState.Value.CalendarSplashSettings.PrimaryColor};" : "")">
-                                            @context.ToString("dd")<br />
+                                        <div role="button" class="calendar-day" data-day="@context.DayOfWeek" @onclick="() => SelectedDayDate = context.Date">
+                                            @if (context.Date == DateTime.Today.Date)
+                                            {
+                                                <strong>
+                                                    @context.ToString("dd")
+                                                </strong>
+                                            }
+                                            else
+                                            {
+                                                @context.ToString("dd")
+                                            }
+                                            <br />
                                             @if (CalendarState.Value.CalendarItems != null)
                                             {
                                                 @if (CalendarState.Value.CalendarItems.GetCalendarItems(context.ToLocalDate()).Count() > 0)

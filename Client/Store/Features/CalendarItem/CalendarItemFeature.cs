@@ -17,7 +17,8 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 StartDayOfWeek = DayOfWeek.Sunday,
                 CalendarSplashSettings = new CalendarSplashSettings()
                 {
-                    PrimaryColor = "#7efcfc",
+                    PrimaryColor = "#f1f1f1",
+                    SecondaryColor = "#ffffff",
                     StartDayOfWeek = DayOfWeek.Sunday
                 }
             };

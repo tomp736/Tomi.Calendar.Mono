@@ -247,29 +247,29 @@ div .calendar-view-dayofweek {
 }
 
 [data-day="Monday"] {
-    background-color: rgba(0,0,0, 0.10);
+    background-color: rgba(0,0,0, 0.02);
 }
 
 [data-day="Tuesday"] {
-    background-color: rgba(0,0,0, 0.10);
+    background-color: rgba(0,0,0, 0.02);
 }
 
 [data-day="Wednesday"] {
-    background-color: rgba(0,0,0, 0.10);
+    background-color: rgba(0,0,0, 0.02);
 }
 
 [data-day="Thursday"] {
-    background-color: rgba(0,0,0, 0.10);
+    background-color: rgba(0,0,0, 0.02);
 }
 
 [data-day="Friday"] {
-    background-color: rgba(0,0,0, 0.10);
+    background-color: rgba(0,0,0, 0.02);
 }
 
 [data-day="Saturday"] {
-    background-color: rgba(0,0,0, 0.20);
+    background-color: rgba(0,0,0, 0.03);
 }
 
 [data-day="Sunday"] {
-    background-color: rgba(0,0,0, 0.20);
+    background-color: rgba(0,0,0, 0.03);
 }
