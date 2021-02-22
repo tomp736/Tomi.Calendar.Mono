@@ -12,13 +12,9 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 
 WORKDIR /src
 COPY ["Server/Tomi.Calendar.Mono.Server.csproj", "Tomi.Calendar.Mono.Server.csproj"]
+COPY ["NuGet.Config", "NuGet.Config"]
 
 RUN dotnet restore "/src/Tomi.Calendar.Mono.Server.csproj"
-
-COPY Tomi.Notification.Blazor/. Tomi.Notification.Blazor
-COPY Tomi.Calendar.Proto/. Tomi.Calendar.Proto
-
-RUN dotnet restore "/src/Tomi.Calendar.Proto/Tomi.Calendar.Proto.csproj"
 
 COPY Client/. Client
 COPY Server/. Server

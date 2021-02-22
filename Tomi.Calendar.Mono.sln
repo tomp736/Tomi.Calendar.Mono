@@ -12,10 +12,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4D1E3C3A-329D-49D4-927B-93B0802BEE0D}"
 	ProjectSection(SolutionItems) = preProject
 		Server\.dockerignore = Server\.dockerignore
+		.gitignore = .gitignore
 		build.bat = build.bat
 		create-migration.txt = create-migration.txt
 		docker-compose.yaml = docker-compose.yaml
 		Dockerfile = Dockerfile
+		NuGet.Config = NuGet.Config
 		README.md = README.md
 	EndProjectSection
 EndProject
