@@ -43,8 +43,6 @@
         if(state.User.Identity.IsAuthenticated)
         {
             StateFacade.LoadCalendarItems();
-            StateFacade.LoadTags();
-            StateFacade.LoadNotes();
             await NotificationHub.Start();
         }
         await base.OnInitializedAsync();

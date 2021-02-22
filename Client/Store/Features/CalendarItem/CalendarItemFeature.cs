@@ -13,8 +13,6 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             new CalendarState
             {                
                 CalendarItems = null,
-                CurrentCalendarItem = null,
-                StartDayOfWeek = DayOfWeek.Sunday,
                 CalendarSplashSettings = new CalendarSplashSettings()
                 {
                     PrimaryColor = "#f1f1f1",

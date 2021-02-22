@@ -1,8 +1,7 @@
 ﻿using NodaTime;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Tomi.Calendar.Mono.Shared.Dtos.Tag;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
 {
@@ -18,12 +17,25 @@ namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
         public LocalDate StartDate { get; set; }
 
         [Required(ErrorMessage = "Must have an End Date")]
-        public LocalDate EndDate { get; set; } 
+        public LocalDate EndDate { get; set; }
 
+        [Required(ErrorMessage = "Must have a Start Time")]
         public LocalTime StartTime { get; set; }
+
+        [Required(ErrorMessage = "Must have an End Time")]
         public LocalTime EndTime { get; set; }
 
-        public List<Guid> TagIds { get; set; }
-        public List<Guid> NoteIds { get; set; }
+        public CalendarItemDto ToCalendarItemDto()
+        {
+            return new CalendarItemDto()
+            {
+                Title = Title,
+                Description = Description,
+                StartDate = StartDate,
+                EndDate = EndDate,
+                StartTime = StartTime,
+                EndTime = EndTime
+            };
+        }
     }
 }

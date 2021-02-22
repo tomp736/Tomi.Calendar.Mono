@@ -46,7 +46,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Tomi.Calendar.Mono.Shared.csproj" />
-    <ProjectReference Include="..\Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj" />
   </ItemGroup>
   
   <ItemGroup>

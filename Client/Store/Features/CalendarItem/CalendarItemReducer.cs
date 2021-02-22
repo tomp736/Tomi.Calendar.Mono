@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tomi.Calendar.Mono.Client.Store.State;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 {
@@ -69,14 +69,14 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, LoadCalendarItemsAction _) =>
             state with
-            {                
+            {
                 CurrentErrorMessage = null
             };
 
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, LoadCalendarItemsSuccessAction action) =>
             state with
-            {                
+            {
                 CurrentErrorMessage = null,
                 CalendarItems = action.CalendarItems
             };
@@ -84,7 +84,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, LoadCalendarItemsFailureAction action) =>
             state with
-            {                
+            {
                 CurrentErrorMessage = action.ErrorMessage
             };
 
@@ -95,14 +95,14 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, LoadCalendarItemDetailAction _) =>
             state with
-            {                
+            {
             };
 
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, LoadCalendarItemDetailSuccessAction action) =>
             state with
             {
-                
+
                 CurrentCalendarItem = action.CalendarItem,
                 CurrentErrorMessage = null
             };
@@ -110,7 +110,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, LoadCalendarItemDetailFailureAction action) =>
             state with
-            {                
+            {
                 CurrentErrorMessage = action.ErrorMessage
             };
 
@@ -121,7 +121,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, UpdateCalendarItemAction _) =>
             state with
-            {                
+            {
                 CurrentErrorMessage = null
             };
 
@@ -133,7 +133,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             {
                 return state with
                 {
-                    
+
                     CurrentErrorMessage = null,
                     CalendarItems = new List<CalendarItemDto> { action.CalendarItem }
                 };
@@ -152,7 +152,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 
             return state with
             {
-                
+
                 CurrentErrorMessage = null,
                 CalendarItems = updatedList
             };
@@ -161,7 +161,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, UpdateCalendarItemFailureAction action) =>
             state with
-            {                
+            {
                 CurrentErrorMessage = action.ErrorMessage
             };
 
@@ -172,7 +172,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         [ReducerMethod]
         public static CalendarState Reduce(CalendarState state, DeleteCalendarItemAction _) =>
             state with
-            {                
+            {
                 CurrentErrorMessage = null
             };
 
@@ -183,7 +183,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             if (state.CalendarItems is null)
             {
                 return state with
-                {                    
+                {
                     CurrentErrorMessage = null
                 };
             }
@@ -192,7 +192,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
             var updatedCalendarItems = state.CalendarItems.Where(t => t.Id != action.Id);
             return state with
             {
-                
+
                 CurrentErrorMessage = null,
                 CalendarItems = updatedCalendarItems
             };
@@ -201,7 +201,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
         public static CalendarState Reduce(CalendarState state, DeleteCalendarItemFailureAction action) =>
             state with
             {
-                
+
                 CurrentErrorMessage = action.ErrorMessage
             };
 

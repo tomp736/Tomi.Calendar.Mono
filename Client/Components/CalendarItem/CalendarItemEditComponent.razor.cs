@@ -77,8 +77,6 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
             _validationModel.EndDate = state.CurrentCalendarItem.EndDate.GetValueOrDefault(_validationModel.EndDate);
             _validationModel.StartTime = state.CurrentCalendarItem.StartTime.GetValueOrDefault(LocalTime.MinValue);
             _validationModel.EndTime = state.CurrentCalendarItem.EndTime.GetValueOrDefault(LocalTime.MaxValue);
-            _validationModel.TagIds = state.CurrentCalendarItem.TagIds?.ToList() ?? new List<Guid>();
-            _validationModel.NoteIds = state.CurrentCalendarItem.NoteIds?.ToList() ?? new List<Guid>();
 
             StateHasChanged();
         }
@@ -101,16 +99,7 @@ namespace Tomi.Calendar.Mono.Client.Components.CalendarItem
         private void HandleValidSubmit()
         {
             // We use the bang operator (!) to tell the compiler we'll know this string field will not be null
-            StateFacade.UpdateCalendarItem(
-                Id.Value,
-                _validationModel.Title!,
-                _validationModel.Description!,
-                _validationModel.StartDate,
-                _validationModel.EndDate,
-                _validationModel.StartTime,
-                _validationModel.EndTime,
-                _validationModel.TagIds,
-                _validationModel.NoteIds);
+            StateFacade.UpdateCalendarItem(Id.Value, _validationModel.ToCalendarItemDto());
         }
     }
 }

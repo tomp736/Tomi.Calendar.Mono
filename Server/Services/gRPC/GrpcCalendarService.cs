@@ -8,17 +8,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.Models;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 using Tomi.Calendar.Mono.Shared.Entities;
 using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Server
 {
-    public class GrpcCalendarItemService : AuthorizedService, ICalendarItemService
+    public class GrpcCalendarService : AuthorizedService, ICalendarService
     {
-        private readonly ILogger<GrpcCalendarItemService> _logger;
+        private readonly ILogger<GrpcCalendarService> _logger;
         private readonly AppNpgSqlDataContext _dataContext;
-        public GrpcCalendarItemService(AppNpgSqlDataContext dataContext, ILogger<GrpcCalendarItemService> logger)
+        public GrpcCalendarService(AppNpgSqlDataContext dataContext, ILogger<GrpcCalendarService> logger)
             : base(dataContext)
         {
             _dataContext = dataContext;
@@ -34,8 +33,6 @@ namespace Tomi.Calendar.Mono.Server
                 IEnumerable<CalendarItem> userCalendarItems = _dataContext.ApplicationUserCalendarItem
                     .Where(n => n.UserKey == applicationUser.Id)
                     .Include(n => n.CalendarItem)
-                    .ThenInclude(n => n.CalendarItemTags)
-                    .ThenInclude(n => n.Tag)
                     .Select(n => n.CalendarItem).ToList();
 
                 getCalendarItemsResponse.CalendarItems = userCalendarItems.Select(n => n.ToDto());
@@ -60,8 +57,6 @@ namespace Tomi.Calendar.Mono.Server
                 IEnumerable<CalendarItem> userCalendarItems = _dataContext.ApplicationUserCalendarItem
                     .Where(n => n.UserKey == applicationUser.Id)
                     .Include(n => n.CalendarItem)
-                    .ThenInclude(n => n.CalendarItemTags)
-                    .ThenInclude(n => n.Tag)
                     .Where(n => request.CalendarItems.Select(ci => ci.Id).Contains(n.CalendarItem.Id))
                     .Select(n => n.CalendarItem);
 
@@ -83,18 +78,6 @@ namespace Tomi.Calendar.Mono.Server
                     calendarItem.StartTime = calendarItemDto.StartTime.GetValueOrDefault();
                     calendarItem.EndTime = calendarItemDto.EndTime.GetValueOrDefault();
 
-                    if (calendarItemDto.TagIds != null && calendarItemDto.TagIds.Any())
-                    {
-                        var applicationUserTags = _dataContext.ApplicationUserTags.Include(aut => aut.Tag).Where(tag => calendarItemDto.TagIds.Contains(tag.Tag.Id));
-                        calendarItem.CalendarItemTags = applicationUserTags.Select(aut => new CalendarItemTag() { CalendarItem = calendarItem, Tag = aut.Tag }).ToList();
-                    }
-
-                    if (calendarItemDto.NoteIds != null && calendarItemDto.NoteIds.Any())
-                    {
-                        var applicationUserNotes = _dataContext.ApplicationUserNotes.Include(aut => aut.Note).Where(tag => calendarItemDto.TagIds.Contains(tag.Note.Id));
-                        calendarItem.CalendarItemNotes = applicationUserNotes.Select(aun => new CalendarItemNote() { CalendarItem = calendarItem, Note = aun.Note }).ToList();
-                    }
-
                     if (isNew)
                     {
                         _dataContext.ApplicationUserCalendarItem.Add(new ApplicationUserCalendarItem() { CalendarItem = calendarItem, User = applicationUser });
@@ -115,8 +98,6 @@ namespace Tomi.Calendar.Mono.Server
                 getCalendarItemsResponse.CalendarItems = _dataContext.ApplicationUserCalendarItem
                         .Where(n => n.UserKey == applicationUser.Id)
                         .Include(n => n.CalendarItem)
-                        .ThenInclude(n => n.CalendarItemTags)
-                        .ThenInclude(n => n.Tag)
                         .Where(n => request.CalendarItems.Select(ci => ci.Id).Contains(n.CalendarItem.Id))
                         .Select(n => n.CalendarItem.ToDto());
             }
@@ -137,8 +118,6 @@ namespace Tomi.Calendar.Mono.Server
                 IEnumerable<CalendarItem> userCalendarItems = _dataContext.ApplicationUserCalendarItem
                     .Where(n => n.UserKey == applicationUser.Id)
                     .Include(n => n.CalendarItem)
-                    .ThenInclude(n => n.CalendarItemTags)
-                    .ThenInclude(n => n.Tag)
                     .Where(n => request.CalendarItemIds.Contains(n.CalendarItem.Id))
                     .Select(n => n.CalendarItem);
 

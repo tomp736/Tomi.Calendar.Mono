@@ -1,9 +1,7 @@
 ﻿using NodaTime;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Shared.Entities
 {
@@ -21,8 +19,6 @@ namespace Tomi.Calendar.Mono.Shared.Entities
 
         public string Title { get; set; }
         public string Description { get; set; }
-        public List<CalendarItemTag> CalendarItemTags { get; set; }
-        public List<CalendarItemNote> CalendarItemNotes { get; set; }
 
         public CalendarItemDto ToDto()
         {
@@ -34,9 +30,7 @@ namespace Tomi.Calendar.Mono.Shared.Entities
                 StartDate = StartDate,
                 EndDate = EndDate,
                 StartTime = StartTime,
-                EndTime = EndTime,
-                TagIds = CalendarItemTags == null ? new List<Guid>() : CalendarItemTags.Select(tag => tag.Tag.Id).ToList(),
-                NoteIds = CalendarItemNotes == null ? new List<Guid>() : CalendarItemNotes.Select(tag => tag.Note.Id).ToList()
+                EndTime = EndTime
             };
         }
     }

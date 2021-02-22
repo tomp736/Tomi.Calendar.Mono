@@ -105,8 +105,6 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.EndDate = action.CalendarItemDto.EndDate;
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
-                calendarItemDto.TagIds = action.CalendarItemDto.TagIds;
-                calendarItemDto.NoteIds = action.CalendarItemDto.NoteIds;
 
                 SaveCalendarItemsResponse calendarItemsResponse = await _calendarDataService.SaveCalendarItems(new SaveCalendarItemsRequest()
                 {
@@ -135,8 +133,6 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
                 calendarItemDto.EndDate = action.CalendarItemDto.EndDate;
                 calendarItemDto.StartTime = action.CalendarItemDto.StartTime;
                 calendarItemDto.EndTime = action.CalendarItemDto.EndTime;
-                calendarItemDto.TagIds = action.CalendarItemDto.TagIds;
-                calendarItemDto.NoteIds = action.CalendarItemDto.NoteIds;
 
                 SaveCalendarItemsResponse calendarItemsResponse = await _calendarDataService.SaveCalendarItems(new SaveCalendarItemsRequest()
                 {

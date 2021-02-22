@@ -9,8 +9,8 @@ using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
 
 namespace Tomi.Calendar.Proto
 {
-    [ServiceContract(Name = "Mono.Calendar.CalendarItem")]
-    public interface ICalendarItemService
+    [ServiceContract(Name = "Tomi.Calendar")]
+    public interface ICalendarService
     {
         ValueTask<GetCalendarItemsResponse> GetCalendarItems(GetCalendarItemsRequest request, CallContext context = default);
         ValueTask<SaveCalendarItemsResponse> SaveCalendarItems(SaveCalendarItemsRequest request, CallContext context = default);

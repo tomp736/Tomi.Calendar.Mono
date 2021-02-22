@@ -16,18 +16,8 @@ namespace Tomi.Calendar.Mono.Server.Data
     public class AppNpgSqlDataContext : ApiAuthorizationDbContext<ApplicationUser>
     {
         private readonly DbContextEvents _dbContextEvents;
-
         public DbSet<ApplicationUserCalendarItem> ApplicationUserCalendarItem { get; set; }
-        public DbSet<ApplicationUserNote> ApplicationUserNotes { get; set; }
-        public DbSet<ApplicationUserTag> ApplicationUserTags { get; set; }
-
         public DbSet<CalendarItem> CalendarItems { get; set; }
-
-        public DbSet<CalendarItemTag> CalendarItemTags { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-
-        public DbSet<CalendarItemNote> CalendarItemNotes { get; set; }
-        public DbSet<Note> Notes { get; set; }
 
         public AppNpgSqlDataContext(
             DbContextOptions options,
@@ -43,13 +33,6 @@ namespace Tomi.Calendar.Mono.Server.Data
             modelBuilder.Entity<CalendarItem>().Property(f => f.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<CalendarItem>().Property(f => f.Key).ValueGeneratedOnAdd();
 
-
-            modelBuilder.Entity<Tag>().Property(f => f.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Tag>().Property(f => f.Key).ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Note>().Property(f => f.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Note>().Property(f => f.Key).ValueGeneratedOnAdd();
-
             // Relationships
             modelBuilder.Entity<ApplicationUserCalendarItem>()
                 .HasKey(bc => new { bc.CalendarItemKey, bc.UserKey });
@@ -59,49 +42,6 @@ namespace Tomi.Calendar.Mono.Server.Data
                 .WithMany(bc => bc.UserCalendarItems)
                 .HasForeignKey(k => k.UserKey);
 
-            // Relationships
-            modelBuilder.Entity<ApplicationUserNote>()
-                .HasKey(bc => new { bc.NoteKey, bc.UserKey });
-
-            modelBuilder.Entity<ApplicationUserNote>()
-                .HasOne(c => c.User)
-                .WithMany(bc => bc.UserNotes)
-                .HasForeignKey(k => k.UserKey);
-
-            // Relationships
-            modelBuilder.Entity<ApplicationUserTag>()
-                .HasKey(bc => new { bc.TagKey, bc.UserKey });
-
-            modelBuilder.Entity<ApplicationUserTag>()
-                .HasOne(c => c.User)
-                .WithMany(bc => bc.UserTags)
-                .HasForeignKey(k => k.UserKey);
-
-            modelBuilder.Entity<CalendarItemTag>()
-                .HasKey(bc => new { bc.CalendarItemKey, bc.TagKey });
-
-            modelBuilder.Entity<CalendarItemTag>()
-                .HasOne(bc => bc.CalendarItem)
-                .WithMany(b => b.CalendarItemTags)
-                .HasForeignKey(bc => bc.CalendarItemKey);
-
-            modelBuilder.Entity<CalendarItemTag>()
-                .HasOne(bc => bc.Tag)
-                .WithMany(c => c.CalendarItemTags)
-                .HasForeignKey(bc => bc.TagKey);
-
-            modelBuilder.Entity<CalendarItemNote>()
-                .HasKey(bc => new { bc.CalendarItemKey, bc.NoteKey });
-
-            modelBuilder.Entity<CalendarItemNote>()
-                .HasOne(bc => bc.CalendarItem)
-                .WithMany(b => b.CalendarItemNotes)
-                .HasForeignKey(bc => bc.CalendarItemKey);
-
-            modelBuilder.Entity<CalendarItemNote>()
-                .HasOne(bc => bc.Note)
-                .WithMany(c => c.CalendarItemNotes)
-                .HasForeignKey(bc => bc.NoteKey);
 
             base.OnModelCreating(modelBuilder);
         }

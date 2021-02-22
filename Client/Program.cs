@@ -17,10 +17,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Tomi.Calendar.Mono.Client.Services;
 using Tomi.Calendar.Mono.Client.Services.Grpc;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
-using Tomi.Calendar.Mono.Shared.Dtos.Note;
-using Tomi.Calendar.Mono.Shared.Dtos.Tag;
-using Tomi.Calendar.Proto;
 using Tomi.Notification.Blazor.Services;
 
 namespace Tomi.Calendar.Mono.Client
@@ -79,9 +75,6 @@ namespace Tomi.Calendar.Mono.Client
         private static void ConfigureProtobufRuntimeTypeModels()
         {
             RuntimeTypeModel.Default.AddNodaTime();
-            RuntimeTypeModel.Default.Add(typeof(CalendarItemDto), false).SetSurrogate(typeof(CalendarItemSurrogate));
-            RuntimeTypeModel.Default.Add(typeof(NoteDto), false).SetSurrogate(typeof(NoteSurrogate));
-            RuntimeTypeModel.Default.Add(typeof(TagDto), false).SetSurrogate(typeof(TagSurrogate));
         }
 
         private static void ConfigureJsonSerializer(WebAssemblyHostBuilder builder)

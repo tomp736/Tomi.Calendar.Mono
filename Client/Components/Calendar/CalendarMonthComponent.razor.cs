@@ -8,7 +8,7 @@ namespace Tomi.Calendar.Mono.Client.Components.Calendar
 {
     public partial class CalendarMonthComponent : CalendarComponentBase
     {
-        protected DateTime StartDate => CalendarHelpers.GetStartDateOfWeek(new DateTime(Date.Year, Date.Month, 1), CalendarState.Value.StartDayOfWeek);
+        protected DateTime StartDate => CalendarHelpers.GetStartDateOfWeek(new DateTime(Date.Year, Date.Month, 1), StartDayOfWeek);
         protected DateTime EndDate => StartDate.AddDays(34);
 
         [Parameter]

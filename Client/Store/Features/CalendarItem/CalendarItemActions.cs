@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Tomi.Calendar.Mono.Client.Store.Features.Shared;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
+using Tomi.Calendar.Proto;
 
 namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 {
@@ -24,8 +24,8 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 
     public record CreateCalendarItemAction
     {
-        public CreateCalendarItemAction(CreateOrUpdateCalendarItemDto note) => CalendarItemDto = note;
-        public CreateOrUpdateCalendarItemDto CalendarItemDto { get; }
+        public CreateCalendarItemAction(CalendarItemDto calendarItemDto) => CalendarItemDto = calendarItemDto;
+        public CalendarItemDto CalendarItemDto { get; }
     }
     public record CreateCalendarItemFailureAction : FailureAction
     {
@@ -33,7 +33,7 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
     }
     public record CreateCalendarItemSuccessAction
     {
-        public CreateCalendarItemSuccessAction(CalendarItemDto note) => CalendarItem = note;
+        public CreateCalendarItemSuccessAction(CalendarItemDto calendarItemDto) => CalendarItem = calendarItemDto;
         public CalendarItemDto CalendarItem { get; }
     }
 
@@ -68,9 +68,9 @@ namespace Tomi.Calendar.Mono.Client.Store.Features.CalendarItem
 
     public record UpdateCalendarItemAction
     {
-        public UpdateCalendarItemAction(Guid id, CreateOrUpdateCalendarItemDto calendarItemDto) => (Id, CalendarItemDto) = (id, calendarItemDto);
+        public UpdateCalendarItemAction(Guid id, CalendarItemDto calendarItemDto) => (Id, CalendarItemDto) = (id, calendarItemDto);
         public Guid Id { get; }
-        public CreateOrUpdateCalendarItemDto CalendarItemDto { get; }
+        public CalendarItemDto CalendarItemDto { get; }
     }
     public record UpdateCalendarItemSuccessAction
     {

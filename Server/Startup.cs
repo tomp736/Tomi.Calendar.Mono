@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,15 +12,11 @@ using NodaTime.Serialization.SystemTextJson;
 using Npgsql;
 using ProtoBuf.Grpc.Server;
 using ProtoBuf.Meta;
-using System.Data;
 using System.Linq;
 using Tomi.Calendar.Mono.Server.Data;
 using Tomi.Calendar.Mono.Server.DataServices;
 using Tomi.Calendar.Mono.Server.Models;
 using Tomi.Calendar.Mono.Server.Services.Notification;
-using Tomi.Calendar.Mono.Shared.Dtos.CalendarItem;
-using Tomi.Calendar.Mono.Shared.Dtos.Note;
-using Tomi.Calendar.Mono.Shared.Dtos.Tag;
 using Tomi.Calendar.Proto;
 using Tomi.Notification.AspNetCore;
 using Tomi.Notification.AspNetCore.Hubs;
@@ -59,25 +54,10 @@ namespace Tomi.Calendar.Mono.Server
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddControllersWithViews()
-                .AddJsonOptions(opt => opt.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
+            services.AddControllersWithViews().AddJsonOptions(opt => opt.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
             services.AddRazorPages();
 
-
-            RuntimeTypeModel.Default
-                .Add(typeof(CalendarItemDto), false)
-                .SetSurrogate(typeof(CalendarItemSurrogate));
-
-            RuntimeTypeModel.Default
-                .Add(typeof(NoteDto), false)
-                .SetSurrogate(typeof(NoteSurrogate));
-
-            RuntimeTypeModel.Default
-                .Add(typeof(TagDto), false)
-                .SetSurrogate(typeof(TagSurrogate));
-
-            RuntimeTypeModel.Default
-                .AddNodaTime();
+            RuntimeTypeModel.Default.AddNodaTime();
 
             services.AddGrpc(options =>
             {
@@ -144,15 +124,7 @@ namespace Tomi.Calendar.Mono.Server
             app.UseGrpcWeb();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GrpcCalendarItemService>()
-                    .RequireAuthorization(new AuthorizeAttribute())
-                    .EnableGrpcWeb();
-
-                endpoints.MapGrpcService<GrpcNoteService>()
-                    .RequireAuthorization(new AuthorizeAttribute())
-                    .EnableGrpcWeb();
-
-                endpoints.MapGrpcService<GrpcTagService>()
+                endpoints.MapGrpcService<GrpcCalendarService>()
                     .RequireAuthorization(new AuthorizeAttribute())
                     .EnableGrpcWeb();
 

@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4D1E3C3A
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomi.Calendar.Proto", "Tomi.Calendar.Proto\Tomi.Calendar.Proto.csproj", "{DAE6F08F-07B4-486C-AACC-8CCD74FCCDB3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +37,6 @@ Global
 		{29094F69-C22E-43B8-98BC-EBDE89758809}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29094F69-C22E-43B8-98BC-EBDE89758809}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29094F69-C22E-43B8-98BC-EBDE89758809}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DAE6F08F-07B4-486C-AACC-8CCD74FCCDB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAE6F08F-07B4-486C-AACC-8CCD74FCCDB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DAE6F08F-07B4-486C-AACC-8CCD74FCCDB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAE6F08F-07B4-486C-AACC-8CCD74FCCDB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

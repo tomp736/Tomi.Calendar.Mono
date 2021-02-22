@@ -11,7 +11,5 @@ namespace Tomi.Calendar.Mono.Server.Models
         public DateTime BirthDate { get; set; }
 
         public IEnumerable<ApplicationUserCalendarItem> UserCalendarItems { get; set; }
-        public IEnumerable<ApplicationUserNote> UserNotes { get; set; }
-        public IEnumerable<ApplicationUserTag> UserTags { get; set; }
     }
 }

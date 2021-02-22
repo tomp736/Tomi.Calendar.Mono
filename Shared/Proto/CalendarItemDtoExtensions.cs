@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tomi.Calendar.Mono.Shared.Dtos.CalendarItem
+namespace Tomi.Calendar.Proto
 {
     public static class CalendarItemDtoExtensions
     {
